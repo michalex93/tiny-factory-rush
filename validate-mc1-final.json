@@ -1,0 +1,1048 @@
+{
+  "generatedAt": "2026-09-05T21:08:00.104Z",
+  "note": "M-C.1 session-time Playwright validation; adaptive funding + commissioning Launch (1 relevant action).",
+  "partA": {
+    "id": "A_balanced_throughput",
+    "branch": "throughput",
+    "policy": "balanced",
+    "events": "off",
+    "toys_s": 439.3,
+    "fundingChoice_s": 490.9,
+    "policySelect": {
+      "cash": 57,
+      "fund": 0,
+      "ups": 26,
+      "policy": "balanced",
+      "locked": true,
+      "phase": "smartphone_funding",
+      "fundTarget": 1075,
+      "fundingRef": 7.857,
+      "contribution": 0.55,
+      "durationSec": 250
+    },
+    "fundBuys": [
+      {
+        "ok": true,
+        "type": "speed",
+        "machine": 0,
+        "cost": 65,
+        "fundBefore": 1,
+        "fundAfter": 1,
+        "cash": 4
+      }
+    ],
+    "midFundingReload": {
+      "fundBefore": 486,
+      "fundAfter": 486,
+      "policyAfter": "balanced",
+      "phaseAfter": "smartphone_funding",
+      "preserved": true
+    },
+    "fundingDuration_s": 208,
+    "ready_s": 699.6,
+    "ready_min": 11.66,
+    "fundTarget": 1075,
+    "fundingRef": 7.857,
+    "contribution": 0.55,
+    "build": {
+      "ok": true,
+      "cashBefore": 60,
+      "cashAfter": 60,
+      "cashDelta": 0,
+      "policy": "balanced",
+      "policyUnchanged": true,
+      "built": true,
+      "product": "smartphones",
+      "baseValue": 14,
+      "phase": "first_smartphone",
+      "sessMs": 700273
+    },
+    "firstPhoneDelta_s": 0.5,
+    "firstPhoneVisual": {
+      "product": "smartphones",
+      "baseValue": 14,
+      "income": 3371.7,
+      "incomeAtBuild": 3218.5
+    },
+    "launchReload": null,
+    "launchObserve": {
+      "tp": 42,
+      "income": 3218.5,
+      "wip": 12,
+      "bn": 1,
+      "baselineTp": 43.11,
+      "baselineIncome": 3303.15,
+      "batchProgress": 0,
+      "batchTarget": 76,
+      "gate": "pending",
+      "recommended": {
+        "machineId": 0,
+        "type": "buffer",
+        "reason": "Buffer before bottleneck to clear queue"
+      },
+      "label": "PHONE RAMP — CLEAR THE FLOW — 0 / 76",
+      "actions": 0,
+      "phase": "smartphone_launch"
+    },
+    "launchBuys": [
+      {
+        "ok": true,
+        "tp": [
+          null,
+          null
+        ],
+        "wip": [
+          null,
+          null
+        ],
+        "income": [
+          null,
+          null
+        ]
+      },
+      {
+        "type": "buffer",
+        "machine": 0,
+        "reason": "Buffer before bottleneck to clear queue",
+        "ok": true,
+        "actionsAfter": 1,
+        "tp": [
+          42,
+          42
+        ],
+        "wip": [
+          12,
+          13
+        ],
+        "income": [
+          3604.6714664163196,
+          3604.6714664163196
+        ]
+      }
+    ],
+    "launchTiming": {
+      "launchStartMs": 700806,
+      "actionDoneMs": 716853,
+      "batchFullMs": 820820,
+      "launchCompleteMs": 830564,
+      "durationMs": 129758,
+      "minGateMs": null,
+      "duration_s": 129.8,
+      "actionDone_s": 716.9,
+      "batchFull_s": 820.8
+    },
+    "launchProductFeel": {
+      "mode": "commissioning",
+      "wrongActionBlocked": true,
+      "relevantAction": true,
+      "feltLikeForcedWait": "should be NO — no minElapsed/hold gates"
+    },
+    "shift1_s": 830.6,
+    "returnKind": "flow",
+    "returnDuration_s": 85.6,
+    "freeSpend": {
+      "ok": true,
+      "type": "speed",
+      "machine": 1,
+      "costListed": 5930,
+      "levelBefore": 18,
+      "levelAfter": 19,
+      "cashBefore": 4633,
+      "cashAfter": 4633,
+      "cashDelta": 0,
+      "creditsAfter": 0,
+      "used": true
+    },
+    "criteria": {
+      "selectNeverBuilds": true,
+      "policyLocked": true,
+      "adaptiveTargetLocked": true,
+      "contributionBand": true,
+      "buildBeforeReadyNoop": true,
+      "policyChangeRejected": true,
+      "fundNeverDecreased": true,
+      "fundingUpgradeAvailability": false,
+      "fundingReadyBand": true,
+      "buildCashDelta0": true,
+      "buildPolicyUnchanged": true,
+      "buildOnce": true,
+      "buildIdempotent": true,
+      "selectorGone": true,
+      "firstPhoneLe10s": true,
+      "entersBaselineOrLaunch": true,
+      "salesTapsDontQualify": true,
+      "wrongActionDoesNotQualify": true,
+      "oneRelevantActionQualifies": true,
+      "launchDurationBand": true,
+      "launchNotElapsedTimer": true,
+      "launchCompletedByBatchNotIdleTimer": true,
+      "shift1Immediate": true,
+      "noEmptyLabel": true,
+      "returnNotSameSession": true,
+      "returnAppearsOnReload": true,
+      "returnKindMatches": true,
+      "returnNoAutocompleteGrace": true,
+      "returnDuration2_5min": false,
+      "freeUpgradeGranted": true,
+      "freeCreditSurvivesReload": true,
+      "freeSpendCashDelta0": true,
+      "freeConsumed": true,
+      "noDuplicateFreeOnReload": true,
+      "buildFloor975": true,
+      "buildBand": true,
+      "buildBandSoft": true,
+      "campaignMarkersPresent": true
+    },
+    "report": {
+      "currentSessionEvents": [
+        {
+          "name": "economic_metric_view",
+          "elapsedMs": 192,
+          "payload": {
+            "lineIncomePerMin": 0
+          },
+          "at": 1788642388837
+        },
+        {
+          "name": "first_upgrade_view",
+          "elapsedMs": 192,
+          "payload": {
+            "suggested": 0
+          },
+          "at": 1788642388837
+        }
+      ],
+      "campaignMarkers": {
+        "fundingChoiceCampaignMs": 490565,
+        "fundReadyCampaignMs": 699248,
+        "smartphoneBuildCampaignMs": 700273,
+        "firstPhoneCampaignMs": 700500,
+        "launchStartCampaignMs": 709491,
+        "launchCompleteCampaignMs": 830510,
+        "shift1CompleteCampaignMs": 830510,
+        "returnShownCampaignMs": 830510,
+        "returnCompleteCampaignMs": 920105,
+        "freeUpgradeUsedCampaignMs": 920582
+      },
+      "campaignState": {
+        "phase": "return_complete",
+        "fundingPolicy": "balanced",
+        "fundingReferenceIncomePerSec": 7.857,
+        "fundingTarget": 1075,
+        "effectiveContributionRate": 0.55,
+        "fundProgress": 1075,
+        "launchBranch": "throughput",
+        "launchBaseline": {
+          "outputPerMin": 43.11,
+          "lineIncomePerMin": 3303.15,
+          "wip": 12,
+          "blockedShare": 0.285,
+          "bottleneckId": 1
+        },
+        "launchTarget": 76,
+        "launchProgress": 1,
+        "launchActionGate": "complete",
+        "returnBaseline": {
+          "output": 40,
+          "income": 3433.020444206019
+        },
+        "returnTarget": 120,
+        "returnProgress": 131,
+        "freeUpgradeMode": "normal",
+        "freeUpgradeCashDelta": 0
+      },
+      "sessionMs": 920807,
+      "fundingPolicy": "balanced",
+      "fundingSelectedMs": null,
+      "fundReadyMs": 699248,
+      "smartphoneBuildMs": 700273,
+      "cashAtBuild": 60,
+      "firstSmartphoneMs": 700500,
+      "launchStartMs": 709491,
+      "launchCompleteMs": 830510,
+      "launchQualifiedActions": 1,
+      "fundingReferenceIncomePerSec": 7.857,
+      "fundingTarget": 1075,
+      "effectiveContributionRate": 0.55,
+      "launchActionGate": "complete",
+      "freeUpgradeMode": "normal",
+      "shift1CompleteMs": 830510,
+      "returnChallengeCompleteMs": 920105,
+      "freeUpgradeUsedMs": 920582,
+      "timeToFirstInputMs": null,
+      "timeToFirstSaleMs": null,
+      "timeToFirstUpgradeMs": null,
+      "timeToBottleneckShownMs": null,
+      "timeToSessionGoalStartMs": null,
+      "timeToSessionGoalCompleteMs": null,
+      "upgradesBought": 0,
+      "throughputInitial": null,
+      "throughputFinal": null,
+      "hintsShown": [],
+      "globalEventsSuppressed": 0,
+      "globalEventsSuppressedCount": 0,
+      "onboardingComplete": false,
+      "branchSelected": null,
+      "branchPurchaseTime": null,
+      "branchGoalCompletionTime": null,
+      "convergenceCompletionTime": null,
+      "nextMilestoneShownTime": null,
+      "toysMilestoneShownMs": null,
+      "toysThreshold": null,
+      "toysThresholdReachedMs": null,
+      "toysOpenedMs": null,
+      "firstToyActionMs": null,
+      "firstToyProducedMs": null,
+      "toyMasteryShownMs": null,
+      "toyMasteryCompleteMs": null,
+      "toyMasteryType": null,
+      "toyMasteryTarget": null,
+      "smartphonesMilestoneShownMs": null,
+      "lifetimeEarnedAtUnlock": null,
+      "lifetimeEarnedAt650": null,
+      "cashAtUnlock": null,
+      "upgradesAtFiveMinutes": null,
+      "upgradesAtToysUnlock": null,
+      "branchKpiAtToysUnlock": null,
+      "upgradesByType": {
+        "speed": 0,
+        "buffer": 0,
+        "value": 0
+      },
+      "canonicalLineIncomePerMin": 0,
+      "events": [
+        {
+          "name": "economic_metric_view",
+          "elapsedMs": 192,
+          "payload": {
+            "lineIncomePerMin": 0
+          },
+          "at": 1788642388837
+        },
+        {
+          "name": "first_upgrade_view",
+          "elapsedMs": 192,
+          "payload": {
+            "suggested": 0
+          },
+          "at": 1788642388837
+        }
+      ],
+      "live": {
+        "branch": "throughput",
+        "OUTPUT": 0,
+        "lineIncomePerMin": 0,
+        "WIP": 1,
+        "cash": 4633
+      }
+    },
+    "shots": [
+      "validate-mc1-a-01-policy-choice.png",
+      "validate-mc1-a-02-funding.png",
+      "validate-mc1-a-03-ready.png",
+      "validate-mc1-a-04-first-phone.png",
+      "validate-mc1-a-05-launch.png",
+      "validate-mc1-a-06-shift1-preview.png",
+      "validate-mc1-a-07-return.png",
+      "validate-mc1-a-08-free-upgrade.png"
+    ]
+  },
+  "partB": {
+    "id": "B_fast_margin",
+    "branch": "margin",
+    "policy": "fast",
+    "events": "on",
+    "toys_s": 391.5,
+    "fundingChoice_s": 437.2,
+    "policySelect": {
+      "cash": 51,
+      "fund": 0,
+      "ups": 28,
+      "policy": "fast",
+      "locked": true,
+      "phase": "smartphone_funding",
+      "fundTarget": 1900,
+      "fundingRef": 12.479,
+      "contribution": 0.78,
+      "durationSec": 195
+    },
+    "fundBuys": [],
+    "midFundingReload": null,
+    "fundingDuration_s": 192.3,
+    "ready_s": 630.1,
+    "ready_min": 10.5,
+    "fundTarget": 1900,
+    "fundingRef": 12.479,
+    "contribution": 0.78,
+    "build": {
+      "ok": true,
+      "cashBefore": 103,
+      "cashAfter": 103,
+      "cashDelta": 0,
+      "policy": "fast",
+      "policyUnchanged": true,
+      "built": true,
+      "product": "smartphones",
+      "baseValue": 14,
+      "phase": "first_smartphone",
+      "sessMs": 630815
+    },
+    "firstPhoneDelta_s": 1.6,
+    "firstPhoneVisual": {
+      "product": "smartphones",
+      "baseValue": 14,
+      "income": 2399.9,
+      "incomeAtBuild": 2399.9
+    },
+    "launchReload": {
+      "actionsBefore": 0,
+      "actionsAfter": 0,
+      "progressBefore": 0,
+      "progressAfter": 0,
+      "noDuplicateActions": true,
+      "phaseOk": false
+    },
+    "launchObserve": {
+      "tp": 8,
+      "income": 436.3,
+      "wip": 12,
+      "bn": 1,
+      "baselineTp": 21.01,
+      "baselineIncome": 1146.07,
+      "batchProgress": 0,
+      "batchTarget": 2005,
+      "gate": "pending",
+      "recommended": {
+        "machineId": 1,
+        "type": "value",
+        "reason": "Raise unit value → LINE INCOME"
+      },
+      "label": "PREMIUM LAUNCH — PROVE THE VALUE — $0 / $2005",
+      "actions": 0,
+      "phase": "smartphone_launch"
+    },
+    "launchBuys": [
+      {
+        "ok": true,
+        "tp": [
+          null,
+          null
+        ],
+        "wip": [
+          null,
+          null
+        ],
+        "income": [
+          null,
+          null
+        ]
+      },
+      {
+        "type": "value",
+        "machine": 1,
+        "reason": "Raise unit value → LINE INCOME",
+        "ok": true,
+        "actionsAfter": 1,
+        "tp": [
+          8,
+          10
+        ],
+        "wip": [
+          12,
+          12
+        ],
+        "income": [
+          436.3493111652618,
+          610.8890356313665
+        ]
+      }
+    ],
+    "launchTiming": {
+      "launchStartMs": 632446,
+      "actionDoneMs": 649373,
+      "batchFullMs": 683564,
+      "launchCompleteMs": 693393,
+      "durationMs": 60947,
+      "minGateMs": null,
+      "duration_s": 60.9,
+      "actionDone_s": 649.4,
+      "batchFull_s": 683.6
+    },
+    "launchProductFeel": {
+      "mode": "commissioning",
+      "wrongActionBlocked": true,
+      "relevantAction": true,
+      "feltLikeForcedWait": "should be NO — no minElapsed/hold gates"
+    },
+    "shift1_s": 693.4,
+    "returnKind": "margin",
+    "returnDuration_s": 37.4,
+    "freeSpend": {
+      "ok": true,
+      "type": "value",
+      "machine": 1,
+      "costListed": 1587,
+      "levelBefore": 12,
+      "levelAfter": 13,
+      "cashBefore": 1053,
+      "cashAfter": 1053,
+      "cashDelta": 0,
+      "creditsAfter": 0,
+      "used": true
+    },
+    "criteria": {
+      "selectNeverBuilds": true,
+      "policyLocked": true,
+      "adaptiveTargetLocked": true,
+      "contributionBand": true,
+      "buildBeforeReadyNoop": true,
+      "policyChangeRejected": true,
+      "fundNeverDecreased": true,
+      "fundingUpgradeAvailability": false,
+      "fundingReadyBand": true,
+      "buildCashDelta0": true,
+      "buildPolicyUnchanged": true,
+      "buildOnce": true,
+      "buildIdempotent": true,
+      "selectorGone": true,
+      "firstPhoneLe10s": true,
+      "entersBaselineOrLaunch": true,
+      "launchReloadPreserves": false,
+      "salesTapsDontQualify": true,
+      "wrongActionDoesNotQualify": true,
+      "oneRelevantActionQualifies": true,
+      "launchDurationBand": true,
+      "launchNotElapsedTimer": true,
+      "launchCompletedByBatchNotIdleTimer": true,
+      "shift1Immediate": true,
+      "noEmptyLabel": true,
+      "returnNotSameSession": true,
+      "returnAppearsOnReload": true,
+      "returnKindMatches": true,
+      "returnNoAutocompleteGrace": true,
+      "returnDuration2_5min": false,
+      "freeUpgradeGranted": true,
+      "freeCreditSurvivesReload": true,
+      "freeSpendCashDelta0": true,
+      "freeConsumed": true,
+      "noDuplicateFreeOnReload": true,
+      "buildFloor975": true,
+      "buildBand": true,
+      "buildBandSoft": true,
+      "campaignMarkersPresent": true
+    },
+    "report": {
+      "currentSessionEvents": [
+        {
+          "name": "first_sale",
+          "elapsedMs": 200,
+          "payload": {
+            "amount": 828,
+            "golden": false
+          },
+          "at": 1788642479480
+        },
+        {
+          "name": "economic_metric_view",
+          "elapsedMs": 200,
+          "payload": {
+            "lineIncomePerMin": 1655.796070000812
+          },
+          "at": 1788642479482
+        },
+        {
+          "name": "first_upgrade_view",
+          "elapsedMs": 200,
+          "payload": {
+            "suggested": 1
+          },
+          "at": 1788642479482
+        },
+        {
+          "name": "hint_deduplicated",
+          "elapsedMs": 200,
+          "payload": {
+            "hintId": "money_in_teach"
+          },
+          "at": 1788642479486
+        }
+      ],
+      "campaignMarkers": {
+        "fundingChoiceCampaignMs": 436872,
+        "fundReadyCampaignMs": 629551,
+        "smartphoneBuildCampaignMs": 630815,
+        "firstPhoneCampaignMs": 632393,
+        "launchStartCampaignMs": 642639,
+        "launchCompleteCampaignMs": 693334,
+        "shift1CompleteCampaignMs": 693334,
+        "returnShownCampaignMs": 693334,
+        "returnCompleteCampaignMs": 734758,
+        "freeUpgradeUsedCampaignMs": 735218
+      },
+      "campaignState": {
+        "phase": "return_complete",
+        "fundingPolicy": "fast",
+        "fundingReferenceIncomePerSec": 12.479,
+        "fundingTarget": 1900,
+        "effectiveContributionRate": 0.78,
+        "fundProgress": 1900,
+        "launchBranch": "margin",
+        "launchBaseline": {
+          "outputPerMin": 21.01,
+          "lineIncomePerMin": 1146.07,
+          "wip": 12,
+          "blockedShare": 0.541,
+          "bottleneckId": 1
+        },
+        "launchTarget": 2005,
+        "launchProgress": 1,
+        "launchActionGate": "complete",
+        "returnBaseline": {
+          "output": 60,
+          "income": 3665.334213788199
+        },
+        "returnTarget": 11000,
+        "returnProgress": 20053,
+        "freeUpgradeMode": "normal",
+        "freeUpgradeCashDelta": 0
+      },
+      "sessionMs": 735434,
+      "fundingPolicy": "fast",
+      "fundingSelectedMs": null,
+      "fundReadyMs": 629551,
+      "smartphoneBuildMs": 630815,
+      "cashAtBuild": 103,
+      "firstSmartphoneMs": 632393,
+      "launchStartMs": 642639,
+      "launchCompleteMs": 693334,
+      "launchQualifiedActions": 1,
+      "fundingReferenceIncomePerSec": 12.479,
+      "fundingTarget": 1900,
+      "effectiveContributionRate": 0.78,
+      "launchActionGate": "complete",
+      "freeUpgradeMode": "normal",
+      "shift1CompleteMs": 693334,
+      "returnChallengeCompleteMs": 734758,
+      "freeUpgradeUsedMs": 735218,
+      "timeToFirstInputMs": null,
+      "timeToFirstSaleMs": 200,
+      "timeToFirstUpgradeMs": null,
+      "timeToBottleneckShownMs": null,
+      "timeToSessionGoalStartMs": null,
+      "timeToSessionGoalCompleteMs": null,
+      "upgradesBought": 0,
+      "throughputInitial": null,
+      "throughputFinal": null,
+      "hintsShown": [],
+      "globalEventsSuppressed": 0,
+      "globalEventsSuppressedCount": 0,
+      "onboardingComplete": false,
+      "branchSelected": null,
+      "branchPurchaseTime": null,
+      "branchGoalCompletionTime": null,
+      "convergenceCompletionTime": null,
+      "nextMilestoneShownTime": null,
+      "toysMilestoneShownMs": null,
+      "toysThreshold": null,
+      "toysThresholdReachedMs": null,
+      "toysOpenedMs": null,
+      "firstToyActionMs": null,
+      "firstToyProducedMs": null,
+      "toyMasteryShownMs": null,
+      "toyMasteryCompleteMs": null,
+      "toyMasteryType": null,
+      "toyMasteryTarget": null,
+      "smartphonesMilestoneShownMs": null,
+      "lifetimeEarnedAtUnlock": null,
+      "lifetimeEarnedAt650": null,
+      "cashAtUnlock": null,
+      "upgradesAtFiveMinutes": null,
+      "upgradesAtToysUnlock": null,
+      "branchKpiAtToysUnlock": null,
+      "upgradesByType": {
+        "speed": 0,
+        "buffer": 0,
+        "value": 0
+      },
+      "canonicalLineIncomePerMin": 1655.796070000812,
+      "events": [
+        {
+          "name": "first_sale",
+          "elapsedMs": 200,
+          "payload": {
+            "amount": 828,
+            "golden": false
+          },
+          "at": 1788642479480
+        },
+        {
+          "name": "economic_metric_view",
+          "elapsedMs": 200,
+          "payload": {
+            "lineIncomePerMin": 1655.796070000812
+          },
+          "at": 1788642479482
+        },
+        {
+          "name": "first_upgrade_view",
+          "elapsedMs": 200,
+          "payload": {
+            "suggested": 1
+          },
+          "at": 1788642479482
+        },
+        {
+          "name": "hint_deduplicated",
+          "elapsedMs": 200,
+          "payload": {
+            "hintId": "money_in_teach"
+          },
+          "at": 1788642479486
+        }
+      ],
+      "live": {
+        "branch": "margin",
+        "OUTPUT": 2,
+        "lineIncomePerMin": 1655.8,
+        "WIP": 9,
+        "cash": 1881
+      }
+    },
+    "shots": [
+      "validate-mc1-b-01-policy-choice.png",
+      "validate-mc1-b-02-funding.png",
+      "validate-mc1-b-03-ready.png",
+      "validate-mc1-b-04-first-phone.png",
+      "validate-mc1-b-05-launch.png",
+      "validate-mc1-b-06-shift1-preview.png",
+      "validate-mc1-b-07-return.png",
+      "validate-mc1-b-08-free-upgrade.png"
+    ]
+  },
+  "raw": {
+    "partA_criteria": {
+      "selectNeverBuilds": true,
+      "policyLocked": true,
+      "adaptiveTargetLocked": true,
+      "contributionBand": true,
+      "buildBeforeReadyNoop": true,
+      "policyChangeRejected": true,
+      "fundNeverDecreased": true,
+      "fundingUpgradeAvailability": false,
+      "fundingReadyBand": true,
+      "buildCashDelta0": true,
+      "buildPolicyUnchanged": true,
+      "buildOnce": true,
+      "buildIdempotent": true,
+      "selectorGone": true,
+      "firstPhoneLe10s": true,
+      "entersBaselineOrLaunch": true,
+      "salesTapsDontQualify": true,
+      "wrongActionDoesNotQualify": true,
+      "oneRelevantActionQualifies": true,
+      "launchDurationBand": true,
+      "launchNotElapsedTimer": true,
+      "launchCompletedByBatchNotIdleTimer": true,
+      "shift1Immediate": true,
+      "noEmptyLabel": true,
+      "returnNotSameSession": true,
+      "returnAppearsOnReload": true,
+      "returnKindMatches": true,
+      "returnNoAutocompleteGrace": true,
+      "returnDuration2_5min": false,
+      "freeUpgradeGranted": true,
+      "freeCreditSurvivesReload": true,
+      "freeSpendCashDelta0": true,
+      "freeConsumed": true,
+      "noDuplicateFreeOnReload": true,
+      "buildFloor975": true,
+      "buildBand": true,
+      "buildBandSoft": true,
+      "campaignMarkersPresent": true
+    },
+    "partB_criteria": {
+      "selectNeverBuilds": true,
+      "policyLocked": true,
+      "adaptiveTargetLocked": true,
+      "contributionBand": true,
+      "buildBeforeReadyNoop": true,
+      "policyChangeRejected": true,
+      "fundNeverDecreased": true,
+      "fundingUpgradeAvailability": false,
+      "fundingReadyBand": true,
+      "buildCashDelta0": true,
+      "buildPolicyUnchanged": true,
+      "buildOnce": true,
+      "buildIdempotent": true,
+      "selectorGone": true,
+      "firstPhoneLe10s": true,
+      "entersBaselineOrLaunch": true,
+      "launchReloadPreserves": false,
+      "salesTapsDontQualify": true,
+      "wrongActionDoesNotQualify": true,
+      "oneRelevantActionQualifies": true,
+      "launchDurationBand": true,
+      "launchNotElapsedTimer": true,
+      "launchCompletedByBatchNotIdleTimer": true,
+      "shift1Immediate": true,
+      "noEmptyLabel": true,
+      "returnNotSameSession": true,
+      "returnAppearsOnReload": true,
+      "returnKindMatches": true,
+      "returnNoAutocompleteGrace": true,
+      "returnDuration2_5min": false,
+      "freeUpgradeGranted": true,
+      "freeCreditSurvivesReload": true,
+      "freeSpendCashDelta0": true,
+      "freeConsumed": true,
+      "noDuplicateFreeOnReload": true,
+      "buildFloor975": true,
+      "buildBand": true,
+      "buildBandSoft": true,
+      "campaignMarkersPresent": true
+    },
+    "partA_markers": {
+      "stage1": {
+        "sessMs": 56092,
+        "mcPhase": "idle",
+        "label": "CHOOSE: Throughput (Speed) or Margin (Value)"
+      },
+      "convergence": {
+        "sessMs": 160428,
+        "mcPhase": "idle",
+        "label": "TOYS — $170 / $650 EARNED"
+      },
+      "toysThreshold": {
+        "sessMs": 439262,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED"
+      },
+      "toysReady": {
+        "sessMs": 439262,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED"
+      },
+      "beforeOpen": {
+        "sessMs": 439319,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED"
+      },
+      "afterOpen": {
+        "sessMs": 439429,
+        "mcPhase": "idle",
+        "label": "NEXT: Produce your first Toy"
+      },
+      "masteryShown": {
+        "sessMs": 441357,
+        "mcPhase": "idle",
+        "label": "TOY RUSH — 0 / 28 Toys"
+      },
+      "fundingChoice": {
+        "sessMs": 490870,
+        "mcPhase": "funding_choice",
+        "label": "SMARTPHONE FUND — choose BALANCED or FAST"
+      },
+      "atPolicyChoice": {
+        "sessMs": 491459,
+        "mcPhase": "funding_choice",
+        "label": "SMARTPHONE FUND — choose BALANCED or FAST"
+      },
+      "policySelected": {
+        "sessMs": 491560,
+        "mcPhase": "smartphone_funding",
+        "label": "SMARTPHONE FUND — $0 / $1075 · BALANCED"
+      },
+      "beforeMidFundingReload": {
+        "sessMs": 591042,
+        "mcPhase": "smartphone_funding",
+        "label": "SMARTPHONE FUND — $486 / $1075 · BALANCED"
+      },
+      "afterMidFundingReload": {
+        "sessMs": 591283,
+        "mcPhase": "smartphone_funding",
+        "label": "SMARTPHONE FUND — $486 / $1075 · BALANCED"
+      },
+      "ready": {
+        "sessMs": 699560,
+        "mcPhase": "smartphone_ready",
+        "label": "SMARTPHONE READY — BUILD SMARTPHONE LINE"
+      },
+      "afterBuild": {
+        "sessMs": 700330,
+        "mcPhase": "first_smartphone",
+        "label": "FIRST SMARTPHONE — Produce and sell your first Smartphone"
+      },
+      "firstPhone": {
+        "sessMs": 700806,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…"
+      },
+      "launchObserve": {
+        "sessMs": 705018,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…"
+      },
+      "shift1": {
+        "sessMs": 830564,
+        "mcPhase": "return_preview",
+        "label": "SHIFT 1 COMPLETE · NEXT SHIFT ready on your next visit"
+      },
+      "afterReturnReload": {
+        "sessMs": 831352,
+        "mcPhase": "return_challenge",
+        "label": "FLOW RESTART — 0 / 120 phones"
+      },
+      "returnDone": {
+        "sessMs": 920160,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund"
+      },
+      "afterFreeCreditReload": {
+        "sessMs": 920398,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund"
+      },
+      "afterSpendReload": {
+        "sessMs": 920790,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund"
+      }
+    },
+    "partB_markers": {
+      "stage1": {
+        "sessMs": 56073,
+        "mcPhase": "idle",
+        "label": "CHOOSE: Throughput (Speed) or Margin (Value)"
+      },
+      "convergence": {
+        "sessMs": 204661,
+        "mcPhase": "idle",
+        "label": "TOYS — $260 / $650 EARNED"
+      },
+      "toysThreshold": {
+        "sessMs": 391462,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED"
+      },
+      "toysReady": {
+        "sessMs": 391462,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED"
+      },
+      "beforeOpen": {
+        "sessMs": 391519,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED"
+      },
+      "afterOpen": {
+        "sessMs": 391634,
+        "mcPhase": "idle",
+        "label": "NEXT: Produce your first Toy"
+      },
+      "masteryShown": {
+        "sessMs": 393579,
+        "mcPhase": "idle",
+        "label": "PREMIUM TOYS — $0 / $420"
+      },
+      "fundingChoice": {
+        "sessMs": 437179,
+        "mcPhase": "funding_choice",
+        "label": "SMARTPHONE FUND — choose BALANCED or FAST"
+      },
+      "atPolicyChoice": {
+        "sessMs": 437739,
+        "mcPhase": "funding_choice",
+        "label": "SMARTPHONE FUND — choose BALANCED or FAST"
+      },
+      "policySelected": {
+        "sessMs": 437849,
+        "mcPhase": "smartphone_funding",
+        "label": "SMARTPHONE FUND — $0 / $1900 · FAST"
+      },
+      "ready": {
+        "sessMs": 630111,
+        "mcPhase": "smartphone_ready",
+        "label": "SMARTPHONE READY — BUILD SMARTPHONE LINE"
+      },
+      "afterBuild": {
+        "sessMs": 630873,
+        "mcPhase": "first_smartphone",
+        "label": "FIRST SMARTPHONE — Produce and sell your first Smartphone"
+      },
+      "firstPhone": {
+        "sessMs": 632446,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…"
+      },
+      "launchObserve": {
+        "sessMs": 636645,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…"
+      },
+      "beforeLaunchReload": {
+        "sessMs": 636710,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…"
+      },
+      "afterLaunchReload": {
+        "sessMs": 636956,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…"
+      },
+      "shift1": {
+        "sessMs": 693393,
+        "mcPhase": "return_preview",
+        "label": "SHIFT 1 COMPLETE · NEXT SHIFT ready on your next visit"
+      },
+      "afterReturnReload": {
+        "sessMs": 694228,
+        "mcPhase": "return_challenge",
+        "label": "MARGIN RESTART — $61 / $11000"
+      },
+      "returnDone": {
+        "sessMs": 734813,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund"
+      },
+      "afterFreeCreditReload": {
+        "sessMs": 735051,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund"
+      },
+      "afterSpendReload": {
+        "sessMs": 735418,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund"
+      }
+    }
+  },
+  "cross": {
+    "fastFundingShorter": true,
+    "fastFundingRatio": 0.925,
+    "bothBuildAboveFloor": true
+  },
+  "verdict": {
+    "partA": {
+      "pass": 36,
+      "total": 38,
+      "fail": [
+        "fundingUpgradeAvailability",
+        "returnDuration2_5min"
+      ]
+    },
+    "partB": {
+      "pass": 36,
+      "total": 39,
+      "fail": [
+        "fundingUpgradeAvailability",
+        "launchReloadPreserves",
+        "returnDuration2_5min"
+      ]
+    },
+    "cross": {
+      "fastFundingShorter": true,
+      "fastFundingRatio": 0.925,
+      "bothBuildAboveFloor": true
+    }
+  }
+}

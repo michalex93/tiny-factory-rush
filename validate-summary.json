@@ -1,0 +1,1289 @@
+{
+  "speed": {
+    "wallMs": 300935,
+    "stage1": {
+      "wall": 44523,
+      "sess": 45382,
+      "tp": 28,
+      "wip": 7,
+      "blk": 0,
+      "inc": 56,
+      "prof": 72,
+      "up": 2
+    },
+    "stage2": {
+      "wall": 59458,
+      "sess": 60318,
+      "tp": 28,
+      "wip": 9,
+      "blk": 0.166,
+      "inc": 56,
+      "up": 2
+    },
+    "stage3": {
+      "wall": 102443,
+      "sess": 103292,
+      "tp": 52,
+      "wip": 9,
+      "blk": 0.225,
+      "inc": 146.1,
+      "prof": 180,
+      "up": 6
+    },
+    "choice": {
+      "id": "more_speed",
+      "wallMs": 59889
+    },
+    "assist": false,
+    "notes": {
+      "autoComplete": false,
+      "gapNoDirectionMs": 1265,
+      "celebrationSeen": true,
+      "nextGoalUnder2s": true,
+      "abandonUrgeAt": 122883,
+      "afterStage3": "Optimization chain complete — keep tuning the line",
+      "improvedShot": true
+    },
+    "end": {
+      "sess": 301314,
+      "up": 24,
+      "tp": 44,
+      "wip": 2,
+      "blk": 0,
+      "inc": 384,
+      "prof": 324,
+      "stage": "economic_efficiency",
+      "status": "chain_complete",
+      "completed": [
+        "throughput",
+        "flow_stability",
+        "economic_efficiency"
+      ],
+      "label": "Optimization chain complete — keep tuning the line",
+      "levels": {
+        "0": {
+          "speed": 0,
+          "buffer": 0,
+          "value": 10
+        },
+        "1": {
+          "speed": 11,
+          "buffer": 0,
+          "value": 3
+        },
+        "2": {
+          "speed": 0,
+          "buffer": 0,
+          "value": 0
+        }
+      }
+    },
+    "reportBrief": {
+      "goalCompleteMs": 45116,
+      "upBought": 24,
+      "tpI": 14,
+      "tpF": 28,
+      "onb": true,
+      "uniqueHints": [
+        "TAP a running machine to boost it",
+        "Money in! Watch where products pile up…",
+        "Bottleneck: M2 — queue builds here. Speed it up!",
+        "Watch the queue…",
+        "OUTPUT 14→28/min · WIP 7 · BN M2",
+        "GOAL 3: earn $90/min for 12s (keep WIP/blocks in check)",
+        "OUTPUT +0%",
+        "IMPROVED +5% — STILL LIMITING",
+        "Optimization chain complete — keep tuning the line",
+        "BOTTLENECK MOVED TO M1",
+        "QUEUE SHRINKING"
+      ],
+      "suppressedCount": 25
+    },
+    "keyEvents": [
+      {
+        "n": "session_goal_stage_start",
+        "ms": 21056,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 21056,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput",
+          "progress": 0.5,
+          "throughput": 14,
+          "target": 28
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 22655,
+        "p": {
+          "before": 14,
+          "after": 14,
+          "deltaPct": 0,
+          "beforeWip": 5,
+          "afterWip": 6,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "up"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 29831,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput",
+          "progress": 0.7857142857142857,
+          "throughput": 22,
+          "target": 28
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 40687,
+        "p": {
+          "before": 26,
+          "after": 24,
+          "deltaPct": -7.6923076923076925,
+          "beforeWip": 7,
+          "afterWip": 8,
+          "kind": "neutral",
+          "message": "OUTPUT -8%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 45116,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput",
+          "progress": 1,
+          "throughput": 28,
+          "target": 28
+        }
+      },
+      {
+        "n": "session_goal_stage_complete",
+        "ms": 45116,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput"
+        }
+      },
+      {
+        "n": "session_goal_complete",
+        "ms": 45116,
+        "p": {
+          "success": true
+        }
+      },
+      {
+        "n": "optimization_choice_view",
+        "ms": 45116,
+        "p": {
+          "a": "more_speed",
+          "b": "more_buffer"
+        }
+      },
+      {
+        "n": "session_goal_stage_start",
+        "ms": 45116,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 45133,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 0.0011099999999999999,
+          "throughput": 28,
+          "blocked": 0,
+          "wip": 7
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 48879,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 0.2508726666666671,
+          "throughput": 26,
+          "blocked": 0,
+          "wip": 8
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 52625,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 0.5006259999999993,
+          "throughput": 28,
+          "blocked": 0,
+          "wip": 8
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 56372,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 0.7503799999999958,
+          "throughput": 28,
+          "blocked": 0.036605657237936774,
+          "wip": 8
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 60118,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 1,
+          "throughput": 28,
+          "blocked": 0.15307820299500832,
+          "wip": 8
+        }
+      },
+      {
+        "n": "session_goal_stage_complete",
+        "ms": 60118,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability"
+        }
+      },
+      {
+        "n": "session_goal_stage_start",
+        "ms": 60118,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 60134,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 0,
+          "income": 56,
+          "blocked": 0.15474209650582363,
+          "wip": 8
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 60750,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 62366,
+        "p": {
+          "before": 28,
+          "after": 28,
+          "deltaPct": 0,
+          "beforeWip": 9,
+          "afterWip": 8,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 82080,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 83695,
+        "p": {
+          "before": 32,
+          "after": 32,
+          "deltaPct": 0,
+          "beforeWip": 8,
+          "afterWip": 8,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 91237,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "value"
+        }
+      },
+      {
+        "n": "bottleneck_persisted",
+        "ms": 92852,
+        "p": {
+          "machineId": 1
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 92852,
+        "p": {
+          "before": 40,
+          "after": 42,
+          "deltaPct": 5,
+          "beforeWip": 8,
+          "afterWip": 8,
+          "kind": "bottleneck_improved_still_limiting",
+          "message": "IMPROVED +5% — STILL LIMITING",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 94251,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 0.2511433333333331,
+          "income": 105.36960000000002,
+          "blocked": 0.07744107744107744,
+          "wip": 9
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 97248,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 0.5008808333333321,
+          "income": 115.40480000000002,
+          "blocked": 0.10851419031719532,
+          "wip": 8
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 99979,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "value"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 100245,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 0.7506408333333303,
+          "income": 140.49280000000005,
+          "blocked": 0.17529215358931552,
+          "wip": 8
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 101594,
+        "p": {
+          "before": 50,
+          "after": 50,
+          "deltaPct": 0,
+          "beforeWip": 8,
+          "afterWip": 9,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 103242,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 1,
+          "income": 146.11251200000004,
+          "blocked": 0.22462562396006655,
+          "wip": 9
+        }
+      },
+      {
+        "n": "session_goal_stage_complete",
+        "ms": 103242,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency"
+        }
+      },
+      {
+        "n": "session_goal_chain_complete",
+        "ms": 103242
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 111018,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 112633,
+        "p": {
+          "before": 56,
+          "after": 54,
+          "deltaPct": -3.571428571428571,
+          "beforeWip": 8,
+          "afterWip": 9,
+          "kind": "neutral",
+          "message": "OUTPUT -4%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 125037,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 126653,
+        "p": {
+          "before": 46,
+          "after": 44,
+          "deltaPct": -4.3478260869565215,
+          "beforeWip": 8,
+          "afterWip": 9,
+          "kind": "neutral",
+          "message": "OUTPUT -4%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 131414,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 133030,
+        "p": {
+          "before": 40,
+          "after": 38,
+          "deltaPct": -5,
+          "beforeWip": 8,
+          "afterWip": 8,
+          "kind": "neutral",
+          "message": "OUTPUT -5%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 139140,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 140755,
+        "p": {
+          "before": 40,
+          "after": 40,
+          "deltaPct": 0,
+          "beforeWip": 7,
+          "afterWip": 6,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 155857,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 157473,
+        "p": {
+          "before": 48,
+          "after": 46,
+          "deltaPct": -4.166666666666666,
+          "beforeWip": 2,
+          "afterWip": 2,
+          "kind": "neutral",
+          "message": "OUTPUT -4%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 169277,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 170892,
+        "p": {
+          "before": 44,
+          "after": 46,
+          "deltaPct": 4.545454545454546,
+          "beforeWip": 2,
+          "afterWip": 2,
+          "kind": "neutral",
+          "message": "OUTPUT +5%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 175055,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 176670,
+        "p": {
+          "before": 48,
+          "after": 48,
+          "deltaPct": 0,
+          "beforeWip": 2,
+          "afterWip": 2,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 182031,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 183646,
+        "p": {
+          "before": 52,
+          "after": 54,
+          "deltaPct": 3.8461538461538463,
+          "beforeWip": 2,
+          "afterWip": 2,
+          "kind": "neutral",
+          "message": "OUTPUT +4%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 185229,
+        "p": {
+          "choiceId": "more_speed",
+          "machineId": 1,
+          "type": "speed"
+        }
+      }
+    ]
+  },
+  "buffer": {
+    "wallMs": 300800,
+    "stage1": {
+      "wall": 42620,
+      "sess": 43443,
+      "tp": 26,
+      "wip": 7,
+      "blk": 0,
+      "inc": 52,
+      "prof": 72,
+      "up": 2
+    },
+    "stage2": {
+      "wall": 57475,
+      "sess": 58295,
+      "tp": 28,
+      "wip": 8,
+      "blk": 0.082,
+      "inc": 56,
+      "up": 2
+    },
+    "stage3": {
+      "wall": 105992,
+      "sess": 106814,
+      "tp": 50,
+      "wip": 9,
+      "blk": 0.281,
+      "inc": 125.4,
+      "prof": 108,
+      "up": 5
+    },
+    "choice": {
+      "id": "more_buffer",
+      "wallMs": 67238
+    },
+    "assist": false,
+    "notes": {
+      "autoComplete": false,
+      "gapNoDirectionMs": 1244,
+      "celebrationSeen": true,
+      "nextGoalUnder2s": true,
+      "abandonUrgeAt": 126229,
+      "afterStage3": "Optimization chain complete — keep tuning the line",
+      "improvedShot": true
+    },
+    "end": {
+      "sess": 301257,
+      "up": 22,
+      "tp": 42,
+      "wip": 2,
+      "blk": 0,
+      "inc": 260.9,
+      "prof": 288,
+      "stage": "economic_efficiency",
+      "status": "chain_complete",
+      "completed": [
+        "throughput",
+        "flow_stability",
+        "economic_efficiency"
+      ],
+      "label": "Optimization chain complete — keep tuning the line",
+      "levels": {
+        "0": {
+          "speed": 0,
+          "buffer": 1,
+          "value": 8
+        },
+        "1": {
+          "speed": 11,
+          "buffer": 0,
+          "value": 2
+        },
+        "2": {
+          "speed": 0,
+          "buffer": 0,
+          "value": 0
+        }
+      }
+    },
+    "reportBrief": {
+      "goalCompleteMs": 43060,
+      "upBought": 22,
+      "tpI": 14,
+      "tpF": 28,
+      "onb": true,
+      "uniqueHints": [
+        "TAP a running machine to boost it",
+        "Money in! Watch where products pile up…",
+        "Bottleneck: M2 — queue builds here. Speed it up!",
+        "Watch the queue…",
+        "OUTPUT 14→28/min · WIP 7 · BN M2",
+        "GOAL 3: earn $90/min for 12s (keep WIP/blocks in check)",
+        "OUTPUT +0%",
+        "IMPROVED +6% — STILL LIMITING",
+        "Optimization chain complete — keep tuning the line",
+        "QUEUE SHRINKING",
+        "OUTPUT +8%",
+        "BOTTLENECK MOVED TO M1"
+      ],
+      "suppressedCount": 24
+    },
+    "keyEvents": [
+      {
+        "n": "session_goal_stage_start",
+        "ms": 20965,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 20965,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput",
+          "progress": 0.5,
+          "throughput": 14,
+          "target": 28
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 22564,
+        "p": {
+          "before": 14,
+          "after": 14,
+          "deltaPct": 0,
+          "beforeWip": 5,
+          "afterWip": 6,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "up"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 29807,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput",
+          "progress": 0.7857142857142857,
+          "throughput": 22,
+          "target": 28
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 40696,
+        "p": {
+          "before": 26,
+          "after": 24,
+          "deltaPct": -7.6923076923076925,
+          "beforeWip": 7,
+          "afterWip": 8,
+          "kind": "neutral",
+          "message": "OUTPUT -8%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 43060,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput",
+          "progress": 1,
+          "throughput": 28,
+          "target": 28
+        }
+      },
+      {
+        "n": "session_goal_stage_complete",
+        "ms": 43060,
+        "p": {
+          "stageIndex": 0,
+          "stageId": "throughput"
+        }
+      },
+      {
+        "n": "session_goal_complete",
+        "ms": 43060,
+        "p": {
+          "success": true
+        }
+      },
+      {
+        "n": "optimization_choice_view",
+        "ms": 43060,
+        "p": {
+          "a": "more_speed",
+          "b": "more_buffer"
+        }
+      },
+      {
+        "n": "session_goal_stage_start",
+        "ms": 43060,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 43077,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 0.001109333333333343,
+          "throughput": 26,
+          "blocked": 0,
+          "wip": 7
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 46823,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 0.2508666666666672,
+          "throughput": 26,
+          "blocked": 0,
+          "wip": 8
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 50570,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 0.5006199999999991,
+          "throughput": 28,
+          "blocked": 0,
+          "wip": 8
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 54316,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 0.750386666666663,
+          "throughput": 28,
+          "blocked": 0.004991680532445923,
+          "wip": 8
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 58062,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability",
+          "progress": 1,
+          "throughput": 28,
+          "blocked": 0.06821963394342762,
+          "wip": 8
+        }
+      },
+      {
+        "n": "session_goal_stage_complete",
+        "ms": 58062,
+        "p": {
+          "stageIndex": 1,
+          "stageId": "flow_stability"
+        }
+      },
+      {
+        "n": "session_goal_stage_start",
+        "ms": 58062,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 58079,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 0,
+          "income": 56,
+          "blocked": 0.06988352745424292,
+          "wip": 8
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 68052,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 0,
+          "type": "buffer"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 69668,
+        "p": {
+          "before": 30,
+          "after": 30,
+          "deltaPct": 0,
+          "beforeWip": 8,
+          "afterWip": 8,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 87966,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 1,
+          "type": "value"
+        }
+      },
+      {
+        "n": "bottleneck_persisted",
+        "ms": 89581,
+        "p": {
+          "machineId": 1
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 89581,
+        "p": {
+          "before": 34,
+          "after": 36,
+          "deltaPct": 5.88235294117647,
+          "beforeWip": 9,
+          "afterWip": 9,
+          "kind": "bottleneck_improved_still_limiting",
+          "message": "IMPROVED +6% — STILL LIMITING",
+          "wipTrend": "down"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 97807,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 0.2511466666666665,
+          "income": 98.56,
+          "blocked": 0.2762063227953411,
+          "wip": 9
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 100804,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 0.5008974999999989,
+          "income": 107.52000000000001,
+          "blocked": 0.26955074875207985,
+          "wip": 9
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 102236,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 1,
+          "type": "value"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 103801,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 0.7506566666666652,
+          "income": 120.42240000000001,
+          "blocked": 0.3261231281198003,
+          "wip": 9
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 103851,
+        "p": {
+          "before": 48,
+          "after": 48,
+          "deltaPct": 0,
+          "beforeWip": 10,
+          "afterWip": 9,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "session_goal_stage_progress",
+        "ms": 106798,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency",
+          "progress": 1,
+          "income": 125.44000000000001,
+          "blocked": 0.281198003327787,
+          "wip": 9
+        }
+      },
+      {
+        "n": "session_goal_stage_complete",
+        "ms": 106798,
+        "p": {
+          "stageIndex": 2,
+          "stageId": "economic_efficiency"
+        }
+      },
+      {
+        "n": "session_goal_chain_complete",
+        "ms": 106798
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 116938,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 118553,
+        "p": {
+          "before": 46,
+          "after": 44,
+          "deltaPct": -4.3478260869565215,
+          "beforeWip": 9,
+          "afterWip": 9,
+          "kind": "queue_shrinking",
+          "message": "QUEUE SHRINKING",
+          "wipTrend": "down"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 128327,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 129942,
+        "p": {
+          "before": 36,
+          "after": 34,
+          "deltaPct": -5.555555555555555,
+          "beforeWip": 9,
+          "afterWip": 9,
+          "kind": "neutral",
+          "message": "OUTPUT -6%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 144228,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 145843,
+        "p": {
+          "before": 34,
+          "after": 34,
+          "deltaPct": 0,
+          "beforeWip": 9,
+          "afterWip": 9,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 153718,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 155334,
+        "p": {
+          "before": 38,
+          "after": 38,
+          "deltaPct": 0,
+          "beforeWip": 7,
+          "afterWip": 7,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 166456,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 168071,
+        "p": {
+          "before": 42,
+          "after": 44,
+          "deltaPct": 4.761904761904762,
+          "beforeWip": 4,
+          "afterWip": 4,
+          "kind": "neutral",
+          "message": "OUTPUT +5%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 172167,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 173782,
+        "p": {
+          "before": 52,
+          "after": 56,
+          "deltaPct": 7.6923076923076925,
+          "beforeWip": 3,
+          "afterWip": 2,
+          "kind": "output_up",
+          "message": "OUTPUT +8%",
+          "wipTrend": "up"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 174731,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 176346,
+        "p": {
+          "before": 56,
+          "after": 58,
+          "deltaPct": 3.571428571428571,
+          "beforeWip": 2,
+          "afterWip": 1,
+          "kind": "neutral",
+          "message": "OUTPUT +4%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 181008,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 182623,
+        "p": {
+          "before": 62,
+          "after": 62,
+          "deltaPct": 0,
+          "beforeWip": 2,
+          "afterWip": 2,
+          "kind": "neutral",
+          "message": "OUTPUT +0%",
+          "wipTrend": "flat"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 184155,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 0,
+          "type": "value"
+        }
+      },
+      {
+        "n": "optimization_choice_selected",
+        "ms": 184788,
+        "p": {
+          "choiceId": "more_buffer",
+          "machineId": 1,
+          "type": "speed"
+        }
+      },
+      {
+        "n": "upgrade_effect_shown",
+        "ms": 186403,
+        "p": {
+          "before": 64,
+          "after": 66,
+          "deltaPct": 3.125,
+          "beforeWip": 2,
+          "afterWip": 1,
+          "kind": "queue_shrinking",
+          "message": "QUEUE SHRINKING",
+          "wipTrend": "down"
+        }
+      }
+    ]
+  }
+}

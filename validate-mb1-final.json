@@ -1,0 +1,282 @@
+{
+  "throughput": {
+    "route": "throughput",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "wallMin": 8.01,
+    "stage1": {
+      "wallSec": 333.2,
+      "sessSec": 43.5,
+      "phase": "awaiting_choice",
+      "tp": 26,
+      "income": 52,
+      "wip": 7,
+      "up": 2,
+      "earned": 34,
+      "coins": 4,
+      "label": "CHOOSE: Throughput (Speed) or Margin (Value)",
+      "branch": null
+    },
+    "choiceShown": {
+      "wallSec": 333.2,
+      "phase": "awaiting_choice",
+      "label": "CHOOSE: Throughput (Speed) or Margin (Value)"
+    },
+    "choiceSelected": {
+      "wall": 333227,
+      "route": "throughput"
+    },
+    "purchase": {
+      "wallSec": 351,
+      "phase": "branch",
+      "up": 3,
+      "branch": "throughput"
+    },
+    "branchDone": {
+      "wallSec": 395.9,
+      "sessSec": 106.2,
+      "phase": "convergence",
+      "tp": 56,
+      "income": 112,
+      "wip": 8,
+      "up": 4,
+      "earned": 138,
+      "coins": 42,
+      "label": "BALANCE: OUTPUT≥32 · INCOME≥$85/min · 20s",
+      "branch": "throughput"
+    },
+    "convergenceDone": {
+      "wallSec": 418.7,
+      "sessSec": 129,
+      "phase": "post_chain",
+      "tp": 40,
+      "income": 100.4,
+      "wip": 8,
+      "up": 6,
+      "earned": 167,
+      "coins": 4,
+      "label": "NEXT: unlock Toys — earn $400 then pay $280",
+      "branch": "throughput"
+    },
+    "toysShown": {
+      "wallSec": 418.7,
+      "earned": 167,
+      "coins": 4,
+      "canUnlock": false,
+      "unlocked": false,
+      "label": "NEXT: unlock Toys — earn $400 then pay $280"
+    },
+    "toysUnlockable": null,
+    "toysBought": null,
+    "upgradesAt5": 0,
+    "upgradesAt8": 8,
+    "notes": {
+      "branchProgressedBeforeBuy": false,
+      "maxGapNoDirMs": 1053,
+      "toysShownWhenAlreadyReady": false,
+      "badgeSeen": false,
+      "improvedShot": false
+    },
+    "end": {
+      "sessSec": 190.6,
+      "up": 8,
+      "tp": 64,
+      "income": 179.8,
+      "wip": 3,
+      "bn": 1,
+      "phase": "post_chain",
+      "earned": 339,
+      "unlockedToys": false,
+      "levels": {
+        "0": {
+          "speed": 0,
+          "buffer": 0,
+          "value": 0
+        },
+        "1": {
+          "speed": 5,
+          "buffer": 0,
+          "value": 3
+        },
+        "2": {
+          "speed": 0,
+          "buffer": 0,
+          "value": 0
+        }
+      },
+      "label": "NEXT: unlock Toys — earn $400 then pay $280"
+    },
+    "report": {
+      "stage1CompleteMs": 43055,
+      "branchSelected": "throughput",
+      "branchPurchaseTime": 59555,
+      "branchGoalCompletionTime": 106076,
+      "convergenceCompletionTime": 128604,
+      "nextMilestoneShownTime": 128604,
+      "upgradesBought": 8,
+      "upgradesByType": {
+        "speed": 5,
+        "buffer": 0,
+        "value": 3
+      },
+      "tpI": 14,
+      "tpF": 28,
+      "lineIncome": 179.83078400000005,
+      "onb": true,
+      "uniqueHints": [
+        "TAP a running machine to boost it",
+        "Money in! Watch where products pile up…",
+        "Bottleneck: M2 — queue builds here. Speed it up!",
+        "Watch the queue…",
+        "OUTPUT 14→28/min · WIP 7 · BN M2",
+        "BRANCH: hold OUTPUT ≥ 32/min for 22s",
+        "OUTPUT +5%",
+        "BALANCE: OUTPUT≥32 · INCOME≥$85/min · 20s",
+        "NEXT: unlock Toys — earn $400 then pay $280",
+        "QUEUE SHRINKING"
+      ]
+    }
+  },
+  "margin": {
+    "route": "margin",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "wallMin": 8.05,
+    "stage1": {
+      "wallSec": 44.5,
+      "sessSec": 45.5,
+      "phase": "awaiting_choice",
+      "tp": 28,
+      "income": 56,
+      "wip": 7,
+      "up": 2,
+      "earned": 36,
+      "coins": 6,
+      "label": "CHOOSE: Throughput (Speed) or Margin (Value)",
+      "branch": null
+    },
+    "choiceShown": {
+      "wallSec": 44.5,
+      "phase": "awaiting_choice",
+      "label": "CHOOSE: Throughput (Speed) or Margin (Value)"
+    },
+    "choiceSelected": {
+      "wall": 44538,
+      "route": "margin"
+    },
+    "purchase": {
+      "wallSec": 64.2,
+      "phase": "branch",
+      "up": 3,
+      "branch": "margin"
+    },
+    "branchDone": {
+      "wallSec": 94.5,
+      "sessSec": 95.5,
+      "phase": "convergence",
+      "tp": 38,
+      "income": 95.3,
+      "wip": 9,
+      "up": 4,
+      "earned": 118,
+      "coins": 25,
+      "label": "BALANCE: OUTPUT≥32 · INCOME≥$85/min · 20s",
+      "branch": "margin"
+    },
+    "convergenceDone": {
+      "wallSec": 117,
+      "sessSec": 118,
+      "phase": "post_chain",
+      "tp": 50,
+      "income": 125.4,
+      "wip": 8,
+      "up": 6,
+      "earned": 189,
+      "coins": 15,
+      "label": "NEXT: unlock Toys — earn $400 then pay $280",
+      "branch": "margin"
+    },
+    "toysShown": {
+      "wallSec": 117,
+      "earned": 189,
+      "coins": 15,
+      "canUnlock": false,
+      "unlocked": false,
+      "label": "NEXT: unlock Toys — earn $400 then pay $280"
+    },
+    "toysUnlockable": null,
+    "toysBought": null,
+    "upgradesAt5": 11,
+    "upgradesAt8": 16,
+    "notes": {
+      "branchProgressedBeforeBuy": false,
+      "maxGapNoDirMs": 1058,
+      "toysShownWhenAlreadyReady": false,
+      "badgeSeen": false,
+      "improvedShot": false
+    },
+    "end": {
+      "sessSec": 478.3,
+      "up": 16,
+      "tp": 40,
+      "income": 176.9,
+      "wip": 2,
+      "bn": 2,
+      "phase": "post_chain",
+      "earned": 1497,
+      "unlockedToys": false,
+      "levels": {
+        "0": {
+          "speed": 0,
+          "buffer": 0,
+          "value": 0
+        },
+        "1": {
+          "speed": 9,
+          "buffer": 0,
+          "value": 7
+        },
+        "2": {
+          "speed": 0,
+          "buffer": 0,
+          "value": 0
+        }
+      },
+      "label": "NEXT: unlock Toys — earn $400 then pay $280"
+    },
+    "report": {
+      "stage1CompleteMs": 45121,
+      "branchSelected": "margin",
+      "branchPurchaseTime": 63470,
+      "branchGoalCompletionTime": 95255,
+      "convergenceCompletionTime": 117783,
+      "nextMilestoneShownTime": 117783,
+      "upgradesBought": 16,
+      "upgradesByType": {
+        "speed": 9,
+        "buffer": 0,
+        "value": 7
+      },
+      "tpI": 14,
+      "tpF": 28,
+      "lineIncome": 176.85451259248651,
+      "onb": true,
+      "uniqueHints": [
+        "TAP a running machine to boost it",
+        "Money in! Watch where products pile up…",
+        "Bottleneck: M2 — queue builds here. Speed it up!",
+        "Watch the queue…",
+        "OUTPUT 14→28/min · WIP 7 · BN M2",
+        "BRANCH: hold LINE INCOME ≥ $63/min for 22s",
+        "OUTPUT +0%",
+        "BALANCE: OUTPUT≥32 · INCOME≥$85/min · 20s",
+        "NEXT: unlock Toys — earn $400 then pay $280",
+        "QUEUE SHRINKING"
+      ]
+    }
+  }
+}
