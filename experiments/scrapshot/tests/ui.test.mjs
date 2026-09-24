@@ -54,7 +54,7 @@ test("compiled app completes all ten sites through its actual UI handlers and pr
   for (let site = 0; site < 10; site++) {
     tick(120);
     range("angle", site === 3 ? 10 : 5);
-    range("power", [1, 3, 6, 8].includes(site) ? 100 : 70);
+    range("power", site === 6 ? 85 : [1, 3, 9].includes(site) ? 100 : 70);
     for (let shot = 0; shot < 3 && el("overlay").hidden; shot++) {
       assert.equal(el("fire").disabled, false);
       el("fire").click();
@@ -139,4 +139,27 @@ test("workshop upgrades spend once, extend the round, lock during play and persi
   const c = boot(save);
   assert.match(c.el("shots").textContent, /●●●●/);
   c.dom.window.close();
+});
+
+test("new players unlock tools gradually; workshop projects persist without duplicate spending", () => {
+  const fresh = boot();
+  assert.equal(fresh.w.document.querySelector('[data-kind="heavy"]').disabled, true);
+  assert.equal(fresh.w.document.querySelector('[data-kind="magnet"]').disabled, true);
+  fresh.dom.window.close();
+  const a = boot(JSON.stringify({schema: 2, best: [3,3,3,3,3,3], unlocked: 6, coins: 777, upgrades: {impact: 2, magazine: 1}}));
+  assert.equal(a.w.document.querySelector('[data-kind="magnet"]').disabled, false);
+  a.el("build-project").click();
+  a.el("build-project").click();
+  a.el("build-project").click();
+  assert.equal(a.el("build-project").disabled, true);
+  assert.match(a.el("shots").textContent, /●●●●●/);
+  const saved = JSON.parse(a.w.localStorage.getItem("scrapshot.progress.v1"));
+  assert.equal(saved.salvage, 50);
+  assert.equal(saved.projects, 3);
+  assert.equal(saved.coins, 777);
+  a.dom.window.close();
+  const b = boot(JSON.stringify(saved));
+  assert.equal(b.el("build-project").disabled, true);
+  assert.equal(b.w.document.querySelectorAll('.building.built').length, 3);
+  b.dom.window.close();
 });

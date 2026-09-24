@@ -127,28 +127,25 @@ export const levels: Level[] = [
   },
 ];
 
-// Reinforced contracts reuse familiar silhouettes with tougher weak points.
-const reinforcedNames = [
-  ["Reinforced domino", "Ficha reforzada"],
-  ["Twin strongholds", "Fortalezas gemelas"],
-  ["Steelworks", "La acería"],
-  ["Scrapyard fortress", "Fortaleza del desguace"],
-  ["Final contract", "Contrato final"],
-];
+// Five distinct structures: bridges, stepped supports, metal loads and offset towers.
 levels.push(
-  ...levels.slice(0, 5).map(
-    (level, i): Level => ({
-      ...level,
-      name: reinforcedNames[i][0],
-      es: reinforcedNames[i][1],
-      goal: 85,
-      hint: "Reinforced supports. Upgrade impact or add a shot in the workshop.",
-      hintEs:
-        "Soportes reforzados. Mejora el impacto o añade disparos en el taller.",
-      blocks: level.blocks.map((block) => ({
-        ...block,
-        material: block.material === "glass" ? "wood" : block.material,
-      })),
-    }),
-  ),
+  { name: "The freight bridge", es: "El puente de carga", hint: "Remove a bridge pier to tip its cargo.", hintEs: "Quita un pilar del puente para volcar la carga.", line: 420, goal: 80, blocks: [
+    b(620,452,26,112,"glass"), b(850,452,26,112,"wood"), b(735,383,280,24,"wood"),
+    b(640,345,44,50,"metal"), b(710,345,44,50,"wood"), b(780,345,44,50,"metal"), b(835,345,44,50,"wood") ] },
+  { name: "The staircase", es: "La escalera", hint: "Different heights need different angles. Start with the closest support.", hintEs: "Cada altura pide otro ángulo. Empieza por el soporte más cercano.", line: 440, goal: 80, blocks: [
+    b(590,458,26,100,"glass"), b(640,458,26,100,"wood"), b(615,396,96,24,"wood"),
+    b(745,438,28,140,"glass"), b(795,438,28,140,"wood"), b(770,356,100,24,"wood"),
+    b(890,418,28,180,"glass"), b(940,418,28,180,"wood"), b(915,316,100,24,"metal") ] },
+  { name: "Iron cargo", es: "Carga de hierro", hint: "Pull the metal load sideways with the magnet or push its glass supports.", hintEs: "Atrae la carga con el imán o empuja sus soportes de vidrio.", line: 430, goal: 80, blocks: [
+    b(640,448,26,120,"glass"), b(790,448,26,120,"glass"), b(715,376,200,24,"metal"),
+    b(655,341,40,44,"metal"), b(715,341,40,44,"metal"), b(775,341,40,44,"metal"),
+    b(685,298,40,40,"wood"), b(745,298,40,40,"wood") ] },
+  { name: "Off balance", es: "Fuera de equilibrio", hint: "The upper floors overhang to the right. Let their weight help.", hintEs: "Los pisos superiores sobresalen a la derecha. Aprovecha su peso.", line: 425, goal: 80, blocks: [
+    b(660,448,30,120,"wood"), b(760,448,30,120,"glass"), b(720,376,164,24,"wood"),
+    b(715,331,28,64,"wood"), b(785,331,28,64,"glass"), b(758,286,142,24,"wood"),
+    b(744,250,38,46,"metal"), b(790,250,38,46,"wood") ] },
+  { name: "The long yard", es: "El gran patio", hint: "Three separate structures. Save a shot for the far tower.", hintEs: "Tres estructuras separadas. Guarda un disparo para la torre del fondo.", line: 420, goal: 85, blocks: [
+    b(560,458,24,100,"glass"), b(620,458,24,100,"wood"), b(590,396,100,24,"wood"), b(590,360,40,46,"metal"),
+    b(725,443,24,130,"glass"), b(785,443,24,130,"wood"), b(755,366,100,24,"wood"), b(755,330,40,46,"metal"),
+    b(880,458,24,100,"glass"), b(940,458,24,100,"wood"), b(910,396,100,24,"wood"), b(910,360,40,46,"metal") ] },
 );

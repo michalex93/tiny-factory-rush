@@ -2,6 +2,7 @@ import Matter from "matter-js";
 import { levels, type Material } from "./levels";
 import {
   SAVE_KEY,
+  recoverScrap, buildProject, PROJECT_COSTS, toolAvailable,
   shotBudget,
   starsForShots,
   upgradeCost,
@@ -112,7 +113,7 @@ const words = {
   en: {
     tag: "PHYSICS PLAYGROUND",
     title: "A little shot. A big reaction.",
-    sub: "Find the weak spot. Bring the whole thing down.",
+    sub: "Demolish. Recover. Rebuild your workshop.",
     sector: "SITE",
     shot: "SHOTS LEFT",
     clear: "CLEARED",
@@ -136,7 +137,7 @@ const words = {
     glass: "Glass",
     metal: "Metal",
     levelLabel: "Ten contracts.\nBuild a better cannon.",
-    footer: "PROTOTYPE 02 / THE SCRAPYARD",
+    footer: "PROTOTYPE 03 / THE SCRAPYARD",
     privacy: "Playtest data stays on this device.",
     export: "Export playtest",
     pause: "Pause",
@@ -160,7 +161,7 @@ const words = {
   es: {
     tag: "LABORATORIO DE FÍSICAS",
     title: "Un disparo. Una gran reacción.",
-    sub: "Encuentra el punto débil. Derríbalo todo.",
+    sub: "Demuele. Recupera. Reconstruye tu taller.",
     sector: "ZONA",
     shot: "DISPAROS",
     clear: "DERRIBADO",
@@ -184,7 +185,7 @@ const words = {
     glass: "Vidrio",
     metal: "Metal",
     levelLabel: "Diez contratos.\nConstruye un mejor cañón.",
-    footer: "PROTOTIPO 02 / EL DESGUACE",
+    footer: "PROTOTIPO 03 / EL DESGUACE",
     privacy: "Los datos de prueba se quedan en este dispositivo.",
     export: "Exportar prueba",
     pause: "Pausa",
@@ -213,7 +214,7 @@ app.innerHTML = `<header><div class="brand"><span class="brand-mark" aria-hidden
 <div class="game-layout"><section class="stage" aria-label="Scrapshot"><div class="progress-track"><div class="progress-fill" id="fill"></div></div><div class="canvas-wrap"><div class="stage-top"><span class="pill" id="balance"></span><span class="pill" id="shots"></span><span class="pill" id="score"></span></div><canvas id="game" width="1000" height="560" aria-label="Aim using the angle and power controls, then Fire"></canvas><div class="overlay" id="overlay" hidden><div class="result" role="dialog" aria-modal="true" aria-labelledby="result-title" tabindex="-1"><div class="symbol" id="symbol">✦</div><h2 id="result-title"></h2><p id="result-desc"></p><button class="fire" id="next"></button><button class="retry" id="again"></button></div></div></div><div class="stage-bottom"><p class="hint" id="hint"></p><button class="retry" id="retry"></button></div></section>
 <aside class="panel"><h2 id="load-title"></h2><p class="panel-desc" id="load-desc"></p>${(["standard", "heavy", "magnet"] as Kind[]).map((k) => `<button class="ammo ${k === "standard" ? "active" : ""}" data-kind="${k}" aria-pressed="${k === "standard"}"><span class="orb ${k}" aria-hidden="true"></span><span><b id="${k}-title"></b><small id="${k}-desc"></small></span></button>`).join("")}
 <div class="control"><label for="angle"><span id="angle-label"></span><output id="angle-value">18°</output></label><input id="angle" type="range" min="5" max="70" value="18"></div><div class="control"><label for="power"><span id="power-label"></span><output id="power-value">85%</output></label><input id="power" type="range" min="20" max="100" value="85"></div><button class="fire" id="fire"></button><p class="keyboard" id="keyboard"></p></aside></div>
-<section class="workshop" aria-labelledby="shop-title"><div class="shop-heading"><div><h2 id="shop-title"></h2><p id="shop-note"></p></div><strong class="wallet" id="wallet" aria-live="polite"></strong></div><div class="shop-grid">${(["impact", "magazine"] as const).map((k) => `<button class="upgrade" id="buy-${k}"><span class="upgrade-icon" aria-hidden="true">${k === "impact" ? "↗" : "●●"}</span><span><b id="${k}-name"></b><small id="${k}-effect"></small><strong id="${k}-price"></strong></span></button>`).join("")}</div><p id="shop-feedback" aria-live="polite"></p></section><div class="bottom-row"><nav class="levels" aria-label="Levels">${levels.map((_, i) => `<button class="level" data-level="${i}">${String(i + 1).padStart(2, "0")}</button>`).join("")}<span class="level-label" id="level-label"></span></nav><div class="legend">${(["wood", "glass", "metal"] as Material[]).map((m) => `<span><i class="dot" style="background:${palette[m]}"></i><span id="legend-${m}"></span></span>`).join("")}</div></div>
+<section class="workshop" aria-labelledby="shop-title"><div class="shop-heading"><div><h2 id="shop-title"></h2><p id="shop-note"></p></div><strong class="wallet" id="wallet" aria-live="polite"></strong></div><div class="shop-grid">${(["impact", "magazine"] as const).map((k) => `<button class="upgrade" id="buy-${k}"><span class="upgrade-icon" aria-hidden="true">${k === "impact" ? "↗" : "●●"}</span><span><b id="${k}-name"></b><small id="${k}-effect"></small><strong id="${k}-price"></strong></span></button>`).join("")}</div><p id="shop-feedback" aria-live="polite"></p></section><section class="workshop restoration" aria-labelledby="project-title"><div><h2 id="project-title"></h2><p id="project-note"></p></div><div class="project-buildings" id="project-buildings"></div><p id="salvage" aria-live="polite"></p><button class="fire" id="build-project"></button></section><div class="bottom-row"><nav class="levels" aria-label="Levels">${levels.map((_, i) => `<button class="level" data-level="${i}">${String(i + 1).padStart(2, "0")}</button>`).join("")}<span class="level-label" id="level-label"></span></nav><div class="legend">${(["wood", "glass", "metal"] as Material[]).map((m) => `<span><i class="dot" style="background:${palette[m]}"></i><span id="legend-${m}"></span></span>`).join("")}</div></div>
 <p class="notice" id="notice" hidden></p><div class="footer"><span id="footer"></span><span><span id="privacy"></span> <button id="export"></button></span></div><p id="status" class="sr-only" aria-live="polite"></p></main>`;
 function el<T extends HTMLElement = HTMLElement>(id: string) {
   return document.getElementById(id) as T;
@@ -333,7 +334,19 @@ function shop() {
       cost === null || !allowed || progress.coins < cost;
   }
 }
+function restoration() {
+  const es = lang === "es", rank = progress.projects;
+  const names = es ? ["Banco de precisión", "Bobina magnética", "Depósito de munición"] : ["Precision bench", "Magnetic coil", "Ammo depot"];
+  const effects = es ? ["Guía de tiro más larga", "Imán activo durante 5 segundos", "Un disparo extra en cada zona"] : ["Longer aiming guide", "Magnet active for 5 seconds", "One extra shot on every site"];
+  text("project-title", es ? "Tu taller está cobrando vida" : "Bring your workshop to life");
+  text("project-note", es ? "La chatarra recuperada se conserva incluso al fallar. Cada zona paga solo por mejorar tu récord de recuperación." : "Keep recovered scrap even when you fail. Each site pays only for a new recovery record.");
+  el("project-buildings").innerHTML = names.map((name, i) => `<div class="building ${i < rank ? "built" : ""}"><span aria-hidden="true">${["⌂", "ϟ", "▣"][i]}</span><b>${name}</b><small>${effects[i]}</small><strong>${i < rank ? (es ? "CONSTRUIDO ✓" : "BUILT ✓") : `${PROJECT_COSTS[i]} ${es ? "chatarra" : "scrap"}`}</strong></div>`).join("");
+  text("salvage", `${es ? "CHATARRA" : "SCRAP"}: ${progress.salvage} · ${es ? "Recuperado en esta zona" : "Recovered on this site"}: ${progress.recovered[levelIndex]}/100`);
+  text("build-project", rank === 3 ? (es ? "TALLER COMPLETO ✓" : "WORKSHOP COMPLETE ✓") : `${es ? "CONSTRUIR" : "BUILD"}: ${names[rank]} · ${PROJECT_COSTS[rank]}`);
+  el<HTMLButtonElement>("build-project").disabled = rank === 3 || progress.salvage < PROJECT_COSTS[rank] || phase !== "ready" || firstShot || paused;
+}
 function hud() {
+  restoration();
   shop();
   const l = levels[levelIndex],
     w = t();
@@ -351,11 +364,13 @@ function hud() {
   );
   text("score", `${percent}% ${w.clear} · ${w.target} ${l.goal}%`);
   el("fill").style.width = `${percent}%`;
-  text("hint", firstShot ? (lang === "es" ? l.hintEs : l.hint) : w.hint);
+  text("hint", lang === "es" ? l.hintEs : l.hint);
   text("fire", phase === "flight" ? w.wait : w.fire);
   el<HTMLButtonElement>("fire").disabled = phase !== "ready" || paused;
   for (const c of document.querySelectorAll<HTMLButtonElement>(".ammo")) {
-    c.disabled = phase !== "ready" || paused;
+    c.disabled = phase !== "ready" || paused || !toolAvailable(progress, c.dataset.kind);
+    const k = c.dataset.kind as Kind;
+    text(`${k}-desc`, toolAvailable(progress, k) ? t()[`${k}Desc`] : (lang === "es" ? `Se desbloquea en zona ${k === "heavy" ? 3 : 4}` : `Unlocks at site ${k === "heavy" ? 3 : 4}`));
     c.classList.toggle("active", c.dataset.kind === kind);
     c.setAttribute("aria-pressed", String(c.dataset.kind === kind));
   }
@@ -378,6 +393,7 @@ function hud() {
   el<HTMLInputElement>("power").disabled = phase !== "ready" || paused;
 }
 let earned = 0;
+let scrapEarned = 0;
 let previousFocus: HTMLElement | null = null;
 function updateOverlay() {
   const show = paused || phase === "won" || phase === "lost",
@@ -402,6 +418,7 @@ function updateOverlay() {
             : `${w.winDesc} ${"★".repeat(starsForShots(shotBudget(progress) - shots))}`
           : w.lostDesc,
     );
+    if (!paused) el("result-desc").textContent += lang === "es" ? ` +${scrapEarned} chatarra guardada para tu taller.` : ` +${scrapEarned} scrap saved for your workshop.`;
     if (won && !paused)
       el("result-desc").textContent +=
         lang === "es"
@@ -428,6 +445,7 @@ function loadLevel(i: number) {
     positionIterations: 10,
     velocityIterations: 8,
   });
+  if (firstShot) bankRecovery();
   levelIndex = i;
   pieces = [];
   projectiles = [];
@@ -445,6 +463,8 @@ function loadLevel(i: number) {
   shake = 0;
   firstShot = false;
   earned = 0;
+  scrapEarned = 0;
+  if (!toolAvailable(progress, kind)) kind = "standard";
   angle = 18;
   power = 85;
   levelStart = performance.now();
@@ -508,7 +528,16 @@ function fire() {
   hud();
   text("status", `${t().shot}: ${shots}`);
 }
+function bankRecovery() {
+  const amount = recoverScrap(progress, levelIndex, peak);
+  if (amount) {
+    scrapEarned += amount;
+    write(SAVE_KEY, JSON.stringify(progress));
+    track("scrap_recovered", { amount, record: progress.recovered[levelIndex] });
+  }
+}
 function finish(won: boolean) {
+  bankRecovery();
   phase = won ? "won" : "lost";
   if (won) {
     earned = rewardClear(progress, levelIndex, shotBudget(progress) - shots);
@@ -528,7 +557,7 @@ function step() {
   if (paused || phase === "won" || phase === "lost") return;
   simTime += 1 / 60;
   for (const p of projectiles)
-    if (p.kind === "magnet" && simTime - p.born < 3.2)
+    if (p.kind === "magnet" && simTime - p.born < (progress.projects >= 2 ? 5 : 3.2))
       applyMagnet(p.body, pieces);
   Engine.update(engine, 1000 / 60);
   particles = particles.filter((p) => p.life > 0);
@@ -574,6 +603,7 @@ function step() {
       if (percent >= levels[levelIndex].goal) finish(true);
       else if (shots === 0) finish(false);
       else {
+        bankRecovery();
         phase = "ready";
         hud();
         text("status", `${percent}% ${t().clear}. ${t().shot}: ${shots}`);
@@ -707,7 +737,7 @@ function draw() {
   if (phase === "ready" && !paused) {
     const v = shotVelocity(angle, power, kind);
     ctx.fillStyle = "#e9743990";
-    for (let i = 1; i <= 18; i++) {
+    for (let i = 1; i <= (progress.projects >= 1 ? 30 : 18); i++) {
       const tick = i * 1.6;
       const x = origin.x + v.x * tick,
         y = origin.y + v.y * tick + 0.5 * 0.36 * tick * tick;
@@ -732,7 +762,7 @@ function draw() {
   }
   for (const p of projectiles) {
     const { x, y } = p.body.position;
-    if (p.kind === "magnet" && simTime - p.born < 3.2) {
+    if (p.kind === "magnet" && simTime - p.born < (progress.projects >= 2 ? 5 : 3.2)) {
       ctx.strokeStyle = "#8897e13a";
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -781,6 +811,7 @@ function frame(now: number) {
   requestAnimationFrame(frame);
 }
 function retry() {
+  if (firstShot) bankRecovery();
   track("retry", { phase, peak, shotsUsed: shotBudget(progress) - shots });
   loadLevel(levelIndex);
 }
@@ -813,6 +844,14 @@ for (const key of ["impact", "magazine"] as const)
     tone(550, 0.16);
     hud();
   };
+el("build-project").onclick = () => {
+  if (phase !== "ready" || firstShot || paused || !buildProject(progress)) return;
+  shots = shotBudget(progress);
+  write(SAVE_KEY, JSON.stringify(progress));
+  track("project_built", { project: progress.projects });
+  tone(650, 0.25);
+  hud();
+};
 el("fire").onclick = fire;
 el("retry").onclick = retry;
 el("again").onclick = retry;
@@ -839,6 +878,7 @@ el("sound").onclick = () => {
 };
 for (const button of document.querySelectorAll<HTMLButtonElement>(".ammo"))
   button.onclick = () => {
+    if (phase !== "ready" || paused || !toolAvailable(progress, button.dataset.kind)) return;
     kind = button.dataset.kind as Kind;
     track("tool_selected", { kind });
     hud();
@@ -929,7 +969,7 @@ el("export").onclick = () => {
       JSON.stringify(
         {
           schema: 1,
-          prototype: "0.2.0",
+          prototype: "0.3.0",
           note: "Local events only; not validated retention or revenue.",
           progress,
           events: telemetry,

@@ -1,6 +1,6 @@
-# Scrapshot · prototype 02
+# Scrapshot · prototype 03
 
-A ten-site physics demolition experiment. Find a weak support, choose a ricochet, heavy or magnetic ball, and clear the target within three shots (up to five with upgrades). Original procedural canvas art; English and Spanish UI. This is a prototype for testing the core action, not a release candidate.
+A ten-site physics demolition experiment. Find a weak support, choose a ricochet, heavy or magnetic ball, and clear the target within three shots (up to six with upgrades and the ammo depot). Original procedural canvas art; English and Spanish UI. This is a prototype for testing the core action, not a release candidate.
 
 ## Run
 
@@ -32,8 +32,16 @@ See [plan](../../docs/SCRAPSHOT_PLAN.md) and [validation](../../docs/SCRAPSHOT_V
 
 ## Workshop (0.2.0)
 
-Clear sites to earn coins: first clear pays 100 + 20 × site index (zero-based), plus 20 per newly earned star. Replays pay 25 + 5 × site index plus any new star improvement. Failed attempts pay nothing. Stars depend on shots used: one shot earns three stars, two shots two stars, three or more one star.
+Clear sites to earn coins: first clear pays 100 + 20 × site index (zero-based), plus 20 per newly earned star. Replays pay 25 + 5 × site index plus any new star improvement. Failed attempts pay no coins, but retain newly recovered scrap. Stars depend on shots used: one shot earns three stars, two shots two stars, three or more one star.
 
 Before the first shot, buy reinforced impact (+25% projectile mass per rank, three ranks costing 100/220/380) or an extended magazine (+1 shot per rank, two ranks costing 180/360). Impact adds gold bands to the barrel. Purchases save immediately. Old saves receive first-clear and star credit once; completed site 5 now unlocks site 6.
 
-Sites 6–10 are reinforced variants: glass supports become wood and the target rises to 85%. They remain solvable without purchases, avoiding a mandatory currency grind. Prices and perceived difficulty still need human feedback.
+## Rebuild the workshop (0.3.0)
+
+Sites 6–10 now have distinct layouts: freight bridge, staircase, iron cargo, offset tower and three separate towers. All ten remain solvable with three baseline shots.
+
+Each site awards scrap only for increases in its highest recovered percentage, capped at 100 scrap per site (1,000 for the campaign). Scrap is banked after settled shots, on results, retry and changing sites; refreshing during flight can lose unbanked recovery. Replaying or reloading cannot repay an existing record. Coins retain the established clear/replay payouts.
+
+Spend scrap on three sequential visible projects: precision bench (90, longer approximate aiming guide), magnetic coil (180, magnet lasts 5 seconds instead of 3.2), ammo depot (280, +1 shot per site). Projects can be built before the first shot. Their total 550 scrap requires progress in at least six sites; they do not require grinding repeat clears.
+
+New players unlock heavy at site 3 and magnet at site 4. Existing saves retain all tools, coins, upgrades, stars and level access. Completed sites receive 100 scrap each once during schema-3 migration; this is immediately persisted and marks their recovery records paid. Workshop, tools and recovery events are included in local export. Actual retention and commercial effects remain unmeasured.

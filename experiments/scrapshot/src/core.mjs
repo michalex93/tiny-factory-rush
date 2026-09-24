@@ -46,7 +46,7 @@ export function parseProgress(raw, count) {
     0,
   );
   return {
-    schema: 2,
+    schema: 3,
     unlocked: Math.max(
       integer(p.unlocked, count - 1),
       Math.min(
@@ -55,15 +55,19 @@ export function parseProgress(raw, count) {
       ),
     ),
     best,
-    coins: p.schema === 2 ? integer(p.coins, 1000000) : legacyCredit,
+    toolsUnlocked: p.schema === 3 ? integer(p.toolsUnlocked, 2) : raw ? 2 : 0,
+    salvage: p.schema === 3 ? integer(p.salvage, 1000000) : best.filter(Boolean).length * 100,
+    recovered: Array.from({length: count}, (_, i) => p.schema === 3 ? integer(p.recovered?.[i], 100) : best[i] ? 100 : 0),
+    projects: p.schema === 3 ? integer(p.projects, 3) : 0,
+    coins: p.schema >= 2 ? integer(p.coins, 1000000) : legacyCredit,
     upgrades: {
-      impact: p.schema === 2 ? integer(p.upgrades?.impact, 3) : 0,
-      magazine: p.schema === 2 ? integer(p.upgrades?.magazine, 2) : 0,
+      impact: p.schema >= 2 ? integer(p.upgrades?.impact, 3) : 0,
+      magazine: p.schema >= 2 ? integer(p.upgrades?.magazine, 2) : 0,
     },
   };
 }
 export function shotBudget(progress) {
-  return SHOTS + progress.upgrades.magazine;
+  return SHOTS + progress.upgrades.magazine + (progress.projects >= 3 ? 1 : 0);
 }
 export function starsForShots(used) {
   return Math.max(1, 4 - used);
@@ -91,4 +95,25 @@ export function rewardClear(progress, index, shotsUsed) {
     Math.min(progress.best.length - 1, index + 1),
   );
   return reward;
+}
+
+// A contract pays only for a new recovery record, persisted after each settled shot.
+export function recoverScrap(progress, index, percent) {
+  const record = integer(percent, 100);
+  const amount = Math.max(0, record - progress.recovered[index]);
+  progress.recovered[index] = Math.max(progress.recovered[index], record);
+  progress.salvage += amount;
+  return amount;
+}
+export const PROJECT_COSTS = [90, 180, 280];
+export function buildProject(progress) {
+  const cost = PROJECT_COSTS[progress.projects];
+  if (cost === undefined || progress.salvage < cost) return false;
+  progress.salvage -= cost;
+  progress.projects++;
+  return true;
+}
+export function toolAvailable(progress, kind) {
+  const rank = kind === 'heavy' ? 1 : kind === 'magnet' ? 2 : 0;
+  return rank <= Math.max(progress.toolsUnlocked, progress.unlocked >= 3 ? 2 : progress.unlocked >= 2 ? 1 : 0);
 }

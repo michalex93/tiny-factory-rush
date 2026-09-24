@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  parseProgress,
+  parseProgress, recoverScrap, buildProject, toolAvailable,
   purchaseUpgrade,
   rewardClear,
   shotBudget,
@@ -64,4 +64,33 @@ test("corrupt economy is bounded and reinforced impact increases actual projecti
     3,
   );
   assert.ok(Math.abs(upgraded.mass / base.mass - 1.75) < 1e-10);
+});
+
+test("partial recovery survives failure and reload without retry farming", () => {
+  let p = parseProgress(null, 10);
+  assert.equal(recoverScrap(p, 0, 35), 35);
+  p = parseProgress(JSON.stringify(p), 10);
+  assert.equal(recoverScrap(p, 0, 20), 0);
+  assert.equal(recoverScrap(p, 0, 35), 0);
+  assert.equal(recoverScrap(p, 0, 80), 45);
+  assert.equal(recoverScrap(p, 0, 1000), 20);
+  assert.equal(p.salvage, 100);
+  assert.equal(buildProject(p), true);
+  assert.equal(p.salvage, 10);
+  assert.equal(buildProject(p), false);
+  assert.equal(p.coins, 0);
+});
+test("old saves retain tools, currency and upgrades while new players unlock at sites 3 and 4", () => {
+  const p = parseProgress(null, 10);
+  assert.equal(toolAvailable(p, "heavy"), false);
+  p.unlocked = 2;
+  assert.equal(toolAvailable(p, "heavy"), true);
+  assert.equal(toolAvailable(p, "magnet"), false);
+  p.unlocked = 3;
+  assert.equal(toolAvailable(p, "magnet"), true);
+  const old = parseProgress(JSON.stringify({schema:2, coins:532, best:[3], upgrades:{impact:2,magazine:1}}),10);
+  assert.equal(old.coins,532);
+  assert.equal(old.salvage,100);
+  assert.equal(toolAvailable(old,"magnet"),true);
+  assert.deepEqual(parseProgress(JSON.stringify(old),10), old);
 });

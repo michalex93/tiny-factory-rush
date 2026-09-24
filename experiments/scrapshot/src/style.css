@@ -636,3 +636,13 @@ input[type="range"] {
 @media (max-width: 650px) {
   #balance { display: none; }
 }
+
+.restoration { margin-top: 18px; }
+.project-buildings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+.building { display: grid; gap: 8px; padding: 18px; border: 2px dashed #a0b58b; border-radius: 12px; background: #e8edda; }
+.building > span { font-size: 38px; color: #859b72; }
+.building.built { border: 2px solid #365e4c; background: #dce8ca; }
+.building.built > span { color: #d77546; }
+.building small { line-height: 1.5; }
+.restoration > .fire { max-width: 480px; }
+@media (max-width: 650px) { .project-buildings { grid-template-columns: 1fr; } }

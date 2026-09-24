@@ -30,3 +30,9 @@ Observe 10–15 fresh players without coaching. Record time to first shot, volun
 ## 0.2.0 — workshop follow-up
 
 31 automated checks pass, including all ten sites through compiled UI handlers, old-save migration, one-time credit persistence, purchase costs/caps, shot-budget changes, no duplicate completion payouts, and physical mass increases. Ten structures remain standing before input and have baseline three-shot solutions. New sites are reinforced variants, not five entirely new layouts. Browser visual/mobile QA remains unverified; the owner reported the previous published version looked good. Economy balance and difficulty are provisional.
+
+## 0.3.0 — benchmark-driven progression
+
+34 checks pass. Added migration coverage for preserved currencies/upgrades/tools and one-time scrap credit; partial recovery and duplicate-recovery protection across reload; gradual tool access; project costs, persistence and actual UI shot-budget changes. The compiled UI completes all ten changed sites with baseline equipment. Ten structures stay upright for ten seconds and have three-shot solutions.
+
+New UI solution fixtures: sites 6/8/9 at 5°/70%, site 7 at 5°/85%, site 10 at 5°/100%. These are feasibility checks, not difficulty or fun ratings. New workshop cards are responsive in CSS; real-browser and touch QA remain outstanding. No revenue, retention improvement or platform approval is claimed.
