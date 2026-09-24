@@ -163,3 +163,32 @@ test("new players unlock tools gradually; workshop projects persist without dupl
   assert.equal(b.w.document.querySelectorAll('.building.built').length, 3);
   b.dom.window.close();
 });
+
+test("visible bilingual aiming instructions and modal isolation protect the current round", () => {
+  const a = boot();
+  assert.match(a.el("instructions").textContent, /Drag on the scene.*Release to fire.*cancel/);
+  a.el("lang").click();
+  assert.match(a.el("instructions").textContent, /Arrastra.*Suelta.*cancelar/);
+  a.tick(120);
+  a.el("fire").click();
+  a.el("pause").click();
+  const score = a.el("score").textContent;
+  const shots = a.el("shots").textContent;
+  assert.equal(a.w.document.querySelector("main").hasAttribute("inert"), true);
+  assert.equal(a.el("overlay").parentElement.id, "app");
+  a.el("retry").click();
+  a.w.document.dispatchEvent(new a.w.KeyboardEvent("keydown", {key:"r", bubbles:true}));
+  a.tick(600);
+  assert.equal(a.el("overlay").hidden, false);
+  assert.equal(a.el("shots").textContent, shots);
+  assert.equal(a.el("score").textContent, score);
+  a.w.document.dispatchEvent(new a.w.KeyboardEvent("keydown", {key:"Escape", bubbles:true}));
+  assert.equal(a.el("overlay").hidden, true);
+  assert.equal(a.w.document.querySelector("main").hasAttribute("inert"), false);
+  a.tick(600);
+  assert.match(a.el("result-title").textContent, /desastre/);
+  a.el("next").click();
+  assert.equal(a.el("overlay").hidden, true);
+  assert.match(a.el("eyebrow").textContent, /02/);
+  a.dom.window.close();
+});

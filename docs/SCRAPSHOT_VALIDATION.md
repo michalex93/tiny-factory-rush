@@ -36,3 +36,9 @@ Observe 10–15 fresh players without coaching. Record time to first shot, volun
 34 checks pass. Added migration coverage for preserved currencies/upgrades/tools and one-time scrap credit; partial recovery and duplicate-recovery protection across reload; gradual tool access; project costs, persistence and actual UI shot-budget changes. The compiled UI completes all ten changed sites with baseline equipment. Ten structures stay upright for ten seconds and have three-shot solutions.
 
 New UI solution fixtures: sites 6/8/9 at 5°/70%, site 7 at 5°/85%, site 10 at 5°/100%. These are feasibility checks, not difficulty or fun ratings. New workshop cards are responsive in CSS; real-browser and touch QA remain outstanding. No revenue, retention improvement or platform approval is claimed.
+
+## 0.3.1 — usability audit corrections
+
+35 automated checks pass. A new integration scenario checks bilingual visible aiming/cancel instructions, pause during flight, blocked background Retry and R shortcut, unchanged round state while paused, Escape resume and Next after victory. Dialogs now live outside the canvas clipping container, cover the viewport, make header/main inert, and constrain their scrollable content to the available viewport height. Explicit hidden-button CSS keeps the victory-only Retry action out of the pause dialog.
+
+The approved internal browser preview was attempted on 2026-09-24 and returned ERR_BLOCKED_BY_CLIENT. No visual/mobile or physical-touch verification is claimed. Fixed viewport positioning removes dependence on the short mobile canvas height, but real rendering remains a manual gate.

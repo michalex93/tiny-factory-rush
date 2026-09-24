@@ -210,7 +210,7 @@ const words = {
 const t = () => words[lang];
 const app = document.querySelector<HTMLDivElement>("#app")!;
 app.innerHTML = `<header><div class="brand"><span class="brand-mark" aria-hidden="true">↗</span>scrapshot<span class="tag" id="tag"></span></div><div class="toolbar"><button class="quiet" id="lang">ES</button><button class="quiet" id="sound"></button><button class="quiet" id="pause"></button></div></header>
-<main><div class="intro"><div><p class="eyebrow" id="eyebrow"></p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div><span class="level-count" id="counter"></span></div>
+<main><div class="intro"><div><p class="eyebrow" id="eyebrow"></p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p><p class="instructions" id="instructions"></p></div><span class="level-count" id="counter"></span></div>
 <div class="game-layout"><section class="stage" aria-label="Scrapshot"><div class="progress-track"><div class="progress-fill" id="fill"></div></div><div class="canvas-wrap"><div class="stage-top"><span class="pill" id="balance"></span><span class="pill" id="shots"></span><span class="pill" id="score"></span></div><canvas id="game" width="1000" height="560" aria-label="Aim using the angle and power controls, then Fire"></canvas><div class="overlay" id="overlay" hidden><div class="result" role="dialog" aria-modal="true" aria-labelledby="result-title" tabindex="-1"><div class="symbol" id="symbol">✦</div><h2 id="result-title"></h2><p id="result-desc"></p><button class="fire" id="next"></button><button class="retry" id="again"></button></div></div></div><div class="stage-bottom"><p class="hint" id="hint"></p><button class="retry" id="retry"></button></div></section>
 <aside class="panel"><h2 id="load-title"></h2><p class="panel-desc" id="load-desc"></p>${(["standard", "heavy", "magnet"] as Kind[]).map((k) => `<button class="ammo ${k === "standard" ? "active" : ""}" data-kind="${k}" aria-pressed="${k === "standard"}"><span class="orb ${k}" aria-hidden="true"></span><span><b id="${k}-title"></b><small id="${k}-desc"></small></span></button>`).join("")}
 <div class="control"><label for="angle"><span id="angle-label"></span><output id="angle-value">18°</output></label><input id="angle" type="range" min="5" max="70" value="18"></div><div class="control"><label for="power"><span id="power-label"></span><output id="power-value">85%</output></label><input id="power" type="range" min="20" max="100" value="85"></div><button class="fire" id="fire"></button><p class="keyboard" id="keyboard"></p></aside></div>
@@ -222,6 +222,14 @@ function el<T extends HTMLElement = HTMLElement>(id: string) {
 const canvas = el<HTMLCanvasElement>("game"),
   ctx = canvas.getContext("2d")!;
 const overlay = el("overlay");
+// Keep the modal outside the clipped canvas and outside the inert background.
+app.append(overlay);
+document.addEventListener("click", (event) => {
+  if (!overlay.hidden && event.target instanceof Node && !overlay.contains(event.target)) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+}, true);
 function text(id: string, value: string) {
   el(id).textContent = value;
 }
@@ -251,6 +259,7 @@ function labels() {
   text("tag", w.tag);
   text("title", w.title);
   text("subtitle", w.sub);
+  text("instructions", `${w.hint} ${w.cancel} ${w.goal}`);
   text("load-title", w.loadout);
   text("load-desc", w.loadDesc);
   text("lang", lang === "en" ? "ES" : "EN");
@@ -399,6 +408,11 @@ function updateOverlay() {
   const show = paused || phase === "won" || phase === "lost",
     was = !overlay.hidden;
   overlay.hidden = !show;
+  for (const background of app.querySelectorAll<HTMLElement>(":scope > header, :scope > main")) {
+    background.inert = show;
+    background.toggleAttribute("inert", show);
+  }
+  document.body.classList.toggle("modal-open", show);
   if (show) {
     const w = t(),
       won = phase === "won",
@@ -948,10 +962,17 @@ document.addEventListener("keydown", (e) => {
     if (e.shiftKey && document.activeElement === first) {
       e.preventDefault();
       last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
+    } else if ((!e.shiftKey && document.activeElement === last) || !overlay.contains(document.activeElement)) {
       e.preventDefault();
       first.focus();
     }
+    return;
+  }
+  if (!overlay.hidden) {
+    if (paused && (e.key === "Escape" || e.key.toLowerCase() === "p")) {
+      e.preventDefault();
+      pause(false);
+    } else if (["r", "p"].includes(e.key.toLowerCase())) e.preventDefault();
     return;
   }
   if (e.target instanceof HTMLInputElement) return;
@@ -969,7 +990,7 @@ el("export").onclick = () => {
       JSON.stringify(
         {
           schema: 1,
-          prototype: "0.3.0",
+          prototype: "0.3.1",
           note: "Local events only; not validated retention or revenue.",
           progress,
           events: telemetry,
