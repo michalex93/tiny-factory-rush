@@ -53,8 +53,8 @@ test("compiled app completes all ten sites through its actual UI handlers and pr
   const { el, tick, range } = a;
   for (let site = 0; site < 10; site++) {
     tick(120);
-    range("angle", site === 3 ? 10 : 5);
-    range("power", site === 6 ? 85 : [1, 3, 9].includes(site) ? 100 : 70);
+    range("angle", [5,5,5,18,5,25,5,5,35,25][site]);
+    range("power", [70,100,70,100,70,85,85,70,70,85][site]);
     for (let shot = 0; shot < 3 && el("overlay").hidden; shot++) {
       assert.equal(el("fire").disabled, false);
       el("fire").click();

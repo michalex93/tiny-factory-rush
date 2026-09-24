@@ -42,3 +42,9 @@ New UI solution fixtures: sites 6/8/9 at 5°/70%, site 7 at 5°/85%, site 10 at 
 35 automated checks pass. A new integration scenario checks bilingual visible aiming/cancel instructions, pause during flight, blocked background Retry and R shortcut, unchanged round state while paused, Escape resume and Next after victory. Dialogs now live outside the canvas clipping container, cover the viewport, make header/main inert, and constrain their scrollable content to the available viewport height. Explicit hidden-button CSS keeps the victory-only Retry action out of the pause dialog.
 
 The approved internal browser preview was attempted on 2026-09-24 and returned ERR_BLOCKED_BY_CLIENT. No visual/mobile or physical-touch verification is claimed. Fixed viewport positioning removes dependence on the short mobile canvas height, but real rendering remains a manual gate.
+
+## 0.4.0 — distinct aiming challenges and impact tiers
+
+40 automated checks pass. The ten-site compiled UI campaign uses baseline solutions including site 4 at 18°/100%, site 6 at 25°/85%, site 9 at 35°/70%, and site 10 at 25°/85%. Physics fixtures verify pre-input stability, first-collision damage changes, larger caliber, area destruction that preserves metal, and failure of six fully upgraded low shots for every tool on each of the four walled sites.
+
+The owner reported 0.3.1 looked good on their phone. This is evidence about that version's appearance on one device, not observed touch/performance QA of 0.4.0. Browser testing remains blocked. Human difficulty, upgrade satisfaction and retention are unmeasured.

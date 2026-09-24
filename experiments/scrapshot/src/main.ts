@@ -136,6 +136,7 @@ const words = {
     wood: "Wood",
     glass: "Glass",
     metal: "Metal",
+    barrier: "Fixed barrier",
     levelLabel: "Ten contracts.\nBuild a better cannon.",
     footer: "PROTOTYPE 03 / THE SCRAPYARD",
     privacy: "Playtest data stays on this device.",
@@ -184,6 +185,7 @@ const words = {
     wood: "Madera",
     glass: "Vidrio",
     metal: "Metal",
+    barrier: "Barrera fija",
     levelLabel: "Diez contratos.\nConstruye un mejor cañón.",
     footer: "PROTOTIPO 03 / EL DESGUACE",
     privacy: "Los datos de prueba se quedan en este dispositivo.",
@@ -214,7 +216,7 @@ app.innerHTML = `<header><div class="brand"><span class="brand-mark" aria-hidden
 <div class="game-layout"><section class="stage" aria-label="Scrapshot"><div class="progress-track"><div class="progress-fill" id="fill"></div></div><div class="canvas-wrap"><div class="stage-top"><span class="pill" id="balance"></span><span class="pill" id="shots"></span><span class="pill" id="score"></span></div><canvas id="game" width="1000" height="560" aria-label="Aim using the angle and power controls, then Fire"></canvas><div class="overlay" id="overlay" hidden><div class="result" role="dialog" aria-modal="true" aria-labelledby="result-title" tabindex="-1"><div class="symbol" id="symbol">✦</div><h2 id="result-title"></h2><p id="result-desc"></p><button class="fire" id="next"></button><button class="retry" id="again"></button></div></div></div><div class="stage-bottom"><p class="hint" id="hint"></p><button class="retry" id="retry"></button></div></section>
 <aside class="panel"><h2 id="load-title"></h2><p class="panel-desc" id="load-desc"></p>${(["standard", "heavy", "magnet"] as Kind[]).map((k) => `<button class="ammo ${k === "standard" ? "active" : ""}" data-kind="${k}" aria-pressed="${k === "standard"}"><span class="orb ${k}" aria-hidden="true"></span><span><b id="${k}-title"></b><small id="${k}-desc"></small></span></button>`).join("")}
 <div class="control"><label for="angle"><span id="angle-label"></span><output id="angle-value">18°</output></label><input id="angle" type="range" min="5" max="70" value="18"></div><div class="control"><label for="power"><span id="power-label"></span><output id="power-value">85%</output></label><input id="power" type="range" min="20" max="100" value="85"></div><button class="fire" id="fire"></button><p class="keyboard" id="keyboard"></p></aside></div>
-<section class="workshop" aria-labelledby="shop-title"><div class="shop-heading"><div><h2 id="shop-title"></h2><p id="shop-note"></p></div><strong class="wallet" id="wallet" aria-live="polite"></strong></div><div class="shop-grid">${(["impact", "magazine"] as const).map((k) => `<button class="upgrade" id="buy-${k}"><span class="upgrade-icon" aria-hidden="true">${k === "impact" ? "↗" : "●●"}</span><span><b id="${k}-name"></b><small id="${k}-effect"></small><strong id="${k}-price"></strong></span></button>`).join("")}</div><p id="shop-feedback" aria-live="polite"></p></section><section class="workshop restoration" aria-labelledby="project-title"><div><h2 id="project-title"></h2><p id="project-note"></p></div><div class="project-buildings" id="project-buildings"></div><p id="salvage" aria-live="polite"></p><button class="fire" id="build-project"></button></section><div class="bottom-row"><nav class="levels" aria-label="Levels">${levels.map((_, i) => `<button class="level" data-level="${i}">${String(i + 1).padStart(2, "0")}</button>`).join("")}<span class="level-label" id="level-label"></span></nav><div class="legend">${(["wood", "glass", "metal"] as Material[]).map((m) => `<span><i class="dot" style="background:${palette[m]}"></i><span id="legend-${m}"></span></span>`).join("")}</div></div>
+<section class="workshop" aria-labelledby="shop-title"><div class="shop-heading"><div><h2 id="shop-title"></h2><p id="shop-note"></p></div><strong class="wallet" id="wallet" aria-live="polite"></strong></div><div class="shop-grid">${(["impact", "magazine"] as const).map((k) => `<button class="upgrade" id="buy-${k}"><span class="upgrade-icon" aria-hidden="true">${k === "impact" ? "↗" : "●●"}</span><span><b id="${k}-name"></b><small id="${k}-effect"></small><strong id="${k}-price"></strong></span></button>`).join("")}</div><p id="shop-feedback" aria-live="polite"></p></section><section class="workshop restoration" aria-labelledby="project-title"><div><h2 id="project-title"></h2><p id="project-note"></p></div><div class="project-buildings" id="project-buildings"></div><p id="salvage" aria-live="polite"></p><button class="fire" id="build-project"></button></section><div class="bottom-row"><nav class="levels" aria-label="Levels">${levels.map((_, i) => `<button class="level" data-level="${i}">${String(i + 1).padStart(2, "0")}</button>`).join("")}<span class="level-label" id="level-label"></span></nav><div class="legend">${(["wood", "glass", "metal"] as Material[]).map((m) => `<span><i class="dot" style="background:${palette[m]}"></i><span id="legend-${m}"></span></span>`).join("")}<span><i class="dot barrier-dot"></i><span id="legend-barrier"></span></span></div></div>
 <p class="notice" id="notice" hidden></p><div class="footer"><span id="footer"></span><span><span id="privacy"></span> <button id="export"></button></span></div><p id="status" class="sr-only" aria-live="polite"></p></main>`;
 function el<T extends HTMLElement = HTMLElement>(id: string) {
   return document.getElementById(id) as T;
@@ -287,6 +289,7 @@ function labels() {
   (["wood", "glass", "metal"] as const).forEach((m) =>
     text(`legend-${m}`, w[m]),
   );
+  text("legend-barrier", w.barrier);
   canvas.setAttribute("aria-label", `${w.hint} ${w.goal}`);
   hud();
   updateOverlay();
@@ -314,8 +317,8 @@ function shop() {
       `${key}-effect`,
       key === "impact"
         ? es
-          ? `Masa de la bola +${rank * 25}% → +${Math.min(3, rank + 1) * 25}%. Más empuje.`
-          : `Ball mass +${rank * 25}% → +${Math.min(3, rank + 1) * 25}%. More momentum.`
+          ? ["Siguiente: rompe madera de un impacto directo fuerte.", "Siguiente: proyectil más grande y mayor alcance magnético.", "Siguiente: pulso al primer impacto; rompe madera y vidrio cercanos.", "Pulso de demolición, calibre ampliado y madera de un impacto."][rank]
+          : ["Next: break wood with one strong direct hit.", "Next: larger projectile and greater magnetic reach.", "Next: pulse on first impact; breaks nearby wood and glass.", "Demolition pulse, larger caliber and one-hit wood breaking."][rank]
         : es
           ? `${3 + rank} → ${3 + Math.min(2, rank + 1)} disparos por zona.`
           : `${3 + rank} → ${3 + Math.min(2, rank + 1)} shots per site.`,
@@ -492,6 +495,7 @@ function loadLevel(i: number) {
         lastHitSound = simTime;
       }
     },
+    levels[i].obstacles ?? [],
   );
   engine = world.engine;
   pieces = world.pieces;
@@ -640,10 +644,10 @@ function rounded(
 }
 function draw() {
   ctx.clearRect(0, 0, 1000, 560);
-  ctx.fillStyle = "#e8edda";
+  ctx.fillStyle = levelIndex < 3 ? "#e8edda" : levelIndex < 6 ? "#e7e1cf" : "#dce5ed";
   ctx.fillRect(0, 0, 1000, 560);
   // A quiet, original procedural scrapyard: distant silhouettes, grid and paper grain.
-  ctx.fillStyle = "#dce4cf";
+  ctx.fillStyle = levelIndex < 3 ? "#dce4cf" : levelIndex < 6 ? "#d8d0b9" : "#c6d5df";
   for (let i = 0; i < 9; i++) {
     const x = i * 139 - 35,
       h = 40 + (i % 3) * 24;
@@ -688,6 +692,17 @@ function draw() {
     ctx.lineTo(i + 10, 534);
     ctx.stroke();
   }
+  // Striped permanent obstacles: visually distinct from movable metal.
+  for (const o of l.obstacles ?? []) {
+    rounded(o.x-o.w/2, o.y-o.h/2, o.w, o.h, 3, "#33433d");
+    ctx.save();
+    ctx.beginPath(); ctx.rect(o.x-o.w/2, o.y-o.h/2, o.w, o.h); ctx.clip();
+    ctx.strokeStyle = "#edb36c"; ctx.lineWidth = 7;
+    for (let x = o.x-o.w/2-o.h; x < o.x+o.w/2; x += 22) {
+      ctx.beginPath(); ctx.moveTo(x,o.y+o.h/2); ctx.lineTo(x+o.h,o.y-o.h/2); ctx.stroke();
+    }
+    ctx.restore();
+  }
   // Launcher bot.
   ctx.fillStyle = "#173e3520";
   ctx.beginPath();
@@ -702,7 +717,7 @@ function draw() {
   ctx.save();
   ctx.translate(origin.x, origin.y);
   ctx.rotate((-angle * Math.PI) / 180);
-  rounded(-31, -17, 62, 34, 8, "#365e4c");
+  rounded(-31, -17 - progress.upgrades.impact * 2, 62 + progress.upgrades.impact * 5, 34 + progress.upgrades.impact * 4, 8, progress.upgrades.impact === 3 ? "#704d82" : "#365e4c");
   for (let n = 0; n < progress.upgrades.impact; n++)
     rounded(-25 + n * 13, -20, 7, 40, 2, "#edb36c");
   rounded(18, -20, 15, 40, 4, "#ed7947");
@@ -780,8 +795,18 @@ function draw() {
       ctx.strokeStyle = "#8897e13a";
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.arc(x, y, 100 + Math.sin(simTime * 6) * 12, 0, Math.PI * 2);
+      ctx.arc(x, y, 185 + 25 * progress.upgrades.impact + Math.sin(simTime * 6) * 4, 0, Math.PI * 2);
       ctx.stroke();
+    }
+    if (progress.upgrades.impact > 0) {
+      ctx.strokeStyle = progress.upgrades.impact === 3 ? "#a578bd" : "#edb36c";
+      ctx.lineWidth = 3 + progress.upgrades.impact;
+      ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x-p.body.velocity.x*3,y-p.body.velocity.y*3); ctx.stroke();
+    }
+    if (p.body.plugin.pulsed && !p.body.plugin.pulseSeen) p.body.plugin.pulseSeen = simTime;
+    if (p.body.plugin.pulseSeen && simTime-p.body.plugin.pulseSeen < 0.35) {
+      ctx.strokeStyle = "#a578bd"; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(p.body.plugin.pulseOrigin.x,p.body.plugin.pulseOrigin.y,90,0,Math.PI*2); ctx.stroke();
     }
     ctx.fillStyle =
       p.kind === "standard"
@@ -990,7 +1015,7 @@ el("export").onclick = () => {
       JSON.stringify(
         {
           schema: 1,
-          prototype: "0.3.1",
+          prototype: "0.4.0",
           note: "Local events only; not validated retention or revenue.",
           progress,
           events: telemetry,

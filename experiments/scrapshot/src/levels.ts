@@ -14,6 +14,7 @@ export type Level = {
   line: number;
   goal: number;
   blocks: Block[];
+  obstacles?: {x: number; y: number; w: number; h: number}[];
 };
 const b = (
   x: number,
@@ -149,3 +150,20 @@ levels.push(
     b(725,443,24,130,"glass"), b(785,443,24,130,"wood"), b(755,366,100,24,"wood"), b(755,330,40,46,"metal"),
     b(880,458,24,100,"glass"), b(940,458,24,100,"wood"), b(910,396,100,24,"wood"), b(910,360,40,46,"metal") ] },
 );
+
+// Permanent striped barriers are not salvage targets. Their openings shape the shot.
+levels[3].obstacles = [{x: 460, y: 448, w: 34, h: 120}];
+levels[3].hint = "Arc over the striped wall. The magnet can pull the metal load from above.";
+levels[3].hintEs = "Traza un arco sobre el muro rayado. El imán atrae la carga desde arriba.";
+levels[5].obstacles = [{x: 470, y: 428, w: 40, h: 160}];
+levels[5].hint = "Clear the wall, then strike the bridge deck or its far support.";
+levels[5].hintEs = "Supera el muro y golpea el tablero del puente o el soporte del fondo.";
+levels[6].obstacles = [{x: 410, y: 280, w: 200, h: 26}];
+levels[6].hint = "The overhead beam blocks high arcs. Send a low shot underneath.";
+levels[6].hintEs = "La viga bloquea los arcos altos. Envía un tiro bajo por debajo.";
+levels[8].obstacles = [{x: 460, y: 413, w: 38, h: 190}];
+levels[8].hint = "A taller wall protects the base. Aim high at the overhanging floors.";
+levels[8].hintEs = "Un muro alto protege la base. Apunta a los pisos que sobresalen.";
+levels[9].obstacles = [{x: 420, y: 438, w: 32, h: 140}, {x: 840, y: 468, w: 24, h: 80}];
+levels[9].hint = "Two walls divide the yard. Adjust your arc to reach each tower.";
+levels[9].hintEs = "Dos muros dividen el patio. Ajusta el arco para alcanzar cada torre.";

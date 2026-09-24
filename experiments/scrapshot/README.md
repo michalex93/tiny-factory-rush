@@ -45,3 +45,12 @@ Each site awards scrap only for increases in its highest recovered percentage, c
 Spend scrap on three sequential visible projects: precision bench (90, longer approximate aiming guide), magnetic coil (180, magnet lasts 5 seconds instead of 3.2), ammo depot (280, +1 shot per site). Projects can be built before the first shot. Their total 550 scrap requires progress in at least six sites; they do not require grinding repeat clears.
 
 New players unlock heavy at site 3 and magnet at site 4. Existing saves retain all tools, coins, upgrades, stars and level access. Completed sites receive 100 scrap each once during schema-3 migration; this is immediately persisted and marks their recovery records paid. Workshop, tools and recovery events are included in local export. Actual retention and commercial effects remain unmeasured.
+
+
+## Shot variety and tangible upgrades (0.4.0)
+
+Striped fixed barriers on sites 4, 6, 9 and 10 obstruct low shots; the overhead beam on site 7 favors low trajectories. Barriers never count toward recovered scrap or demolition targets. Existing layouts and hints combine these obstacles with bridges, metal loads and offset floors. Three background palettes separate the early yard, industrial section and late sites.
+
+Impact upgrades retain the 100/220/380 prices and mass increases. Rank 1 deals two damage instead of one on a strong direct hit (wood has two HP). Rank 2 also adds four world units to projectile radius. Rank 3 releases one 90-unit pulse on its first collision above the collision-speed threshold, destroying nearby wood and glass but not metal or barriers. Each rank adds 25 units of magnet range. Barrel size, gold bands, projectile trails, enlarged ammo and the purple pulse communicate progress. Purchases and existing save ranks retain their values.
+
+Feasibility remains three shots with baseline equipment. New regression checks verify that six 5°/100% shots with fully upgraded equipment, for each ammo type, cannot clear the four walled sites. This prevents one specific repetitive strategy; it does not establish human difficulty or retention. No moving targets, protected-objective mode or hinged counterweights are implemented in this version.

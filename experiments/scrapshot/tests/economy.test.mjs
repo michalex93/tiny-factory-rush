@@ -63,7 +63,8 @@ test("corrupt economy is bounded and reinforced impact increases actual projecti
     "standard",
     3,
   );
-  assert.ok(Math.abs(upgraded.mass / base.mass - 1.75) < 1e-10);
+  assert.ok(upgraded.mass > base.mass * 1.75);
+  assert.equal(upgraded.circleRadius, base.circleRadius + 4);
 });
 
 test("partial recovery survives failure and reload without retry farming", () => {

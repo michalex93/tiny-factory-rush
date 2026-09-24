@@ -6,6 +6,7 @@ export function createWorld(
   isActive = () => true,
   onBreak = () => {},
   onHit = () => {},
+  obstacles = [],
 ) {
   const engine = Engine.create({
     gravity: { x: 0, y: 1.3 },
@@ -40,6 +41,7 @@ export function createWorld(
     }),
     Bodies.rectangle(-100, 300, 50, 1200, { isStatic: true }),
     Bodies.rectangle(1140, 300, 50, 1200, { isStatic: true }),
+    ...obstacles.map((o) => Bodies.rectangle(o.x, o.y, o.w, o.h, { isStatic: true, label: "barrier", friction: 0.6, restitution: 0.2 })),
     ...pieces.map((p) => p.body),
   ]);
   Events.on(engine, "collisionStart", (ev) => {
@@ -59,12 +61,25 @@ export function createWorld(
         const threshold =
           p.material === "glass" ? (direct ? 2.3 : 3.4) : direct ? 4 : 5.5;
         if (relative > threshold) {
-          p.hp--;
+          p.hp -= direct && other.plugin.impact >= 1 ? 2 : 1;
           if (p.hp <= 0) {
             p.broken = true;
             Composite.remove(engine.world, p.body);
             onBreak(p);
           }
+        }
+      }
+      // The final barrel tier releases one pulse on its first solid impact.
+      for (const shot of [a, b]) {
+        if (shot.label !== "shot" || shot.plugin.impact < 3 || shot.plugin.pulsed) continue;
+        shot.plugin.pulsed = true;
+        shot.plugin.pulseOrigin = { ...shot.position };
+        for (const p of pieces) {
+          if (p.broken || p.material === "metal") continue;
+          if (Math.hypot(p.body.position.x - shot.position.x, p.body.position.y - shot.position.y) > 90) continue;
+          p.broken = true;
+          Composite.remove(engine.world, p.body);
+          onBreak(p);
         }
       }
       onHit(relative);
@@ -73,13 +88,14 @@ export function createWorld(
   return { engine, pieces };
 }
 export function addShot(engine, origin, velocity, kind, impact = 0) {
-  const radius = kind === "heavy" ? 20 : 16;
+  const radius = (kind === "heavy" ? 20 : 16) + (impact >= 2 ? 4 : 0);
   const body = Bodies.circle(origin.x, origin.y, radius, {
     density: (kind === "heavy" ? 0.03 : 0.015) * (1 + 0.25 * impact),
     restitution: kind === "standard" ? 0.7 : 0.25,
     friction: 0.4,
     frictionAir: 0.008,
     label: "shot",
+    plugin: { impact, pulsed: false },
   });
   Composite.add(engine.world, body);
   Body.setVelocity(body, velocity);
@@ -91,8 +107,9 @@ export function applyMagnet(body, pieces) {
     const dx = body.position.x - piece.body.position.x,
       dy = body.position.y - piece.body.position.y,
       d = Math.hypot(dx, dy);
-    if (d > 20 && d < 185) {
-      const strength = piece.body.mass * 0.0025 * (1 - d / 185);
+    const range = 185 + 25 * (body.plugin.impact || 0);
+    if (d > 20 && d < range) {
+      const strength = piece.body.mass * 0.0025 * (1 - d / range);
       Body.applyForce(piece.body, piece.body.position, {
         x: (dx / d) * strength,
         y: (dy / d) * strength,
