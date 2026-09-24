@@ -72,10 +72,10 @@ export function createWorld(
   });
   return { engine, pieces };
 }
-export function addShot(engine, origin, velocity, kind) {
+export function addShot(engine, origin, velocity, kind, impact = 0) {
   const radius = kind === "heavy" ? 20 : 16;
   const body = Bodies.circle(origin.x, origin.y, radius, {
-    density: kind === "heavy" ? 0.03 : 0.015,
+    density: (kind === "heavy" ? 0.03 : 0.015) * (1 + 0.25 * impact),
     restitution: kind === "standard" ? 0.7 : 0.25,
     friction: 0.4,
     frictionAir: 0.008,

@@ -126,3 +126,29 @@ export const levels: Level[] = [
     ],
   },
 ];
+
+// Reinforced contracts reuse familiar silhouettes with tougher weak points.
+const reinforcedNames = [
+  ["Reinforced domino", "Ficha reforzada"],
+  ["Twin strongholds", "Fortalezas gemelas"],
+  ["Steelworks", "La acería"],
+  ["Scrapyard fortress", "Fortaleza del desguace"],
+  ["Final contract", "Contrato final"],
+];
+levels.push(
+  ...levels.slice(0, 5).map(
+    (level, i): Level => ({
+      ...level,
+      name: reinforcedNames[i][0],
+      es: reinforcedNames[i][1],
+      goal: 85,
+      hint: "Reinforced supports. Upgrade impact or add a shot in the workshop.",
+      hintEs:
+        "Soportes reforzados. Mejora el impacto o añade disparos en el taller.",
+      blocks: level.blocks.map((block) => ({
+        ...block,
+        material: block.material === "glass" ? "wood" : block.material,
+      })),
+    }),
+  ),
+);

@@ -26,3 +26,7 @@ Manual checks: first launch at 390px and desktop widths; aim/cancel with touch; 
 ## Product validation next
 
 Observe 10–15 fresh players without coaching. Record time to first shot, voluntary retries, levels completed and moments of confusion. Use the local export only with the tester's awareness. Improve the weakest part of the loop before adding content or monetization. Neither these tests nor technical compatibility prove demand, revenue or CrazyGames acceptance.
+
+## 0.2.0 — workshop follow-up
+
+31 automated checks pass, including all ten sites through compiled UI handlers, old-save migration, one-time credit persistence, purchase costs/caps, shot-budget changes, no duplicate completion payouts, and physical mass increases. Ten structures remain standing before input and have baseline three-shot solutions. New sites are reinforced variants, not five entirely new layouts. Browser visual/mobile QA remains unverified; the owner reported the previous published version looked good. Economy balance and difficulty are provisional.

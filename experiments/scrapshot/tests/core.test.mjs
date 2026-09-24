@@ -8,10 +8,16 @@ import {
 } from "../src/core.mjs";
 test("corrupt and out-of-range saves cannot unlock non-existent sites", () => {
   assert.deepEqual(parseProgress("broken", 5), {
+    schema: 2,
+    coins: 0,
+    upgrades: { impact: 0, magazine: 0 },
     unlocked: 0,
     best: [0, 0, 0, 0, 0],
   });
   assert.deepEqual(parseProgress('{"unlocked":999,"best":[8,-5,"oops"]}', 5), {
+    schema: 2,
+    coins: 160,
+    upgrades: { impact: 0, magazine: 0 },
     unlocked: 4,
     best: [3, 0, 0, 0, 0],
   });

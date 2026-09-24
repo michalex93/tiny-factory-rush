@@ -48,13 +48,13 @@ function boot(saved) {
     },
   };
 }
-test("compiled app completes all five sites through its actual UI handlers and preserves progress", () => {
+test("compiled app completes all ten sites through its actual UI handlers and preserves progress", () => {
   const a = boot();
   const { el, tick, range } = a;
-  for (let site = 0; site < 5; site++) {
+  for (let site = 0; site < 10; site++) {
     tick(120);
     range("angle", site === 3 ? 10 : 5);
-    range("power", site === 1 || site === 3 ? 100 : 70);
+    range("power", [1, 3, 6, 8].includes(site) ? 100 : 70);
     for (let shot = 0; shot < 3 && el("overlay").hidden; shot++) {
       assert.equal(el("fire").disabled, false);
       el("fire").click();
@@ -67,13 +67,13 @@ test("compiled app completes all five sites through its actual UI handlers and p
       /Beautiful|YARD COMPLETE/,
       `site ${site + 1}`,
     );
-    if (site < 4) el("next").click();
+    if (site < 9) el("next").click();
   }
   const saved = a.w.localStorage.getItem("scrapshot.progress.v1");
-  assert.equal(JSON.parse(saved).unlocked, 4);
+  assert.equal(JSON.parse(saved).unlocked, 9);
   a.dom.window.close();
   const restored = boot(saved);
-  assert.match(restored.el("eyebrow").textContent, /05/);
+  assert.match(restored.el("eyebrow").textContent, /10/);
   restored.dom.window.close();
 });
 test("pause freezes simulation; poor shots exhaust budget; retry restores it; language updates", () => {
@@ -99,4 +99,44 @@ test("pause freezes simulation; poor shots exhaust budget; retry restores it; la
   assert.equal(a.w.document.documentElement.lang, "es");
   assert.match(a.el("fire").textContent, /DISPARAR/);
   a.dom.window.close();
+});
+
+test("workshop upgrades spend once, extend the round, lock during play and persist", () => {
+  const a = boot(JSON.stringify({ unlocked: 0, best: [3] }));
+  assert.match(a.el("wallet").textContent, /160/);
+  a.el("buy-impact").click();
+  assert.match(a.el("wallet").textContent, /60/);
+  assert.equal(a.el("buy-impact").disabled, true);
+  assert.equal(a.el("buy-magazine").disabled, true);
+  a.w.document.querySelector('[data-level="0"]').click();
+  a.tick(120);
+  a.range("angle", 5);
+  a.range("power", 70);
+  a.el("fire").click();
+  a.tick(600);
+  assert.match(a.el("result-title").textContent, /Beautiful/);
+  const before = a.w.localStorage.getItem("scrapshot.progress.v1");
+  a.tick(600);
+  assert.equal(a.w.localStorage.getItem("scrapshot.progress.v1"), before);
+  assert.equal(JSON.parse(before).coins, 85);
+  a.dom.window.close();
+  const b = boot(
+    JSON.stringify({
+      schema: 2,
+      unlocked: 0,
+      best: [],
+      coins: 180,
+      upgrades: { impact: 0, magazine: 0 },
+    }),
+  );
+  b.el("buy-magazine").click();
+  assert.match(b.el("shots").textContent, /●●●●/);
+  assert.match(b.el("wallet").textContent, /0/);
+  b.el("fire").click();
+  assert.equal(b.el("buy-magazine").disabled, true);
+  const save = b.w.localStorage.getItem("scrapshot.progress.v1");
+  b.dom.window.close();
+  const c = boot(save);
+  assert.match(c.el("shots").textContent, /●●●●/);
+  c.dom.window.close();
 });

@@ -2,7 +2,11 @@ import Matter from "matter-js";
 import { levels, type Material } from "./levels";
 import {
   SAVE_KEY,
-  SHOTS,
+  shotBudget,
+  starsForShots,
+  upgradeCost,
+  purchaseUpgrade,
+  rewardClear,
   shotVelocity,
   aimFromPoint,
   parseProgress,
@@ -55,7 +59,7 @@ let levelIndex = progress.unlocked,
   kind: Kind = "standard",
   angle = 18,
   power = 85,
-  shots = SHOTS;
+  shots = shotBudget(progress);
 let pieces: Piece[] = [],
   projectiles: { body: Matter.Body; kind: Kind; born: number }[] = [],
   particles: Particle[] = [];
@@ -131,8 +135,8 @@ const words = {
     wood: "Wood",
     glass: "Glass",
     metal: "Metal",
-    levelLabel: "Five little experiments.\nOne very satisfying collapse.",
-    footer: "PROTOTYPE 01 / THE SCRAPYARD",
+    levelLabel: "Ten contracts.\nBuild a better cannon.",
+    footer: "PROTOTYPE 02 / THE SCRAPYARD",
     privacy: "Playtest data stays on this device.",
     export: "Export playtest",
     pause: "Pause",
@@ -143,7 +147,7 @@ const words = {
     winDesc: "A small action. A chain reaction.",
     next: "NEXT SITE →",
     end: "YARD COMPLETE ✓",
-    endDesc: "Five sites cleared. Try fewer shots or another tool.",
+    endDesc: "Ten sites cleared. Try fewer shots or another tool.",
     replay: "PLAY AGAIN ↻",
     lost: "Almost a masterpiece.",
     lostDesc: "Try a lower angle, a different tool, or a weaker support.",
@@ -179,8 +183,8 @@ const words = {
     wood: "Madera",
     glass: "Vidrio",
     metal: "Metal",
-    levelLabel: "Cinco pequeños retos.\nUn derrumbe satisfactorio.",
-    footer: "PROTOTIPO 01 / EL DESGUACE",
+    levelLabel: "Diez contratos.\nConstruye un mejor cañón.",
+    footer: "PROTOTIPO 02 / EL DESGUACE",
     privacy: "Los datos de prueba se quedan en este dispositivo.",
     export: "Exportar prueba",
     pause: "Pausa",
@@ -191,7 +195,7 @@ const words = {
     winDesc: "Una pequeña acción. Una reacción en cadena.",
     next: "SIGUIENTE ZONA →",
     end: "DESGUACE COMPLETO ✓",
-    endDesc: "Cinco zonas listas. Prueba con menos disparos u otra bola.",
+    endDesc: "Diez zonas listas. Prueba con menos disparos u otra bola.",
     replay: "VOLVER A JUGAR ↻",
     lost: "Casi una obra maestra.",
     lostDesc: "Prueba un ángulo menor, otra bola o un soporte más débil.",
@@ -206,10 +210,10 @@ const t = () => words[lang];
 const app = document.querySelector<HTMLDivElement>("#app")!;
 app.innerHTML = `<header><div class="brand"><span class="brand-mark" aria-hidden="true">↗</span>scrapshot<span class="tag" id="tag"></span></div><div class="toolbar"><button class="quiet" id="lang">ES</button><button class="quiet" id="sound"></button><button class="quiet" id="pause"></button></div></header>
 <main><div class="intro"><div><p class="eyebrow" id="eyebrow"></p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div><span class="level-count" id="counter"></span></div>
-<div class="game-layout"><section class="stage" aria-label="Scrapshot"><div class="progress-track"><div class="progress-fill" id="fill"></div></div><div class="canvas-wrap"><div class="stage-top"><span class="pill" id="shots"></span><span class="pill" id="score"></span></div><canvas id="game" width="1000" height="560" aria-label="Aim using the angle and power controls, then Fire"></canvas><div class="overlay" id="overlay" hidden><div class="result" role="dialog" aria-modal="true" aria-labelledby="result-title" tabindex="-1"><div class="symbol" id="symbol">✦</div><h2 id="result-title"></h2><p id="result-desc"></p><button class="fire" id="next"></button><button class="retry" id="again"></button></div></div></div><div class="stage-bottom"><p class="hint" id="hint"></p><button class="retry" id="retry"></button></div></section>
+<div class="game-layout"><section class="stage" aria-label="Scrapshot"><div class="progress-track"><div class="progress-fill" id="fill"></div></div><div class="canvas-wrap"><div class="stage-top"><span class="pill" id="balance"></span><span class="pill" id="shots"></span><span class="pill" id="score"></span></div><canvas id="game" width="1000" height="560" aria-label="Aim using the angle and power controls, then Fire"></canvas><div class="overlay" id="overlay" hidden><div class="result" role="dialog" aria-modal="true" aria-labelledby="result-title" tabindex="-1"><div class="symbol" id="symbol">✦</div><h2 id="result-title"></h2><p id="result-desc"></p><button class="fire" id="next"></button><button class="retry" id="again"></button></div></div></div><div class="stage-bottom"><p class="hint" id="hint"></p><button class="retry" id="retry"></button></div></section>
 <aside class="panel"><h2 id="load-title"></h2><p class="panel-desc" id="load-desc"></p>${(["standard", "heavy", "magnet"] as Kind[]).map((k) => `<button class="ammo ${k === "standard" ? "active" : ""}" data-kind="${k}" aria-pressed="${k === "standard"}"><span class="orb ${k}" aria-hidden="true"></span><span><b id="${k}-title"></b><small id="${k}-desc"></small></span></button>`).join("")}
 <div class="control"><label for="angle"><span id="angle-label"></span><output id="angle-value">18°</output></label><input id="angle" type="range" min="5" max="70" value="18"></div><div class="control"><label for="power"><span id="power-label"></span><output id="power-value">85%</output></label><input id="power" type="range" min="20" max="100" value="85"></div><button class="fire" id="fire"></button><p class="keyboard" id="keyboard"></p></aside></div>
-<div class="bottom-row"><nav class="levels" aria-label="Levels">${levels.map((_, i) => `<button class="level" data-level="${i}">${String(i + 1).padStart(2, "0")}</button>`).join("")}<span class="level-label" id="level-label"></span></nav><div class="legend">${(["wood", "glass", "metal"] as Material[]).map((m) => `<span><i class="dot" style="background:${palette[m]}"></i><span id="legend-${m}"></span></span>`).join("")}</div></div>
+<section class="workshop" aria-labelledby="shop-title"><div class="shop-heading"><div><h2 id="shop-title"></h2><p id="shop-note"></p></div><strong class="wallet" id="wallet" aria-live="polite"></strong></div><div class="shop-grid">${(["impact", "magazine"] as const).map((k) => `<button class="upgrade" id="buy-${k}"><span class="upgrade-icon" aria-hidden="true">${k === "impact" ? "↗" : "●●"}</span><span><b id="${k}-name"></b><small id="${k}-effect"></small><strong id="${k}-price"></strong></span></button>`).join("")}</div><p id="shop-feedback" aria-live="polite"></p></section><div class="bottom-row"><nav class="levels" aria-label="Levels">${levels.map((_, i) => `<button class="level" data-level="${i}">${String(i + 1).padStart(2, "0")}</button>`).join("")}<span class="level-label" id="level-label"></span></nav><div class="legend">${(["wood", "glass", "metal"] as Material[]).map((m) => `<span><i class="dot" style="background:${palette[m]}"></i><span id="legend-${m}"></span></span>`).join("")}</div></div>
 <p class="notice" id="notice" hidden></p><div class="footer"><span id="footer"></span><span><span id="privacy"></span> <button id="export"></button></span></div><p id="status" class="sr-only" aria-live="polite"></p></main>`;
 function el<T extends HTMLElement = HTMLElement>(id: string) {
   return document.getElementById(id) as T;
@@ -277,15 +281,74 @@ function labels() {
   hud();
   updateOverlay();
 }
+function shop() {
+  const es = lang === "es";
+  text("shop-title", es ? "Taller del cañón" : "Cannon workshop");
+  text("wallet", `${progress.coins} ${es ? "monedas" : "coins"}`);
+  text("balance", `${progress.coins} ${es ? "monedas" : "coins"}`);
+  text(
+    "shop-note",
+    es
+      ? "Gana monedas al completar zonas. Compra antes del primer disparo."
+      : "Earn coins by clearing sites. Upgrade before your first shot.",
+  );
+  for (const key of ["impact", "magazine"] as const) {
+    const rank = progress.upgrades[key],
+      max = key === "impact" ? 3 : 2,
+      cost = upgradeCost(progress, key);
+    text(
+      `${key}-name`,
+      `${key === "impact" ? (es ? "Impacto reforzado" : "Reinforced impact") : es ? "Cargador ampliado" : "Extended magazine"} · ${rank}/${max}`,
+    );
+    text(
+      `${key}-effect`,
+      key === "impact"
+        ? es
+          ? `Masa de la bola +${rank * 25}% → +${Math.min(3, rank + 1) * 25}%. Más empuje.`
+          : `Ball mass +${rank * 25}% → +${Math.min(3, rank + 1) * 25}%. More momentum.`
+        : es
+          ? `${3 + rank} → ${3 + Math.min(2, rank + 1)} disparos por zona.`
+          : `${3 + rank} → ${3 + Math.min(2, rank + 1)} shots per site.`,
+    );
+    const allowed = phase === "ready" && !firstShot && !paused;
+    text(
+      `${key}-price`,
+      cost === null
+        ? es
+          ? "AL MÁXIMO"
+          : "MAXED"
+        : !allowed
+          ? es
+            ? "Disponible al iniciar una zona"
+            : "Available at the start of a site"
+          : progress.coins < cost
+            ? es
+              ? `${cost} monedas · faltan ${cost - progress.coins}`
+              : `${cost} coins · need ${cost - progress.coins} more`
+            : es
+              ? `MEJORAR · ${cost} monedas`
+              : `UPGRADE · ${cost} coins`,
+    );
+    el<HTMLButtonElement>(`buy-${key}`).disabled =
+      cost === null || !allowed || progress.coins < cost;
+  }
+}
 function hud() {
+  shop();
   const l = levels[levelIndex],
     w = t();
   text(
     "eyebrow",
     `${w.sector} ${String(levelIndex + 1).padStart(2, "0")} / ${lang === "es" ? l.es : l.name}`,
   );
-  text("counter", `${String(levelIndex + 1).padStart(2, "0")} / 05`);
-  text("shots", `${w.shot}  ${"●".repeat(shots)}${"○".repeat(SHOTS - shots)}`);
+  text(
+    "counter",
+    `${String(levelIndex + 1).padStart(2, "0")} / ${String(levels.length).padStart(2, "0")}`,
+  );
+  text(
+    "shots",
+    `${w.shot}  ${"●".repeat(shots)}${"○".repeat(shotBudget(progress) - shots)}`,
+  );
   text("score", `${percent}% ${w.clear} · ${w.target} ${l.goal}%`);
   el("fill").style.width = `${percent}%`;
   text("hint", firstShot ? (lang === "es" ? l.hintEs : l.hint) : w.hint);
@@ -314,6 +377,7 @@ function hud() {
   el<HTMLInputElement>("angle").disabled = phase !== "ready" || paused;
   el<HTMLInputElement>("power").disabled = phase !== "ready" || paused;
 }
+let earned = 0;
 let previousFocus: HTMLElement | null = null;
 function updateOverlay() {
   const show = paused || phase === "won" || phase === "lost",
@@ -335,9 +399,14 @@ function updateOverlay() {
         : won
           ? last
             ? w.endDesc
-            : `${w.winDesc} ${"★".repeat(Math.min(3, shots + 1))}`
+            : `${w.winDesc} ${"★".repeat(starsForShots(shotBudget(progress) - shots))}`
           : w.lostDesc,
     );
+    if (won && !paused)
+      el("result-desc").textContent +=
+        lang === "es"
+          ? ` +${earned} monedas. Mejora tu cañón al iniciar la siguiente zona.`
+          : ` +${earned} coins. Upgrade your cannon at the start of the next site.`;
     text(
       "next",
       paused ? w.resume : won ? (last ? w.replay : w.next) : w.retry,
@@ -363,7 +432,7 @@ function loadLevel(i: number) {
   pieces = [];
   projectiles = [];
   particles = [];
-  shots = SHOTS;
+  shots = shotBudget(progress);
   phase = "ready";
   paused = false;
   aiming = false;
@@ -375,6 +444,7 @@ function loadLevel(i: number) {
   combo = 0;
   shake = 0;
   firstShot = false;
+  earned = 0;
   angle = 18;
   power = 85;
   levelStart = performance.now();
@@ -419,7 +489,13 @@ function fire() {
   shotTime = simTime;
   settling = 0;
   combo = 0;
-  const body = addShot(engine, origin, shotVelocity(angle, power, kind), kind);
+  const body = addShot(
+    engine,
+    origin,
+    shotVelocity(angle, power, kind),
+    kind,
+    progress.upgrades.impact,
+  );
   projectiles.push({ body, kind, born: simTime });
   tone(350, 0.15);
   track("shot", {
@@ -435,19 +511,12 @@ function fire() {
 function finish(won: boolean) {
   phase = won ? "won" : "lost";
   if (won) {
-    progress.best[levelIndex] = Math.max(
-      progress.best[levelIndex],
-      Math.min(3, shots + 1),
-    );
-    progress.unlocked = Math.max(
-      progress.unlocked,
-      Math.min(levels.length - 1, levelIndex + 1),
-    );
+    earned = rewardClear(progress, levelIndex, shotBudget(progress) - shots);
     write(SAVE_KEY, JSON.stringify(progress));
     tone(620, 0.3);
   }
   track(won ? "level_complete" : "level_failed", {
-    shotsUsed: SHOTS - shots,
+    shotsUsed: shotBudget(progress) - shots,
     percent,
     elapsedMs: Math.round(performance.now() - levelStart),
   });
@@ -590,6 +659,8 @@ function draw() {
   ctx.translate(origin.x, origin.y);
   ctx.rotate((-angle * Math.PI) / 180);
   rounded(-31, -17, 62, 34, 8, "#365e4c");
+  for (let n = 0; n < progress.upgrades.impact; n++)
+    rounded(-25 + n * 13, -20, 7, 40, 2, "#edb36c");
   rounded(18, -20, 15, 40, 4, "#ed7947");
   ctx.restore();
   ctx.strokeStyle = "#365e4c";
@@ -710,7 +781,7 @@ function frame(now: number) {
   requestAnimationFrame(frame);
 }
 function retry() {
-  track("retry", { phase, peak, shotsUsed: SHOTS - shots });
+  track("retry", { phase, peak, shotsUsed: shotBudget(progress) - shots });
   loadLevel(levelIndex);
 }
 function pause(value: boolean) {
@@ -722,6 +793,26 @@ function pause(value: boolean) {
   if (value) void audio?.suspend();
   else if (!muted) void audio?.resume();
 }
+for (const key of ["impact", "magazine"] as const)
+  el(`buy-${key}`).onclick = () => {
+    if (phase !== "ready" || firstShot || paused) return;
+    if (!purchaseUpgrade(progress, key)) return;
+    shots = shotBudget(progress);
+    write(SAVE_KEY, JSON.stringify(progress));
+    track("upgrade_purchased", {
+      upgrade: key,
+      rank: progress.upgrades[key],
+      coins: progress.coins,
+    });
+    text(
+      "shop-feedback",
+      lang === "es"
+        ? "Mejora instalada. Tu cañón está listo."
+        : "Upgrade installed. Your cannon is ready.",
+    );
+    tone(550, 0.16);
+    hud();
+  };
 el("fire").onclick = fire;
 el("retry").onclick = retry;
 el("again").onclick = retry;
@@ -838,7 +929,7 @@ el("export").onclick = () => {
       JSON.stringify(
         {
           schema: 1,
-          prototype: "0.1.0",
+          prototype: "0.2.0",
           note: "Local events only; not validated retention or revenue.",
           progress,
           events: telemetry,
@@ -856,5 +947,6 @@ el("export").onclick = () => {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
+write(SAVE_KEY, JSON.stringify(progress));
 loadLevel(levelIndex);
 requestAnimationFrame(frame);
