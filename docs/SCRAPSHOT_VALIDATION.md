@@ -48,3 +48,8 @@ The approved internal browser preview was attempted on 2026-09-24 and returned E
 40 automated checks pass. The ten-site compiled UI campaign uses baseline solutions including site 4 at 18°/100%, site 6 at 25°/85%, site 9 at 35°/70%, and site 10 at 25°/85%. Physics fixtures verify pre-input stability, first-collision damage changes, larger caliber, area destruction that preserves metal, and failure of six fully upgraded low shots for every tool on each of the four walled sites.
 
 The owner reported 0.3.1 looked good on their phone. This is evidence about that version's appearance on one device, not observed touch/performance QA of 0.4.0. Browser testing remains blocked. Human difficulty, upgrade satisfaction and retention are unmeasured.
+
+
+## 0.4.1 submission candidate
+
+41 automated tests passed, including absence of playtest export/telemetry and retained saved progress. Build succeeded. No new real-browser result is claimed: managed preview was blocked by ERR_BLOCKED_BY_CLIENT. Offline native-canvas promotional rendering is media production only. Verify loading, controls, pause/resume, saves and readability in the CrazyGames portal on desktop and a real phone before submission.

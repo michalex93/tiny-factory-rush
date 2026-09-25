@@ -192,3 +192,13 @@ test("visible bilingual aiming instructions and modal isolation protect the curr
   assert.match(a.el("eyebrow").textContent, /02/);
   a.dom.window.close();
 });
+
+test("submission build contains no playtest controls and writes no telemetry", () => {
+  const a=boot();
+  assert.equal(a.el("export"),null);
+  assert.doesNotMatch(a.el("footer").textContent,/PROTOTYPE|PROTOTIPO/);
+  a.el("fire").click();a.tick(600);
+  assert.equal(a.w.localStorage.getItem("scrapshot.events.v1"),null);
+  assert.ok(a.w.localStorage.getItem("scrapshot.progress.v1"));
+  a.dom.window.close();
+});

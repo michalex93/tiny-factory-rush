@@ -36,7 +36,7 @@ type Particle = {
 };
 const palette = { wood: "#cc9659", glass: "#9dcac1", metal: "#577d70" };
 const origin = { x: 165, y: 423 };
-let lang: "en" | "es" = navigator.language.startsWith("es") ? "es" : "en";
+let lang: "en" | "es" = "en";
 let storageOK = true;
 function read(key: string) {
   try {
@@ -87,28 +87,8 @@ let muted = read("scrapshot.muted") === "true",
   audio: AudioContext | undefined;
 let lastHitSound = -100;
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const session = crypto.randomUUID?.() ?? String(Date.now());
-let telemetry: {
-  event: string;
-  at: number;
-  level: number;
-  [key: string]: unknown;
-}[] = [];
-try {
-  const parsed = JSON.parse(read("scrapshot.events.v1") || "[]");
-  if (Array.isArray(parsed)) telemetry = parsed.slice(-150);
-} catch {}
-function track(event: string, extra: Record<string, unknown> = {}) {
-  telemetry.push({
-    event,
-    at: Date.now(),
-    session,
-    level: levelIndex + 1,
-    ...extra,
-  });
-  telemetry = telemetry.slice(-200);
-  write("scrapshot.events.v1", JSON.stringify(telemetry));
-}
+// Release build: no playtest telemetry or external analytics.
+function track(_event: string, _extra: Record<string, unknown> = {}) {}
 const words = {
   en: {
     tag: "PHYSICS PLAYGROUND",
@@ -138,9 +118,8 @@ const words = {
     metal: "Metal",
     barrier: "Fixed barrier",
     levelLabel: "Ten contracts.\nBuild a better cannon.",
-    footer: "PROTOTYPE 03 / THE SCRAPYARD",
-    privacy: "Playtest data stays on this device.",
-    export: "Export playtest",
+    footer: "SCRAPSHOT / THE SCRAPYARD",
+    privacy: "Your progress is saved on this device.",
     pause: "Pause",
     resume: "Resume",
     sound: "Sound on",
@@ -187,9 +166,8 @@ const words = {
     metal: "Metal",
     barrier: "Barrera fija",
     levelLabel: "Diez contratos.\nConstruye un mejor cañón.",
-    footer: "PROTOTIPO 03 / EL DESGUACE",
-    privacy: "Los datos de prueba se quedan en este dispositivo.",
-    export: "Exportar prueba",
+    footer: "SCRAPSHOT / EL DESGUACE",
+    privacy: "Tu progreso se guarda en este dispositivo.",
     pause: "Pausa",
     resume: "Continuar",
     sound: "Sonido activo",
@@ -217,7 +195,7 @@ app.innerHTML = `<header><div class="brand"><span class="brand-mark" aria-hidden
 <aside class="panel"><h2 id="load-title"></h2><p class="panel-desc" id="load-desc"></p>${(["standard", "heavy", "magnet"] as Kind[]).map((k) => `<button class="ammo ${k === "standard" ? "active" : ""}" data-kind="${k}" aria-pressed="${k === "standard"}"><span class="orb ${k}" aria-hidden="true"></span><span><b id="${k}-title"></b><small id="${k}-desc"></small></span></button>`).join("")}
 <div class="control"><label for="angle"><span id="angle-label"></span><output id="angle-value">18°</output></label><input id="angle" type="range" min="5" max="70" value="18"></div><div class="control"><label for="power"><span id="power-label"></span><output id="power-value">85%</output></label><input id="power" type="range" min="20" max="100" value="85"></div><button class="fire" id="fire"></button><p class="keyboard" id="keyboard"></p></aside></div>
 <section class="workshop" aria-labelledby="shop-title"><div class="shop-heading"><div><h2 id="shop-title"></h2><p id="shop-note"></p></div><strong class="wallet" id="wallet" aria-live="polite"></strong></div><div class="shop-grid">${(["impact", "magazine"] as const).map((k) => `<button class="upgrade" id="buy-${k}"><span class="upgrade-icon" aria-hidden="true">${k === "impact" ? "↗" : "●●"}</span><span><b id="${k}-name"></b><small id="${k}-effect"></small><strong id="${k}-price"></strong></span></button>`).join("")}</div><p id="shop-feedback" aria-live="polite"></p></section><section class="workshop restoration" aria-labelledby="project-title"><div><h2 id="project-title"></h2><p id="project-note"></p></div><div class="project-buildings" id="project-buildings"></div><p id="salvage" aria-live="polite"></p><button class="fire" id="build-project"></button></section><div class="bottom-row"><nav class="levels" aria-label="Levels">${levels.map((_, i) => `<button class="level" data-level="${i}">${String(i + 1).padStart(2, "0")}</button>`).join("")}<span class="level-label" id="level-label"></span></nav><div class="legend">${(["wood", "glass", "metal"] as Material[]).map((m) => `<span><i class="dot" style="background:${palette[m]}"></i><span id="legend-${m}"></span></span>`).join("")}<span><i class="dot barrier-dot"></i><span id="legend-barrier"></span></span></div></div>
-<p class="notice" id="notice" hidden></p><div class="footer"><span id="footer"></span><span><span id="privacy"></span> <button id="export"></button></span></div><p id="status" class="sr-only" aria-live="polite"></p></main>`;
+<p class="notice" id="notice" hidden></p><div class="footer"><span id="footer"></span><span><span id="privacy"></span></span></div><p id="status" class="sr-only" aria-live="polite"></p></main>`;
 function el<T extends HTMLElement = HTMLElement>(id: string) {
   return document.getElementById(id) as T;
 }
@@ -279,7 +257,6 @@ function labels() {
   text("level-label", w.levelLabel);
   text("footer", w.footer);
   text("privacy", w.privacy);
-  text("export", w.export);
   text("notice", w.storage);
   el("notice").hidden = storageOK;
   (["standard", "heavy", "magnet"] as const).forEach((k) => {
@@ -1008,31 +985,6 @@ document.addEventListener("keydown", (e) => {
 document.addEventListener("visibilitychange", () => {
   if (document.hidden && !paused) pause(true);
 });
-el("export").onclick = () => {
-  track("export");
-  const blob = new Blob(
-    [
-      JSON.stringify(
-        {
-          schema: 1,
-          prototype: "0.4.0",
-          note: "Local events only; not validated retention or revenue.",
-          progress,
-          events: telemetry,
-        },
-        null,
-        2,
-      ),
-    ],
-    { type: "application/json" },
-  );
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "scrapshot-playtest.json";
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-};
 write(SAVE_KEY, JSON.stringify(progress));
 loadLevel(levelIndex);
 requestAnimationFrame(frame);
