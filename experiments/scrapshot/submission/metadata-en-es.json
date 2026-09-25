@@ -1,0 +1,17 @@
+{
+  "title": "Scrapshot",
+  "version": "0.4.1",
+  "launch": "Basic Launch",
+  "suggested_category": "Puzzle",
+  "suggested_tags": ["Physics", "Demolition", "Cannon", "Upgrade", "Casual"],
+  "languages": ["en", "es"],
+  "description_en": "One clever shot can bring the whole scrapyard down. Aim your cannon, hit weak supports, and trigger satisfying chain reactions across 10 physics demolition challenges. Unlock heavy and magnetic shots, earn coins for stronger cannon upgrades, and recover scrap to rebuild your workshop. Wood breaks, glass shatters, and metal needs a different plan. Can you clear every contract with fewer shots?",
+  "controls_en": "Drag inside the play area to aim and release to fire. Drag outside to cancel. You can also adjust Angle and Power, then press Fire. Choose your ammo before shooting. P pauses and R retries on keyboard.",
+  "description_es": "Un buen disparo puede derribar todo el desguace. Apunta tu cañón, encuentra los soportes débiles y provoca reacciones en cadena en 10 desafíos de demolición con física. Desbloquea disparos pesados y magnéticos, gana monedas para mejorar el cañón y recupera chatarra para reconstruir tu taller. La madera se rompe, el vidrio estalla y el metal exige otra estrategia. ¿Puedes completar cada contrato con menos disparos?",
+  "controls_es": "Arrastra dentro de la zona de juego para apuntar y suelta para disparar. Arrastra fuera para cancelar. También puedes ajustar Ángulo y Potencia y pulsar Disparar. Elige la munición antes de disparar. P pausa y R reintenta con teclado.",
+  "save": "Local device storage",
+  "sdk_integrated": false,
+  "ads": false,
+  "in_app_purchases": false,
+  "device_support": "Desktop and touch mobile intended; portal/device QA pending"
+}
