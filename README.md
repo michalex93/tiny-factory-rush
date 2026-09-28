@@ -4,7 +4,7 @@ Juego HTML5 casual/idle de fábrica. Administra una línea de producción: mater
 
 MVP / candidato a validación en CrazyGames.
 
-**Versión:** 0.4.0 — identidad industrial casual (bottleneck / WIP / buffers)
+**Versión:** 0.6.0 — rediseño visual completo ("toy factory"), juice, audio procedural, SDK CrazyGames
 
 ## Stack
 
@@ -47,11 +47,26 @@ La salida queda en `dist/` (lista para subir a un host estático / CrazyGames).
 
 ## Controles
 
-- **Click / tap en una máquina**: acelera temporalmente su procesamiento
-- **Botones de mejora (panel inferior derecho)**: Speed / Capacity / Profit por máquina
-- **Desbloquear (botón izquierdo)**: siguiente producto (Toys → Space Tech)
-- **Mute (esquina superior derecha)**: silenciar SFX (persistente)
+- **Click / tap en una máquina**: la acelera un momento (chispas + ojos felices)
+- **Tarjetas bajo cada máquina**: Faster / More room / Worth more
+- **Tarjeta "NEXT" (arriba a la derecha)**: siguiente producto (Toys → Space Tech)
+- **Música / sonido (arriba a la derecha)**: música y SFX por separado
 - Consola: `window.__tfrReset()` reinicia el guardado y recarga
+
+## Arte y audio (v0.6)
+
+Todo el arte es vectorial y se genera al arrancar (`src/art/Textures.ts`), sin archivos de imagen:
+máquinas con personalidad (ojos que parpadean, se enojan cuando se atascan, se duermen cuando esperan),
+banda transportadora animada, 5 productos × 4 etapas visuales (materia prima → pieza → producto → empacado),
+tolva de entrada y camión de reparto. El render es 2× (`src/art/view.ts`) para verse nítido en pantalla completa.
+
+Audio 100 % Web Audio (`src/systems/AudioSystem.ts`): SFX por acción y un loop musical generativo suave.
+
+La capa de texto (`src/ui/copy.ts`) traduce la jerga de los sistemas (OUTPUT, WIP, THROUGHPUT…) a lenguaje de jugador.
+
+## Portadas
+
+`npm run dev` y luego `npm run covers` → genera `covers/` en 1920×1080, 800×1200 y 800×800.
 
 ## Eventos
 
@@ -86,9 +101,9 @@ Autosave en `localStorage` (`tiny-factory-rush-save`): monedas, upgrades, produc
 
 ## Preparación CrazyGames
 
-- `src/systems/Platform.ts`: hooks `gameplayStart` / `gameplayStop` / ads (no-op)
-- `Events.trigger(...)`: listo para rewarded ads futuros
-- Sin ads reales en esta versión
+- SDK v3 cargado en `index.html`; `src/systems/Platform.ts` llama `init`, `loadingStart/Stop`, `gameplayStart/Stop`, `happytime` (no-op fuera de CrazyGames)
+- Entra directo al gameplay (sin menús), inglés por defecto, sin botón de fullscreen propio
+- Sin ads reales en esta versión (Basic Launch)
 
 ## Checklist candidato (M3)
 
@@ -98,5 +113,8 @@ Autosave en `localStorage` (`tiny-factory-rush-save`): monedas, upgrades, produc
 - [x] 5 productos + eventos + audio
 - [x] Hit areas touch corregidas
 - [x] Feedback visual (sparks, coin fly)
+- [x] Arte coherente en alta resolución + música/SFX (v0.6)
+- [x] SDK CrazyGames v3 (gameplayStart/Stop, loading, happytime)
+- [x] Portadas 16:9, 2:3, 1:1
 - [ ] Prueba manual en Chrome móvil del usuario
-- [ ] Integración SDK CrazyGames (futuro)
+- [ ] Video preview 15–20 s (opcional)

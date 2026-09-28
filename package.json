@@ -1,6 +1,6 @@
 {
   "name": "tiny-factory-rush",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "description": "Casual idle factory game MVP for CrazyGames validation",
   "type": "module",
@@ -10,9 +10,12 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "covers": "node scripts/render-covers.mjs",
+    "tour": "node scripts/visual-tour.mjs"
   },
   "dependencies": {
+    "@fontsource/fredoka": "^5.3.0",
     "phaser": "^4.2.1"
   },
   "devDependencies": {

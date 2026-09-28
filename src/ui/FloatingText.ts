@@ -1,59 +1,55 @@
 import Phaser from 'phaser';
+import { CSS } from '../art/palette';
+import { txt } from '../art/view';
 
 interface PooledText {
   text: Phaser.GameObjects.Text;
   inUse: boolean;
+  bornAt: number;
 }
 
-/**
- * Reusable floating damage/coin numbers — avoids allocating per sale.
- */
+/** Pooled pop-up numbers/messages with a springy rise. */
 export class FloatingText {
   private pool: PooledText[] = [];
-  private scene: Phaser.Scene;
-  private readonly poolSize = 16;
+  private readonly poolSize = 24;
 
-  constructor(scene: Phaser.Scene) {
-    this.scene = scene;
+  constructor(private scene: Phaser.Scene) {
     for (let i = 0; i < this.poolSize; i++) {
-      const text = scene.add
-        .text(0, 0, '', {
-          fontFamily: 'Segoe UI, system-ui, sans-serif',
-          fontSize: '22px',
-          fontStyle: 'bold',
-          color: '#ffd166',
-          stroke: '#000000',
-          strokeThickness: 3,
-        })
+      const text = txt(scene, 0, 0, '', {
+        size: 22,
+        weight: '700',
+        color: CSS.gold,
+        stroke: CSS.ink,
+        strokeThickness: 6,
+        align: 'center',
+      })
         .setOrigin(0.5)
         .setVisible(false)
         .setDepth(1000);
-      this.pool.push({ text, inUse: false });
+      this.pool.push({ text, inUse: false, bornAt: 0 });
     }
   }
 
-  spawn(x: number, y: number, value: string, color = '#ffd166'): void {
-    const entry = this.pool.find((p) => !p.inUse) ?? this.pool[0]!;
+  spawn(x: number, y: number, value: string, color: string = CSS.gold, size = 22): void {
+    let entry = this.pool.find((p) => !p.inUse);
+    if (!entry) entry = this.pool.reduce((a, b) => (a.bornAt < b.bornAt ? a : b));
     entry.inUse = true;
+    entry.bornAt = this.scene.time.now;
     const t = entry.text;
     this.scene.tweens.killTweensOf(t);
-    t.setText(value);
-    t.setColor(color);
-    t.setPosition(x, y);
-    t.setAlpha(1);
-    t.setScale(1);
-    t.setVisible(true);
-
+    t.setText(value).setColor(color).setFontSize(size);
+    t.setPosition(x, y).setAlpha(1).setScale(0.4).setVisible(true);
+    this.scene.tweens.add({ targets: t, scale: 1, duration: 180, ease: 'Back.easeOut' });
     this.scene.tweens.add({
       targets: t,
-      y: y - 48,
+      y: y - 56,
       alpha: 0,
-      scale: 1.15,
-      duration: 700,
-      ease: 'Cubic.easeOut',
+      delay: 380,
+      duration: 650,
+      ease: 'Cubic.easeIn',
       onComplete: () => {
         t.setVisible(false);
-        entry.inUse = false;
+        entry!.inUse = false;
       },
     });
   }

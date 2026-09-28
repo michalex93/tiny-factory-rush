@@ -2,6 +2,24 @@
 
 ## Milestone actual
 
+**V-1 — Rediseño visual y "game feel" (respuesta al 2.º rechazo de CrazyGames por calidad)**
+
+Motor de simulación, balance y campaña **sin cambios** (136 tests verdes). Cambió toda la capa de presentación:
+
+| Hallazgo (investigación) | Cambio |
+|---|---|
+| El placer central de los juegos de fábrica es *ver el flujo* (Kolibri/Idle Miner: loop completo en 1 pantalla con cuellos visibles) | Banda continua, ítems que viajan físicamente, se apilan frente a la máquina lenta y saltan al camión |
+| "Juice it or lose it": tweening, squash & stretch, partículas, shake, personalidad | Máquinas con ojos/estados, herramientas animadas, chispas, monedas que vuelan al contador, confeti + shake en hitos |
+| CrazyGames quality: arte coherente en alta resolución, audio consistente | Arte vectorial único (paleta + contornos), render 2×, fuente Fredoka, SFX + música procedural |
+| Interfaces confusas / jerga (quejas en itch.io; Larss IO) | `friendly()` traduce OUTPUT/WIP/BOTTLENECK…; mejoras bajo cada máquina con ícono, nombre, nivel y precio |
+| Retención D1 10–15 % (Basic Launch) | Recompensa "Welcome back" acotada (solo tras 3 mejoras, máx. 8 min de ingreso) |
+
+Archivos nuevos: `src/art/*` (paleta, Pen, texturas, Fx, view), `src/ui/copy.ts`, `src/cover.ts` + `cover.html`, `scripts/render-covers.mjs`, `scripts/visual-tour.mjs`.
+
+---
+
+## M-C.2 (histórico)
+
 **M-C.2 — Liquidez funding, Return rate fix, Launch reload, BONUS TIER UI**
 
 Correctivo quirúrgico sobre M-C.1. Artefactos `validate-mc1-*` no modificados.

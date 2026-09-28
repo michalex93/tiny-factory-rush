@@ -1,12 +1,14 @@
 import Phaser from 'phaser';
+import '@fontsource/fredoka/latin-500.css';
+import '@fontsource/fredoka/latin-600.css';
+import '@fontsource/fredoka/latin-700.css';
 import { createGameConfig } from './config/gameConfig';
+import { Platform } from './systems/Platform';
 
 const parent = document.getElementById('game-container');
 if (!parent) {
   throw new Error('Missing #game-container');
 }
-
-const game = new Phaser.Game(createGameConfig(parent));
 
 // Helpful in console during development
 declare global {
@@ -23,6 +25,30 @@ declare global {
     ) => boolean;
   }
 }
-window.__tfrGame = game;
 
-export default game;
+async function loadFonts(): Promise<void> {
+  if (!document.fonts?.load) return;
+  const wait = Promise.all(
+    ['500', '600', '700'].map((w) => document.fonts.load(`${w} 20px "Fredoka"`)),
+  );
+  // Never block the game more than ~1.5 s on a slow font
+  await Promise.race([wait, new Promise((r) => setTimeout(r, 1500))]);
+}
+
+async function boot(): Promise<void> {
+  await Platform.init();
+  Platform.loadingStart();
+  await loadFonts();
+  const game = new Phaser.Game(createGameConfig(parent!));
+  window.__tfrGame = game;
+
+  document.addEventListener('visibilitychange', () => {
+    const reg = game.registry.get('game') as
+      | { audio?: { suspend(): void; resume(): void } }
+      | undefined;
+    if (document.hidden) reg?.audio?.suspend();
+    else reg?.audio?.resume();
+  });
+}
+
+void boot();

@@ -3,6 +3,7 @@ import { LAYOUT } from './balance';
 import { BootScene } from '../scenes/BootScene';
 import { GameScene } from '../scenes/GameScene';
 import { UIScene } from '../scenes/UIScene';
+import { ZOOM } from '../art/view';
 
 export function createGameConfig(
   parent: string | HTMLElement,
@@ -10,9 +11,9 @@ export function createGameConfig(
   return {
     type: Phaser.AUTO,
     parent,
-    width: LAYOUT.width,
-    height: LAYOUT.height,
-    backgroundColor: '#1a2332',
+    width: LAYOUT.width * ZOOM,
+    height: LAYOUT.height * ZOOM,
+    backgroundColor: '#3b93c9',
     roundPixels: false,
     scale: {
       mode: Phaser.Scale.FIT,

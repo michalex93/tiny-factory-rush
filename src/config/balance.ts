@@ -11,7 +11,7 @@ export type UpgradeType = 'speed' | 'buffer' | 'value';
 export type MachineId = 0 | 1 | 2;
 export type BufferId = 0 | 1;
 
-export const MACHINE_NAMES = ['Procesado', 'Ensamblaje', 'Empaque'] as const;
+export const MACHINE_NAMES = ['Cutter', 'Assembler', 'Packer'] as const;
 
 export type MachineState = 'IDLE' | 'PROCESSING' | 'BLOCKED' | 'STARVED';
 
