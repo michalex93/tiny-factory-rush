@@ -162,7 +162,7 @@ describe('M-C.2 paired funding liquidity', () => {
 });
 
 describe('M-C.2 return rate + units', () => {
-  it('return target uses proof-batch rate; progress is post-start delta only', () => {
+  it('return preview has no progress until calibration; post-start delta only', () => {
     const f = reachFunding('throughput');
     f.mc.selectPolicy(f, 'fast');
     f.economy.coins = 20_000;
@@ -172,7 +172,6 @@ describe('M-C.2 return rate + units', () => {
       g += 1;
     }
     f.mc.buildSmartphoneLine(f);
-    // Produce through sampling + launch
     g = 0;
     while (!f.mc.state.shift1Complete && g < 2000) {
       if (
@@ -190,33 +189,15 @@ describe('M-C.2 return rate + units', () => {
     }
     expect(f.mc.state.shift1Complete).toBe(true);
     const rc = f.mc.state.returnChallenge!;
-    expect(f.mc.state.launchProofPhones).toBeGreaterThan(0);
-    expect(rc.referencePhonesPerSec).toBeGreaterThan(0);
-    expect(rc.batchTarget).toBeGreaterThanOrEqual(
-      Math.ceil(rc.referencePhonesPerSec * 180),
-    );
-    // Pre-return production must not count
+    expect(rc.returnPhase).toBe('preview');
+    expect(rc.batchProgress).toBe(0);
     const preSold = f.mc.state.smartphonesSoldTotal;
     expect(preSold).toBeGreaterThan(0);
     f.bootMcSession(true);
     expect(f.mc.phase).toBe('return_challenge');
     expect(f.mc.state.returnChallenge!.phonesAtReturnStart).toBe(preSold);
-    expect(f.mc.state.returnChallenge!.batchProgress).toBe(0);
-    sim(f, 2_000);
+    expect(f.mc.state.returnChallenge!.returnPhase).toBe('calibration');
     expect(f.mc.state.returnChallengeComplete).toBe(false);
-    // Mark input + accumulate
-    f.mc.state.returnChallenge!.postStartInput = true;
-    const start = f.sessionMs;
-    g = 0;
-    while (!f.mc.state.returnChallengeComplete && g < 800) {
-      if (g % 10 === 0) buyPrefer(f, 'speed');
-      sim(f, 500);
-      g += 1;
-    }
-    expect(f.mc.state.returnChallengeComplete).toBe(true);
-    const observed = (f.sessionMs - start) / 1000;
-    expect(observed).toBeGreaterThanOrEqual(90);
-    expect(observed).toBeLessThanOrEqual(360);
   }, 120_000);
 });
 
@@ -336,6 +317,7 @@ describe('M-C.2 BONUS TIER buy path', () => {
     f.mc.state.freeUpgradeGranted = true;
     f.mc.state.freeUpgradeCredits = 1;
     f.mc.state.freeUpgradeUsed = false;
+    f.mc.state.freeUpgradeConsumed = false;
     f.mc.state.freeUpgradeMode = f.mc.computeFreeUpgradeMode(f);
     expect(f.mc.state.freeUpgradeMode).toBe('bonus_tier');
 
@@ -362,6 +344,7 @@ describe('M-C.2 BONUS TIER buy path', () => {
     expect(f.mc.state.bonusUpgradeGranted).toBe(true);
     expect(f.mc.state.bonusUpgradeMachineId).toBe(1);
     expect(f.mc.state.bonusUpgradeType).toBe('value');
+    expect(f.mc.state.freeUpgradeConsumed).toBe(true);
     expect(f.upgrades.getLevel(1, 'value')).toBe(levelBefore);
     expect(
       f.upgrades.totalValueMultiplier({ machineId: 1, type: 'value' }),

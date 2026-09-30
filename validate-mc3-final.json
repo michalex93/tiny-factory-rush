@@ -1,0 +1,5007 @@
+{
+  "generatedAt": "2026-09-05T23:48:50.334Z",
+  "note": "M-C.3 session-time Playwright validation; 3 adaptive Return orders, hydration barrier, fundingPurchaseCount, FREE NORMAL + BONUS fixtures.",
+  "smokeUrl": "http://127.0.0.1:5175/",
+  "partA": {
+    "id": "A_balanced_throughput_mc3",
+    "branch": "throughput",
+    "policy": "balanced",
+    "events": "off",
+    "authenticCheckpoint": null,
+    "toys_s": 442,
+    "fundingChoice_s": 492.7,
+    "policySelect": {
+      "cash": 28,
+      "fund": 0,
+      "ups": 27,
+      "policy": "balanced",
+      "locked": true,
+      "phase": "smartphone_funding",
+      "fundTarget": 730,
+      "fundingRef": 8.319,
+      "contribution": 0.35,
+      "durationSec": 250,
+      "upgradesBoughtBeforeFunding": 27
+    },
+    "fundBuys": [
+      {
+        "ok": true,
+        "type": "buffer",
+        "machine": 1,
+        "cost": 106,
+        "fundBefore": 520,
+        "fundAfter": 520,
+        "cash": 10
+      }
+    ],
+    "fundingPurchasesAtReady": {
+      "count": 22,
+      "list": [
+        {
+          "sessionMs": 502748,
+          "machineId": 1,
+          "upgradeType": "speed",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 65,
+          "cashBefore": 73,
+          "cashAfter": 8,
+          "fundBefore": 24.499999999999996,
+          "fundAfter": 24.499999999999996
+        },
+        {
+          "sessionMs": 513918,
+          "machineId": 0,
+          "upgradeType": "speed",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 65,
+          "cashBefore": 72,
+          "cashAfter": 7,
+          "fundBefore": 58.79999999999999,
+          "fundAfter": 58.79999999999999
+        },
+        {
+          "sessionMs": 525398,
+          "machineId": 2,
+          "upgradeType": "speed",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 65,
+          "cashBefore": 70,
+          "cashAfter": 5,
+          "fundBefore": 93.10000000000002,
+          "fundAfter": 93.10000000000002
+        },
+        {
+          "sessionMs": 538313,
+          "machineId": 1,
+          "upgradeType": "value",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 76,
+          "cashBefore": 78,
+          "cashAfter": 2,
+          "fundBefore": 132.30000000000007,
+          "fundAfter": 132.30000000000007
+        },
+        {
+          "sessionMs": 551351,
+          "machineId": 0,
+          "upgradeType": "value",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 76,
+          "cashBefore": 85,
+          "cashAfter": 9,
+          "fundBefore": 177.10000000000002,
+          "fundAfter": 177.10000000000002
+        },
+        {
+          "sessionMs": 561498,
+          "machineId": 2,
+          "upgradeType": "value",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 76,
+          "cashBefore": 76,
+          "cashAfter": 0,
+          "fundBefore": 212.79999999999995,
+          "fundAfter": 212.79999999999995
+        },
+        {
+          "sessionMs": 572898,
+          "machineId": 1,
+          "upgradeType": "buffer",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 78,
+          "cashBefore": 89,
+          "cashAfter": 11,
+          "fundBefore": 256.08857193062494,
+          "fundAfter": 256.08857193062494
+        },
+        {
+          "sessionMs": 582541,
+          "machineId": 1,
+          "upgradeType": "speed",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 90,
+          "cashBefore": 90,
+          "cashAfter": 0,
+          "fundBefore": 291.18603777812496,
+          "fundAfter": 291.18603777812496
+        },
+        {
+          "sessionMs": 591489,
+          "machineId": 0,
+          "upgradeType": "buffer",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 78,
+          "cashBefore": 82,
+          "cashAfter": 4,
+          "fundBefore": 323.753934896875,
+          "fundAfter": 323.753934896875
+        },
+        {
+          "sessionMs": 601299,
+          "machineId": 0,
+          "upgradeType": "speed",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 90,
+          "cashBefore": 101,
+          "cashAfter": 11,
+          "fundBefore": 359.45789743937496,
+          "fundAfter": 359.45789743937496
+        },
+        {
+          "sessionMs": 609879,
+          "machineId": 2,
+          "upgradeType": "speed",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 90,
+          "cashBefore": 94,
+          "cashAfter": 4,
+          "fundBefore": 390.6852708981249,
+          "fundAfter": 390.6852708981249
+        },
+        {
+          "sessionMs": 621446,
+          "machineId": 1,
+          "upgradeType": "value",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 107,
+          "cashBefore": 114,
+          "cashAfter": 7,
+          "fundBefore": 432.78256171937494,
+          "fundAfter": 432.78256171937494
+        },
+        {
+          "sessionMs": 629999,
+          "machineId": 0,
+          "upgradeType": "value",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 107,
+          "cashBefore": 108,
+          "cashAfter": 1,
+          "fundBefore": 463.91279525499993,
+          "fundAfter": 463.91279525499993
+        },
+        {
+          "sessionMs": 638651,
+          "machineId": 2,
+          "upgradeType": "value",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 107,
+          "cashBefore": 113,
+          "cashAfter": 6,
+          "fundBefore": 495.4009433668749,
+          "fundAfter": 495.4009433668749
+        },
+        {
+          "sessionMs": 645651,
+          "machineId": 1,
+          "upgradeType": "buffer",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 106,
+          "cashBefore": 116,
+          "cashAfter": 10,
+          "fundBefore": 520.8776988887499,
+          "fundAfter": 520.8776988887499
+        },
+        {
+          "sessionMs": 652824,
+          "machineId": 0,
+          "upgradeType": "buffer",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 106,
+          "cashBefore": 119,
+          "cashAfter": 13,
+          "fundBefore": 546.985408965625,
+          "fundAfter": 546.985408965625
+        },
+        {
+          "sessionMs": 661577,
+          "machineId": 1,
+          "upgradeType": "speed",
+          "levelBefore": 6,
+          "levelAfter": 7,
+          "cost": 124,
+          "cashBefore": 143,
+          "cashAfter": 19,
+          "fundBefore": 578.8435913968749,
+          "fundAfter": 578.8435913968749
+        },
+        {
+          "sessionMs": 668412,
+          "machineId": 0,
+          "upgradeType": "speed",
+          "levelBefore": 6,
+          "levelAfter": 7,
+          "cost": 124,
+          "cashBefore": 130,
+          "cashAfter": 6,
+          "fundBefore": 602.8099284812498,
+          "fundAfter": 602.8099284812498
+        },
+        {
+          "sessionMs": 676520,
+          "machineId": 2,
+          "upgradeType": "speed",
+          "levelBefore": 6,
+          "levelAfter": 7,
+          "cost": 124,
+          "cashBefore": 137,
+          "cashAfter": 13,
+          "fundBefore": 633.2305565162497,
+          "fundAfter": 633.2305565162497
+        },
+        {
+          "sessionMs": 684192,
+          "machineId": 1,
+          "upgradeType": "buffer",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 143,
+          "cashBefore": 147,
+          "cashAfter": 4,
+          "fundBefore": 661.1518969824998,
+          "fundAfter": 661.1518969824998
+        },
+        {
+          "sessionMs": 692640,
+          "machineId": 1,
+          "upgradeType": "value",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 150,
+          "cashBefore": 163,
+          "cashAfter": 13,
+          "fundBefore": 691.9000128512499,
+          "fundAfter": 691.9000128512499
+        },
+        {
+          "sessionMs": 699534,
+          "machineId": 0,
+          "upgradeType": "buffer",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 143,
+          "cashBefore": 144,
+          "cashAfter": 1,
+          "fundBefore": 715.7149441356249,
+          "fundAfter": 715.7149441356249
+        }
+      ],
+      "before": 27,
+      "total": 49
+    },
+    "fundingDuration_s": 210.1,
+    "ready_s": 704.4,
+    "ready_min": 11.74,
+    "fundTarget": 730,
+    "fundingRef": 8.319,
+    "contribution": 0.35,
+    "build": {
+      "ok": true,
+      "cashBefore": 173,
+      "cashAfter": 173,
+      "cashDelta": 0,
+      "policy": "balanced",
+      "policyUnchanged": true,
+      "built": true,
+      "product": "smartphones",
+      "baseValue": 14,
+      "phase": "first_smartphone",
+      "sessMs": 706772
+    },
+    "firstPhoneDelta_s": 1.4,
+    "firstPhoneVisual": {
+      "product": "smartphones",
+      "baseValue": 14,
+      "income": 4119.6,
+      "incomeAtBuild": 4119.6
+    },
+    "samplingReload": {
+      "phaseBeforeSave": "baseline_sampling",
+      "samplingElapsedBeforeSave": 5468,
+      "sampleTicksBefore": 33,
+      "phaseAfterLoad": "baseline_sampling",
+      "samplingElapsedAfterLoad": 5778,
+      "sampleTicksAfter": 37,
+      "phaseOk": true,
+      "samplingContinued": true,
+      "noReturn": true,
+      "firstPhoneStillTrue": true,
+      "hydrate": {
+        "launchProgressBeforeSave": 0,
+        "launchProgressAfterHydrate": 0,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterFirstValidStep": null,
+        "firstValidStepDelta": 0,
+        "hydrationComplete": true,
+        "launchBatchProgress": 0,
+        "phase": "baseline_sampling",
+        "launchSampleMs": 5778
+      },
+      "afterFirstStep": {
+        "launchProgressBeforeSave": 0,
+        "launchProgressAfterHydrate": 0,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterFirstValidStep": null,
+        "firstValidStepDelta": 0,
+        "hydrationComplete": true,
+        "launchBatchProgress": 0,
+        "phase": "baseline_sampling",
+        "launchSampleMs": 5778
+      },
+      "launchProgressBeforeSave": 0,
+      "launchProgressAfterHydrate": 0,
+      "hydrationProgressDelta": 0,
+      "launchProgressAfterFirstValidStep": null,
+      "firstValidStepDelta": 0
+    },
+    "proofReload": null,
+    "launchObserve": {
+      "tp": 6,
+      "income": 515,
+      "wip": 14,
+      "bn": 1,
+      "baselineTp": 26.68,
+      "baselineIncome": 2289.49,
+      "batchProgress": 0,
+      "batchTarget": 47,
+      "gate": "pending",
+      "recommended": {
+        "machineId": 0,
+        "type": "buffer",
+        "reason": "Buffer before bottleneck to clear queue"
+      },
+      "label": "PHONE RAMP — CLEAR THE FLOW — 0 / 47",
+      "actions": 0,
+      "phase": "smartphone_launch"
+    },
+    "launchBuys": [
+      {
+        "ok": true,
+        "tp": [
+          null,
+          null
+        ],
+        "wip": [
+          null,
+          null
+        ],
+        "income": [
+          null,
+          null
+        ]
+      },
+      {
+        "type": "buffer",
+        "machine": 0,
+        "reason": "Buffer before bottleneck to clear queue",
+        "ok": true,
+        "actionsAfter": 1,
+        "tp": [
+          6,
+          8
+        ],
+        "wip": [
+          14,
+          15
+        ],
+        "income": [
+          576.7474346266112,
+          768.9965795021483
+        ]
+      }
+    ],
+    "launchTiming": {
+      "launchStartMs": 708249,
+      "actionDoneMs": 724250,
+      "batchFullMs": 779953,
+      "launchCompleteMs": 790206,
+      "durationMs": 81957,
+      "minGateMs": null,
+      "duration_s": 82,
+      "actionDone_s": 724.3,
+      "batchFull_s": 780
+    },
+    "launchProductFeel": {
+      "mode": "commissioning",
+      "wrongActionBlocked": true,
+      "relevantAction": true,
+      "feltLikeForcedWait": "should be NO — no minElapsed/hold gates"
+    },
+    "shift1_s": 790.2,
+    "returnKind": "flow",
+    "returnDuration_s": 218.6,
+    "returnDurationNote": "preferred 150–240s",
+    "returnDurationExtreme": null,
+    "returnOrderRecords": [
+      {
+        "orderIndex": 1,
+        "referenceRate": 1.4338,
+        "target": 101,
+        "countedProgress": 110,
+        "activeSimulationMs": 69692.80333333333,
+        "realizedRate": 1.5784,
+        "realizedNeutralRate": 1.2253,
+        "durationMs": 69693,
+        "observedAtSessMs": 870821
+      },
+      {
+        "orderIndex": 2,
+        "referenceRate": 1.2252509973079,
+        "target": 86,
+        "countedProgress": 100,
+        "activeSimulationMs": 69264.30000000006,
+        "realizedRate": 1.4437,
+        "realizedNeutralRate": 1.1178,
+        "durationMs": 69264,
+        "observedAtSessMs": 940080
+      },
+      {
+        "orderIndex": 3,
+        "referenceRate": 1.117828765177039,
+        "target": 79,
+        "countedProgress": 98,
+        "activeSimulationMs": 73172.50000000009,
+        "realizedRate": 1.3393,
+        "realizedNeutralRate": 1.1023,
+        "durationMs": 73173,
+        "observedAtSessMs": 1013509
+      }
+    ],
+    "returnDiag": {
+      "returnPhase": "complete",
+      "returnOrderIndex": 3,
+      "referenceRate": 1.1178,
+      "canonicalRate": 0.4447,
+      "first30SecActualRate": 1.5666666666666667,
+      "target": 79,
+      "startCounter": 63,
+      "countedProgress": 98,
+      "completedOrders": 3,
+      "expectedDuration": 210,
+      "observedDuration": 223.053,
+      "observedToExpectedRatio": 1.041,
+      "observedDuration_s": 218.6,
+      "expectedDuration_s": 210,
+      "orderRecords": [
+        {
+          "orderIndex": 1,
+          "referenceRate": 1.4338,
+          "target": 101,
+          "countedProgress": 110,
+          "activeSimulationMs": 69692.80333333333,
+          "realizedRate": 1.5784,
+          "realizedNeutralRate": 1.2253,
+          "durationMs": 69693,
+          "observedAtSessMs": 870821
+        },
+        {
+          "orderIndex": 2,
+          "referenceRate": 1.2252509973079,
+          "target": 86,
+          "countedProgress": 100,
+          "activeSimulationMs": 69264.30000000006,
+          "realizedRate": 1.4437,
+          "realizedNeutralRate": 1.1178,
+          "durationMs": 69264,
+          "observedAtSessMs": 940080
+        },
+        {
+          "orderIndex": 3,
+          "referenceRate": 1.117828765177039,
+          "target": 79,
+          "countedProgress": 98,
+          "activeSimulationMs": 73172.50000000009,
+          "realizedRate": 1.3393,
+          "realizedNeutralRate": 1.1023,
+          "durationMs": 73173,
+          "observedAtSessMs": 1013509
+        }
+      ],
+      "capacityFeedbackSamples": [
+        {
+          "sessMs": 870821,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 871509,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 872206,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 872998,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 873694,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 874394,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 875094,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 875794,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 876491,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 877278,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 877963,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 878642,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 879327,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 880014,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 880707,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 881504,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 882204,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 882904,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 883604,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 884299,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 884991,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 885772,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 886459,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 887149,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 887842,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 888542,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 889242,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 890042,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 890742,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 891442,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 892134,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 892819,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 893494,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 894256,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 894931,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 895611,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 896297,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 896989,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 897684,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 898476,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 899164,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 899849,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 900539,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 901227,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 901922,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 902722,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 903421,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 904119,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 904816,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 905502,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 906186,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 906967,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 907656,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 908342,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 909026,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 909707,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 910384,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 911147,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 911827,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 912505,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 913190,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 913875,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 914562,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 915352,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 916052,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 916750,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 917450,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 918150,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 918850,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 919650,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 920350,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 921050,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 921747,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 922440,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 923135,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 923930,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 924619,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 925310,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 926002,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 926699,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 927389,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 928179,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 928869,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 929555,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 930244,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 930939,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 931634,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 932432,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 933127,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 933819,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 934509,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 935200,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 935889,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 936674,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 937362,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 938045,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 938722,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 939400,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 940080,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 940852,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 941540,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 942234,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 942925,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 943620,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 944313,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 945097,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 945778,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 946455,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 947132,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 947808,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 948478,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 949238,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 949913,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 950598,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 951283,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 951973,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 952665,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 953445,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 954127,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 954812,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 955498,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 956182,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 956868,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 957637,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 958312,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 958975,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 959635,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 960295,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 960957,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 961700,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 962367,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 963040,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 963715,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 964392,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 965072,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 965840,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 966522,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 967202,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 967883,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 968562,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 969238,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 970003,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 970678,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 971440,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 972111,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 972786,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 973460,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 974310,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 974988,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 975663,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 976336,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 977011,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 977685,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 978436,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 979103,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 979765,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 980430,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 981096,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 981766,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 982523,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 983193,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 983860,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 984526,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 985195,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 985870,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 986636,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 987316,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 987998,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 988683,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 989368,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 990053,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 990826,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 991508,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 992186,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 992866,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 993546,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 994228,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 995005,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 995691,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 996385,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 997081,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 997778,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 998475,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 999271,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 999966,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1000661,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1001351,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1002038,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1002728,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1003519,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1004218,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1004918,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1005618,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1006318,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1007016,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1007814,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1008513,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1009213,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1009913,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1010613,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1011313,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1012113,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1012813,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1013509,
+          "feedback": "1.12 → 1.10",
+          "orderIndex": 3
+        }
+      ]
+    },
+    "freeSpend": {
+      "ok": true,
+      "nearMax": false,
+      "type": "value",
+      "machine": 1,
+      "costListed": 11952,
+      "mode": "normal",
+      "levelBefore": 18,
+      "levelAfter": 19,
+      "cashBefore": 11951,
+      "cashAfter": 11951,
+      "cashDelta": 0,
+      "creditsAfter": 0,
+      "used": true,
+      "consumed": true,
+      "rewardId": "fu_s_mtp14emq_lsz5do"
+    },
+    "bonusTierPath": {
+      "mode": "bonus_tier",
+      "details": [
+        "ONE FREE UPGRADE",
+        "Choose any upgrade — includes one BONUS TIER if your line is MAX."
+      ],
+      "label": "RETURN COMPLETE — claim ONE FREE UPGRADE",
+      "bonusButtonImplied": true,
+      "uiCopyHint": "BONUS +1 — FREE · $0",
+      "ok": true,
+      "cashBefore": 0,
+      "cashAfter": 0,
+      "cashDelta": 0,
+      "creditsAfter": 0,
+      "bonusGranted": true,
+      "bonusLevelDelta": 1,
+      "machine": 1,
+      "type": "value",
+      "used": true,
+      "consumed": true,
+      "levelBefore": 20,
+      "levelAfter": 20,
+      "rewardId": "fu_s_mtp14emq_lsz5do"
+    },
+    "criteria": {
+      "selectNeverBuilds": true,
+      "policyLocked": true,
+      "adaptiveTargetLocked": true,
+      "contributionBand": true,
+      "affordableOpportunitiesOk": true,
+      "buildBeforeReadyNoop": true,
+      "policyChangeRejected": true,
+      "fundNeverDecreased": true,
+      "fundingUpgradeAvailability": true,
+      "fundingPurchaseCountMatchesList": true,
+      "fundingReadyBand": true,
+      "buildCashDelta0": true,
+      "buildPolicyUnchanged": true,
+      "buildOnce": true,
+      "buildIdempotent": true,
+      "selectorGone": true,
+      "firstPhoneLe10s": true,
+      "entersBaselineOrLaunch": true,
+      "samplingReloadPhaseOk": true,
+      "samplingNotReset": true,
+      "samplingNoReturn": true,
+      "samplingHydrationDelta0": true,
+      "samplingProgressHydrateEqualsBefore": true,
+      "salesTapsDontQualify": true,
+      "wrongActionDoesNotQualify": true,
+      "oneRelevantActionQualifies": true,
+      "launchDurationBand": true,
+      "launchNotElapsedTimer": true,
+      "launchCompletedByBatchNotIdleTimer": true,
+      "shift1Immediate": true,
+      "noEmptyLabel": true,
+      "returnNotSameSession": true,
+      "returnAppearsOnReload": true,
+      "returnKindMatches": true,
+      "returnNoAutocompleteGrace": true,
+      "returnExactly3Orders": true,
+      "returnFreeNotBeforeThree": true,
+      "returnLabelsNeverEmpty": true,
+      "returnInputSeen": true,
+      "returnDurationBand": true,
+      "returnDurationPreferred": true,
+      "returnNotUnder90": true,
+      "returnNotOver5min": true,
+      "returnRatioOk": true,
+      "returnStartsAtZero": true,
+      "freeUpgradeGranted": true,
+      "freeGrantedOnlyAfter3": true,
+      "freeCreditSurvivesReload": true,
+      "freeSpendOk": true,
+      "freeSpendModeNormal": true,
+      "freeSpendLevelPlus1": true,
+      "freeSpendCashDelta0": true,
+      "freeConsumedAfterSuccess": true,
+      "freeSecondAttemptBlocked": true,
+      "bonusModeIsBonusTier": true,
+      "bonusPurchaseOk": true,
+      "bonusCashDelta0": true,
+      "bonusCreditConsumed": true,
+      "bonusNoDuplicateOnReload": true,
+      "buildFloor975": true,
+      "buildBand": true,
+      "buildBandSoft": true,
+      "campaignMarkersPresent": true
+    },
+    "report": {
+      "currentSessionEvents": [
+        {
+          "name": "bottleneck_shifted",
+          "elapsedMs": 171,
+          "payload": {
+            "from": 0,
+            "to": 1
+          },
+          "at": 1788651932705
+        },
+        {
+          "name": "bottleneck_resolved",
+          "elapsedMs": 171,
+          "payload": {
+            "machineId": 0
+          },
+          "at": 1788651932705
+        },
+        {
+          "name": "economic_metric_view",
+          "elapsedMs": 188,
+          "payload": {
+            "lineIncomePerMin": 0
+          },
+          "at": 1788651932857
+        },
+        {
+          "name": "first_upgrade_view",
+          "elapsedMs": 188,
+          "payload": {
+            "suggested": 1
+          },
+          "at": 1788651932857
+        }
+      ],
+      "campaignMarkers": {
+        "fundingChoiceCampaignMs": 492636,
+        "fundReadyCampaignMs": 704284,
+        "smartphoneBuildCampaignMs": 706772,
+        "firstPhoneCampaignMs": 707919,
+        "launchStartCampaignMs": 717517,
+        "launchCompleteCampaignMs": 789860,
+        "shift1CompleteCampaignMs": 789860,
+        "returnShownCampaignMs": 789860,
+        "returnCompleteCampaignMs": 1012913,
+        "freeUpgradeUsedCampaignMs": 1014358
+      },
+      "campaignState": {
+        "phase": "return_complete",
+        "fundingPolicy": "balanced",
+        "fundingReferenceIncomePerSec": 8.319,
+        "fundingTarget": 730,
+        "effectiveContributionRate": 0.35,
+        "fundProgress": 730,
+        "launchBranch": "throughput",
+        "launchBaseline": {
+          "outputPerMin": 26.68,
+          "lineIncomePerMin": 2289.49,
+          "wip": 14,
+          "blockedShare": 0.195,
+          "bottleneckId": 1
+        },
+        "launchTarget": 47,
+        "launchProgress": 1,
+        "launchActionGate": "complete",
+        "returnBaseline": {
+          "output": 67.07,
+          "income": 2861.86
+        },
+        "returnTarget": 79,
+        "returnProgress": 98,
+        "returnPhase": "complete",
+        "returnOrderIndex": 3,
+        "freeUpgradeMode": "bonus_tier",
+        "freeUpgradeCashDelta": 0,
+        "freeUpgradeConsumed": true,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterHydrate": 0
+      },
+      "funding": {
+        "contributionRate": 0.35,
+        "retainedCash": 0,
+        "upgradeCostsAtStart": {
+          "cheapest": 65,
+          "second": 65
+        },
+        "affordableUpgradeOpportunities": null,
+        "fundingPurchaseCount": 22,
+        "fundingPurchases": [
+          {
+            "sessionMs": 502748,
+            "machineId": 1,
+            "upgradeType": "speed",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 65,
+            "cashBefore": 73,
+            "cashAfter": 8,
+            "fundBefore": 24.499999999999996,
+            "fundAfter": 24.499999999999996
+          },
+          {
+            "sessionMs": 513918,
+            "machineId": 0,
+            "upgradeType": "speed",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 65,
+            "cashBefore": 72,
+            "cashAfter": 7,
+            "fundBefore": 58.79999999999999,
+            "fundAfter": 58.79999999999999
+          },
+          {
+            "sessionMs": 525398,
+            "machineId": 2,
+            "upgradeType": "speed",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 65,
+            "cashBefore": 70,
+            "cashAfter": 5,
+            "fundBefore": 93.10000000000002,
+            "fundAfter": 93.10000000000002
+          },
+          {
+            "sessionMs": 538313,
+            "machineId": 1,
+            "upgradeType": "value",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 76,
+            "cashBefore": 78,
+            "cashAfter": 2,
+            "fundBefore": 132.30000000000007,
+            "fundAfter": 132.30000000000007
+          },
+          {
+            "sessionMs": 551351,
+            "machineId": 0,
+            "upgradeType": "value",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 76,
+            "cashBefore": 85,
+            "cashAfter": 9,
+            "fundBefore": 177.10000000000002,
+            "fundAfter": 177.10000000000002
+          },
+          {
+            "sessionMs": 561498,
+            "machineId": 2,
+            "upgradeType": "value",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 76,
+            "cashBefore": 76,
+            "cashAfter": 0,
+            "fundBefore": 212.79999999999995,
+            "fundAfter": 212.79999999999995
+          },
+          {
+            "sessionMs": 572898,
+            "machineId": 1,
+            "upgradeType": "buffer",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 78,
+            "cashBefore": 89,
+            "cashAfter": 11,
+            "fundBefore": 256.08857193062494,
+            "fundAfter": 256.08857193062494
+          },
+          {
+            "sessionMs": 582541,
+            "machineId": 1,
+            "upgradeType": "speed",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 90,
+            "cashBefore": 90,
+            "cashAfter": 0,
+            "fundBefore": 291.18603777812496,
+            "fundAfter": 291.18603777812496
+          },
+          {
+            "sessionMs": 591489,
+            "machineId": 0,
+            "upgradeType": "buffer",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 78,
+            "cashBefore": 82,
+            "cashAfter": 4,
+            "fundBefore": 323.753934896875,
+            "fundAfter": 323.753934896875
+          },
+          {
+            "sessionMs": 601299,
+            "machineId": 0,
+            "upgradeType": "speed",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 90,
+            "cashBefore": 101,
+            "cashAfter": 11,
+            "fundBefore": 359.45789743937496,
+            "fundAfter": 359.45789743937496
+          },
+          {
+            "sessionMs": 609879,
+            "machineId": 2,
+            "upgradeType": "speed",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 90,
+            "cashBefore": 94,
+            "cashAfter": 4,
+            "fundBefore": 390.6852708981249,
+            "fundAfter": 390.6852708981249
+          },
+          {
+            "sessionMs": 621446,
+            "machineId": 1,
+            "upgradeType": "value",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 107,
+            "cashBefore": 114,
+            "cashAfter": 7,
+            "fundBefore": 432.78256171937494,
+            "fundAfter": 432.78256171937494
+          },
+          {
+            "sessionMs": 629999,
+            "machineId": 0,
+            "upgradeType": "value",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 107,
+            "cashBefore": 108,
+            "cashAfter": 1,
+            "fundBefore": 463.91279525499993,
+            "fundAfter": 463.91279525499993
+          },
+          {
+            "sessionMs": 638651,
+            "machineId": 2,
+            "upgradeType": "value",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 107,
+            "cashBefore": 113,
+            "cashAfter": 6,
+            "fundBefore": 495.4009433668749,
+            "fundAfter": 495.4009433668749
+          },
+          {
+            "sessionMs": 645651,
+            "machineId": 1,
+            "upgradeType": "buffer",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 106,
+            "cashBefore": 116,
+            "cashAfter": 10,
+            "fundBefore": 520.8776988887499,
+            "fundAfter": 520.8776988887499
+          },
+          {
+            "sessionMs": 652824,
+            "machineId": 0,
+            "upgradeType": "buffer",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 106,
+            "cashBefore": 119,
+            "cashAfter": 13,
+            "fundBefore": 546.985408965625,
+            "fundAfter": 546.985408965625
+          },
+          {
+            "sessionMs": 661577,
+            "machineId": 1,
+            "upgradeType": "speed",
+            "levelBefore": 6,
+            "levelAfter": 7,
+            "cost": 124,
+            "cashBefore": 143,
+            "cashAfter": 19,
+            "fundBefore": 578.8435913968749,
+            "fundAfter": 578.8435913968749
+          },
+          {
+            "sessionMs": 668412,
+            "machineId": 0,
+            "upgradeType": "speed",
+            "levelBefore": 6,
+            "levelAfter": 7,
+            "cost": 124,
+            "cashBefore": 130,
+            "cashAfter": 6,
+            "fundBefore": 602.8099284812498,
+            "fundAfter": 602.8099284812498
+          },
+          {
+            "sessionMs": 676520,
+            "machineId": 2,
+            "upgradeType": "speed",
+            "levelBefore": 6,
+            "levelAfter": 7,
+            "cost": 124,
+            "cashBefore": 137,
+            "cashAfter": 13,
+            "fundBefore": 633.2305565162497,
+            "fundAfter": 633.2305565162497
+          },
+          {
+            "sessionMs": 684192,
+            "machineId": 1,
+            "upgradeType": "buffer",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 143,
+            "cashBefore": 147,
+            "cashAfter": 4,
+            "fundBefore": 661.1518969824998,
+            "fundAfter": 661.1518969824998
+          },
+          {
+            "sessionMs": 692640,
+            "machineId": 1,
+            "upgradeType": "value",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 150,
+            "cashBefore": 163,
+            "cashAfter": 13,
+            "fundBefore": 691.9000128512499,
+            "fundAfter": 691.9000128512499
+          },
+          {
+            "sessionMs": 699534,
+            "machineId": 0,
+            "upgradeType": "buffer",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 143,
+            "cashBefore": 144,
+            "cashAfter": 1,
+            "fundBefore": 715.7149441356249,
+            "fundAfter": 715.7149441356249
+          }
+        ],
+        "upgradesBoughtBeforeFunding": 27,
+        "totalUpgradesBought": 161,
+        "actualPurchases": 22
+      },
+      "returnDiag": {
+        "returnPhase": "complete",
+        "returnOrderIndex": 3,
+        "referenceRate": 1.1178,
+        "canonicalRate": 0.4447,
+        "first30SecActualRate": 1.5666666666666667,
+        "target": 79,
+        "startCounter": 63,
+        "countedProgress": 98,
+        "completedOrders": [
+          {
+            "orderIndex": 1,
+            "referenceRate": 1.4338,
+            "target": 101,
+            "countedProgress": 110,
+            "activeSimulationMs": 69692.80333333333,
+            "realizedRate": 1.5784,
+            "realizedNeutralRate": 1.2253,
+            "durationMs": 69693
+          },
+          {
+            "orderIndex": 2,
+            "referenceRate": 1.2252509973079,
+            "target": 86,
+            "countedProgress": 100,
+            "activeSimulationMs": 69264.30000000006,
+            "realizedRate": 1.4437,
+            "realizedNeutralRate": 1.1178,
+            "durationMs": 69264
+          },
+          {
+            "orderIndex": 3,
+            "referenceRate": 1.117828765177039,
+            "target": 79,
+            "countedProgress": 98,
+            "activeSimulationMs": 73172.50000000009,
+            "realizedRate": 1.3393,
+            "realizedNeutralRate": 1.1023,
+            "durationMs": 73173
+          }
+        ],
+        "expectedDuration": 210,
+        "observedDuration": 223.053,
+        "observedToExpectedRatio": 1.062
+      },
+      "sessionMs": 1015429,
+      "fundingPolicy": "balanced",
+      "fundingSelectedMs": null,
+      "fundReadyMs": 704284,
+      "smartphoneBuildMs": 706772,
+      "cashAtBuild": 173,
+      "firstSmartphoneMs": 707919,
+      "launchStartMs": 717517,
+      "launchCompleteMs": 789860,
+      "launchQualifiedActions": 1,
+      "fundingReferenceIncomePerSec": 8.319,
+      "fundingTarget": 730,
+      "effectiveContributionRate": 0.35,
+      "launchActionGate": "complete",
+      "freeUpgradeMode": "bonus_tier",
+      "shift1CompleteMs": 789860,
+      "returnChallengeCompleteMs": 1012913,
+      "freeUpgradeUsedMs": 1014358,
+      "timeToFirstInputMs": null,
+      "timeToFirstSaleMs": null,
+      "timeToFirstUpgradeMs": null,
+      "timeToBottleneckShownMs": null,
+      "timeToSessionGoalStartMs": null,
+      "timeToSessionGoalCompleteMs": null,
+      "upgradesBought": 0,
+      "throughputInitial": null,
+      "throughputFinal": null,
+      "hintsShown": [],
+      "globalEventsSuppressed": 0,
+      "globalEventsSuppressedCount": 0,
+      "onboardingComplete": false,
+      "branchSelected": null,
+      "branchPurchaseTime": null,
+      "branchGoalCompletionTime": null,
+      "convergenceCompletionTime": null,
+      "nextMilestoneShownTime": null,
+      "toysMilestoneShownMs": null,
+      "toysThreshold": null,
+      "toysThresholdReachedMs": null,
+      "toysOpenedMs": null,
+      "firstToyActionMs": null,
+      "firstToyProducedMs": null,
+      "toyMasteryShownMs": null,
+      "toyMasteryCompleteMs": null,
+      "toyMasteryType": null,
+      "toyMasteryTarget": null,
+      "smartphonesMilestoneShownMs": null,
+      "lifetimeEarnedAtUnlock": null,
+      "lifetimeEarnedAt650": null,
+      "cashAtUnlock": null,
+      "upgradesAtFiveMinutes": null,
+      "upgradesAtToysUnlock": null,
+      "branchKpiAtToysUnlock": null,
+      "upgradesByType": {
+        "speed": 0,
+        "buffer": 0,
+        "value": 0
+      },
+      "canonicalLineIncomePerMin": 0,
+      "events": [
+        {
+          "name": "bottleneck_shifted",
+          "elapsedMs": 171,
+          "payload": {
+            "from": 0,
+            "to": 1
+          },
+          "at": 1788651932705
+        },
+        {
+          "name": "bottleneck_resolved",
+          "elapsedMs": 171,
+          "payload": {
+            "machineId": 0
+          },
+          "at": 1788651932705
+        },
+        {
+          "name": "economic_metric_view",
+          "elapsedMs": 188,
+          "payload": {
+            "lineIncomePerMin": 0
+          },
+          "at": 1788651932857
+        },
+        {
+          "name": "first_upgrade_view",
+          "elapsedMs": 188,
+          "payload": {
+            "suggested": 1
+          },
+          "at": 1788651932857
+        }
+      ],
+      "live": {
+        "branch": "throughput",
+        "OUTPUT": 0,
+        "lineIncomePerMin": 0,
+        "WIP": 1,
+        "cash": 0
+      }
+    },
+    "shots": [
+      "validate-mc3-a-01-policy-choice.png",
+      "validate-mc3-a-02-funding.png",
+      "validate-mc3-a-03-ready.png",
+      "validate-mc3-a-04-first-phone.png",
+      "validate-mc3-a-05-launch.png",
+      "validate-mc3-a-06-shift1-preview.png",
+      "validate-mc3-a-07-return.png",
+      "validate-mc3-a-08-free-upgrade.png",
+      "validate-mc3-free-normal.png",
+      "validate-mc3-free-normal.png",
+      "validate-mc3-bonus-before.png",
+      "validate-mc3-bonus-after.png"
+    ]
+  },
+  "partB": {
+    "id": "B_fast_margin_mc3",
+    "branch": "margin",
+    "policy": "fast",
+    "events": "on",
+    "authenticCheckpoint": "No authentic margin funding_choice checkpoint found; Part B ran from zero (Margin/FAST/events ON/390×844).",
+    "toys_s": null,
+    "fundingChoice_s": null,
+    "policySelect": {
+      "cash": 29184986,
+      "fund": 730,
+      "ups": 161,
+      "policy": "balanced",
+      "locked": true,
+      "phase": "return_complete",
+      "fundTarget": 730,
+      "fundingRef": 8.319,
+      "contribution": 0.35,
+      "durationSec": 250,
+      "upgradesBoughtBeforeFunding": 27
+    },
+    "fundBuys": [],
+    "fundingPurchasesAtReady": {
+      "count": 22,
+      "list": [
+        {
+          "sessionMs": 502748,
+          "machineId": 1,
+          "upgradeType": "speed",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 65,
+          "cashBefore": 73,
+          "cashAfter": 8,
+          "fundBefore": 24.499999999999996,
+          "fundAfter": 24.499999999999996
+        },
+        {
+          "sessionMs": 513918,
+          "machineId": 0,
+          "upgradeType": "speed",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 65,
+          "cashBefore": 72,
+          "cashAfter": 7,
+          "fundBefore": 58.79999999999999,
+          "fundAfter": 58.79999999999999
+        },
+        {
+          "sessionMs": 525398,
+          "machineId": 2,
+          "upgradeType": "speed",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 65,
+          "cashBefore": 70,
+          "cashAfter": 5,
+          "fundBefore": 93.10000000000002,
+          "fundAfter": 93.10000000000002
+        },
+        {
+          "sessionMs": 538313,
+          "machineId": 1,
+          "upgradeType": "value",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 76,
+          "cashBefore": 78,
+          "cashAfter": 2,
+          "fundBefore": 132.30000000000007,
+          "fundAfter": 132.30000000000007
+        },
+        {
+          "sessionMs": 551351,
+          "machineId": 0,
+          "upgradeType": "value",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 76,
+          "cashBefore": 85,
+          "cashAfter": 9,
+          "fundBefore": 177.10000000000002,
+          "fundAfter": 177.10000000000002
+        },
+        {
+          "sessionMs": 561498,
+          "machineId": 2,
+          "upgradeType": "value",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 76,
+          "cashBefore": 76,
+          "cashAfter": 0,
+          "fundBefore": 212.79999999999995,
+          "fundAfter": 212.79999999999995
+        },
+        {
+          "sessionMs": 572898,
+          "machineId": 1,
+          "upgradeType": "buffer",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 78,
+          "cashBefore": 89,
+          "cashAfter": 11,
+          "fundBefore": 256.08857193062494,
+          "fundAfter": 256.08857193062494
+        },
+        {
+          "sessionMs": 582541,
+          "machineId": 1,
+          "upgradeType": "speed",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 90,
+          "cashBefore": 90,
+          "cashAfter": 0,
+          "fundBefore": 291.18603777812496,
+          "fundAfter": 291.18603777812496
+        },
+        {
+          "sessionMs": 591489,
+          "machineId": 0,
+          "upgradeType": "buffer",
+          "levelBefore": 3,
+          "levelAfter": 4,
+          "cost": 78,
+          "cashBefore": 82,
+          "cashAfter": 4,
+          "fundBefore": 323.753934896875,
+          "fundAfter": 323.753934896875
+        },
+        {
+          "sessionMs": 601299,
+          "machineId": 0,
+          "upgradeType": "speed",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 90,
+          "cashBefore": 101,
+          "cashAfter": 11,
+          "fundBefore": 359.45789743937496,
+          "fundAfter": 359.45789743937496
+        },
+        {
+          "sessionMs": 609879,
+          "machineId": 2,
+          "upgradeType": "speed",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 90,
+          "cashBefore": 94,
+          "cashAfter": 4,
+          "fundBefore": 390.6852708981249,
+          "fundAfter": 390.6852708981249
+        },
+        {
+          "sessionMs": 621446,
+          "machineId": 1,
+          "upgradeType": "value",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 107,
+          "cashBefore": 114,
+          "cashAfter": 7,
+          "fundBefore": 432.78256171937494,
+          "fundAfter": 432.78256171937494
+        },
+        {
+          "sessionMs": 629999,
+          "machineId": 0,
+          "upgradeType": "value",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 107,
+          "cashBefore": 108,
+          "cashAfter": 1,
+          "fundBefore": 463.91279525499993,
+          "fundAfter": 463.91279525499993
+        },
+        {
+          "sessionMs": 638651,
+          "machineId": 2,
+          "upgradeType": "value",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 107,
+          "cashBefore": 113,
+          "cashAfter": 6,
+          "fundBefore": 495.4009433668749,
+          "fundAfter": 495.4009433668749
+        },
+        {
+          "sessionMs": 645651,
+          "machineId": 1,
+          "upgradeType": "buffer",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 106,
+          "cashBefore": 116,
+          "cashAfter": 10,
+          "fundBefore": 520.8776988887499,
+          "fundAfter": 520.8776988887499
+        },
+        {
+          "sessionMs": 652824,
+          "machineId": 0,
+          "upgradeType": "buffer",
+          "levelBefore": 4,
+          "levelAfter": 5,
+          "cost": 106,
+          "cashBefore": 119,
+          "cashAfter": 13,
+          "fundBefore": 546.985408965625,
+          "fundAfter": 546.985408965625
+        },
+        {
+          "sessionMs": 661577,
+          "machineId": 1,
+          "upgradeType": "speed",
+          "levelBefore": 6,
+          "levelAfter": 7,
+          "cost": 124,
+          "cashBefore": 143,
+          "cashAfter": 19,
+          "fundBefore": 578.8435913968749,
+          "fundAfter": 578.8435913968749
+        },
+        {
+          "sessionMs": 668412,
+          "machineId": 0,
+          "upgradeType": "speed",
+          "levelBefore": 6,
+          "levelAfter": 7,
+          "cost": 124,
+          "cashBefore": 130,
+          "cashAfter": 6,
+          "fundBefore": 602.8099284812498,
+          "fundAfter": 602.8099284812498
+        },
+        {
+          "sessionMs": 676520,
+          "machineId": 2,
+          "upgradeType": "speed",
+          "levelBefore": 6,
+          "levelAfter": 7,
+          "cost": 124,
+          "cashBefore": 137,
+          "cashAfter": 13,
+          "fundBefore": 633.2305565162497,
+          "fundAfter": 633.2305565162497
+        },
+        {
+          "sessionMs": 684192,
+          "machineId": 1,
+          "upgradeType": "buffer",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 143,
+          "cashBefore": 147,
+          "cashAfter": 4,
+          "fundBefore": 661.1518969824998,
+          "fundAfter": 661.1518969824998
+        },
+        {
+          "sessionMs": 692640,
+          "machineId": 1,
+          "upgradeType": "value",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 150,
+          "cashBefore": 163,
+          "cashAfter": 13,
+          "fundBefore": 691.9000128512499,
+          "fundAfter": 691.9000128512499
+        },
+        {
+          "sessionMs": 699534,
+          "machineId": 0,
+          "upgradeType": "buffer",
+          "levelBefore": 5,
+          "levelAfter": 6,
+          "cost": 143,
+          "cashBefore": 144,
+          "cashAfter": 1,
+          "fundBefore": 715.7149441356249,
+          "fundAfter": 715.7149441356249
+        }
+      ],
+      "before": 27,
+      "total": 161
+    },
+    "fundingDuration_s": 2.5,
+    "ready_s": 1995.5,
+    "ready_min": 33.26,
+    "fundTarget": 730,
+    "fundingRef": 8.319,
+    "contribution": 0.35,
+    "build": {
+      "ok": true,
+      "cashBefore": 29386046,
+      "cashAfter": 29368046,
+      "cashDelta": -18000,
+      "policy": "balanced",
+      "policyUnchanged": true,
+      "built": true,
+      "product": "spaceTech",
+      "baseValue": 120,
+      "phase": "return_complete",
+      "sessMs": 1996844
+    },
+    "firstPhoneDelta_s": 0.2,
+    "firstPhoneVisual": {
+      "product": "spaceTech",
+      "baseValue": 120,
+      "income": 8203317.9,
+      "incomeAtBuild": 8203317.9
+    },
+    "samplingReload": null,
+    "proofReload": {
+      "phaseBeforeSave": "return_complete",
+      "batchBefore": 54,
+      "gateBefore": "complete",
+      "targetBefore": 47,
+      "phaseAfterLoad": "return_complete",
+      "batchAfter": 54,
+      "gateAfter": "complete",
+      "targetAfter": 47,
+      "phaseOk": false,
+      "batchPreserved": true,
+      "gatePreserved": true,
+      "targetUnchanged": true,
+      "noBackToSampling": true,
+      "noReturn": false,
+      "hydrate": {
+        "launchProgressBeforeSave": 0,
+        "launchProgressAfterHydrate": 0,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterFirstValidStep": 1,
+        "firstValidStepDelta": 1,
+        "hydrationComplete": true,
+        "launchBatchProgress": 54,
+        "phase": "return_complete",
+        "launchSampleMs": 9145
+      },
+      "afterFirstStep": {
+        "launchProgressBeforeSave": 0,
+        "launchProgressAfterHydrate": 0,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterFirstValidStep": 1,
+        "firstValidStepDelta": 1,
+        "hydrationComplete": true,
+        "launchBatchProgress": 54,
+        "phase": "return_complete",
+        "launchSampleMs": 9145
+      },
+      "launchProgressBeforeSave": 0,
+      "launchProgressAfterHydrate": 0,
+      "hydrationProgressDelta": 0,
+      "launchProgressAfterFirstValidStep": 1,
+      "firstValidStepDelta": 1
+    },
+    "launchObserve": {
+      "tp": 92,
+      "income": 11098606.6,
+      "wip": 1,
+      "bn": 1,
+      "baselineTp": 26.68,
+      "baselineIncome": 2289.49,
+      "batchProgress": 54,
+      "batchTarget": 47,
+      "gate": "complete",
+      "recommended": {
+        "machineId": 0,
+        "type": "buffer",
+        "reason": "Buffer before bottleneck to clear queue"
+      },
+      "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+      "actions": 1,
+      "phase": "return_complete"
+    },
+    "launchBuys": [
+      {
+        "ok": false,
+        "tp": [
+          null,
+          null
+        ],
+        "wip": [
+          null,
+          null
+        ],
+        "income": [
+          null,
+          null
+        ]
+      }
+    ],
+    "launchTiming": {
+      "launchStartMs": 1997125,
+      "actionDoneMs": 2081873,
+      "batchFullMs": 2081873,
+      "launchCompleteMs": 2081873,
+      "durationMs": 84748,
+      "minGateMs": null,
+      "duration_s": 84.7,
+      "actionDone_s": 2081.9,
+      "batchFull_s": 2081.9
+    },
+    "launchProductFeel": {
+      "mode": "commissioning",
+      "wrongActionBlocked": true,
+      "relevantAction": true,
+      "feltLikeForcedWait": "should be NO — no minElapsed/hold gates"
+    },
+    "shift1_s": 2081.9,
+    "returnKind": "flow",
+    "returnDuration_s": 0,
+    "returnDurationNote": "OUT of band",
+    "returnDurationExtreme": null,
+    "returnOrderRecords": [
+      {
+        "orderIndex": 1,
+        "referenceRate": 1.4338,
+        "target": 101,
+        "countedProgress": 110,
+        "activeSimulationMs": 69692.80333333333,
+        "realizedRate": 1.5784,
+        "realizedNeutralRate": 1.2253,
+        "durationMs": 69693,
+        "observedAtSessMs": 2085556
+      },
+      {
+        "orderIndex": 2,
+        "referenceRate": 1.2252509973079,
+        "target": 86,
+        "countedProgress": 100,
+        "activeSimulationMs": 69264.30000000006,
+        "realizedRate": 1.4437,
+        "realizedNeutralRate": 1.1178,
+        "durationMs": 69264,
+        "observedAtSessMs": 2085556
+      },
+      {
+        "orderIndex": 3,
+        "referenceRate": 1.117828765177039,
+        "target": 79,
+        "countedProgress": 98,
+        "activeSimulationMs": 73172.50000000009,
+        "realizedRate": 1.3393,
+        "realizedNeutralRate": 1.1023,
+        "durationMs": 73173,
+        "observedAtSessMs": 2085556
+      }
+    ],
+    "returnDiag": {
+      "returnPhase": "complete",
+      "returnOrderIndex": 3,
+      "referenceRate": 1.1178,
+      "canonicalRate": 0.4447,
+      "first30SecActualRate": 1.5666666666666667,
+      "target": 79,
+      "startCounter": 63,
+      "countedProgress": 98,
+      "completedOrders": 3,
+      "expectedDuration": 210,
+      "observedDuration": 223.053,
+      "observedToExpectedRatio": 0,
+      "observedDuration_s": 0,
+      "expectedDuration_s": 210,
+      "orderRecords": [
+        {
+          "orderIndex": 1,
+          "referenceRate": 1.4338,
+          "target": 101,
+          "countedProgress": 110,
+          "activeSimulationMs": 69692.80333333333,
+          "realizedRate": 1.5784,
+          "realizedNeutralRate": 1.2253,
+          "durationMs": 69693,
+          "observedAtSessMs": 2085556
+        },
+        {
+          "orderIndex": 2,
+          "referenceRate": 1.2252509973079,
+          "target": 86,
+          "countedProgress": 100,
+          "activeSimulationMs": 69264.30000000006,
+          "realizedRate": 1.4437,
+          "realizedNeutralRate": 1.1178,
+          "durationMs": 69264,
+          "observedAtSessMs": 2085556
+        },
+        {
+          "orderIndex": 3,
+          "referenceRate": 1.117828765177039,
+          "target": 79,
+          "countedProgress": 98,
+          "activeSimulationMs": 73172.50000000009,
+          "realizedRate": 1.3393,
+          "realizedNeutralRate": 1.1023,
+          "durationMs": 73173,
+          "observedAtSessMs": 2085556
+        }
+      ],
+      "capacityFeedbackSamples": [
+        {
+          "sessMs": 2085556,
+          "feedback": "1.12 → 1.10",
+          "orderIndex": 3
+        }
+      ]
+    },
+    "freeSpend": {
+      "ok": false,
+      "reason": "all_maxed"
+    },
+    "bonusTierPath": null,
+    "criteria": {
+      "selectNeverBuilds": false,
+      "policyLocked": true,
+      "adaptiveTargetLocked": true,
+      "contributionBand": false,
+      "affordableOpportunitiesOk": false,
+      "buildBeforeReadyNoop": false,
+      "fundNeverDecreased": true,
+      "fundingUpgradeAvailability": true,
+      "fundingPurchaseCountMatchesList": true,
+      "fundingReadyBand": false,
+      "buildCashDelta0": false,
+      "buildPolicyUnchanged": true,
+      "buildOnce": true,
+      "buildIdempotent": true,
+      "selectorGone": true,
+      "firstPhoneLe10s": true,
+      "entersBaselineOrLaunch": false,
+      "salesTapsDontQualify": true,
+      "wrongActionDoesNotQualify": true,
+      "oneRelevantActionQualifies": true,
+      "proofReloadPhaseOk": false,
+      "proofBatchPreserved": true,
+      "proofActionPreserved": true,
+      "proofTargetUnchanged": true,
+      "proofNoSamplingReset": true,
+      "proofHydrationDelta0": true,
+      "proofProgressHydrateEqualsBefore": true,
+      "launchDurationBand": true,
+      "launchNotElapsedTimer": true,
+      "launchCompletedByBatchNotIdleTimer": true,
+      "shift1Immediate": true,
+      "noEmptyLabel": true,
+      "returnNotSameSession": false,
+      "returnAppearsOnReload": false,
+      "returnKindMatches": false,
+      "returnNoAutocompleteGrace": false,
+      "returnExactly3Orders": true,
+      "returnFreeNotBeforeThree": true,
+      "returnLabelsNeverEmpty": false,
+      "returnInputSeen": true,
+      "returnDurationBand": false,
+      "returnDurationPreferred": false,
+      "returnNotUnder90": false,
+      "returnNotOver5min": true,
+      "returnRatioOk": false,
+      "returnStartsAtZero": false,
+      "freeUpgradeGranted": false,
+      "freeGrantedOnlyAfter3": false,
+      "freeCreditSurvivesReload": false,
+      "freeSpendCashDelta0": false,
+      "freeConsumed": false,
+      "buildFloor975": true,
+      "buildBand": false,
+      "buildBandSoft": false,
+      "campaignMarkersPresent": true
+    },
+    "report": {
+      "currentSessionEvents": [
+        {
+          "name": "economic_metric_view",
+          "elapsedMs": 240,
+          "payload": {
+            "lineIncomePerMin": 0
+          },
+          "at": 1788652128889
+        },
+        {
+          "name": "first_upgrade_view",
+          "elapsedMs": 240,
+          "payload": {
+            "suggested": 1
+          },
+          "at": 1788652128889
+        },
+        {
+          "name": "first_sale",
+          "elapsedMs": 390,
+          "payload": {
+            "amount": 120637,
+            "golden": false
+          },
+          "at": 1788652129780
+        },
+        {
+          "name": "hint_deduplicated",
+          "elapsedMs": 390,
+          "payload": {
+            "hintId": "money_in_teach"
+          },
+          "at": 1788652129783
+        }
+      ],
+      "campaignMarkers": {
+        "fundingChoiceCampaignMs": 492636,
+        "fundReadyCampaignMs": 704284,
+        "smartphoneBuildCampaignMs": 706772,
+        "firstPhoneCampaignMs": 707919,
+        "launchStartCampaignMs": 717517,
+        "launchCompleteCampaignMs": 789860,
+        "shift1CompleteCampaignMs": 789860,
+        "returnShownCampaignMs": 789860,
+        "returnCompleteCampaignMs": 1012913,
+        "freeUpgradeUsedCampaignMs": 1014358
+      },
+      "campaignState": {
+        "phase": "return_complete",
+        "fundingPolicy": "balanced",
+        "fundingReferenceIncomePerSec": 8.319,
+        "fundingTarget": 730,
+        "effectiveContributionRate": 0.35,
+        "fundProgress": 730,
+        "launchBranch": "throughput",
+        "launchBaseline": {
+          "outputPerMin": 26.68,
+          "lineIncomePerMin": 2289.49,
+          "wip": 14,
+          "blockedShare": 0.195,
+          "bottleneckId": 1
+        },
+        "launchTarget": 47,
+        "launchProgress": 1,
+        "launchActionGate": "complete",
+        "returnBaseline": {
+          "output": 67.07,
+          "income": 2861.86
+        },
+        "returnTarget": 79,
+        "returnProgress": 98,
+        "returnPhase": "complete",
+        "returnOrderIndex": 3,
+        "freeUpgradeMode": "bonus_tier",
+        "freeUpgradeCashDelta": 0,
+        "freeUpgradeConsumed": true,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterHydrate": 0
+      },
+      "funding": {
+        "contributionRate": 0.35,
+        "retainedCash": 43965123,
+        "upgradeCostsAtStart": {
+          "cheapest": 65,
+          "second": 65
+        },
+        "affordableUpgradeOpportunities": null,
+        "fundingPurchaseCount": 22,
+        "fundingPurchases": [
+          {
+            "sessionMs": 502748,
+            "machineId": 1,
+            "upgradeType": "speed",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 65,
+            "cashBefore": 73,
+            "cashAfter": 8,
+            "fundBefore": 24.499999999999996,
+            "fundAfter": 24.499999999999996
+          },
+          {
+            "sessionMs": 513918,
+            "machineId": 0,
+            "upgradeType": "speed",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 65,
+            "cashBefore": 72,
+            "cashAfter": 7,
+            "fundBefore": 58.79999999999999,
+            "fundAfter": 58.79999999999999
+          },
+          {
+            "sessionMs": 525398,
+            "machineId": 2,
+            "upgradeType": "speed",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 65,
+            "cashBefore": 70,
+            "cashAfter": 5,
+            "fundBefore": 93.10000000000002,
+            "fundAfter": 93.10000000000002
+          },
+          {
+            "sessionMs": 538313,
+            "machineId": 1,
+            "upgradeType": "value",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 76,
+            "cashBefore": 78,
+            "cashAfter": 2,
+            "fundBefore": 132.30000000000007,
+            "fundAfter": 132.30000000000007
+          },
+          {
+            "sessionMs": 551351,
+            "machineId": 0,
+            "upgradeType": "value",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 76,
+            "cashBefore": 85,
+            "cashAfter": 9,
+            "fundBefore": 177.10000000000002,
+            "fundAfter": 177.10000000000002
+          },
+          {
+            "sessionMs": 561498,
+            "machineId": 2,
+            "upgradeType": "value",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 76,
+            "cashBefore": 76,
+            "cashAfter": 0,
+            "fundBefore": 212.79999999999995,
+            "fundAfter": 212.79999999999995
+          },
+          {
+            "sessionMs": 572898,
+            "machineId": 1,
+            "upgradeType": "buffer",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 78,
+            "cashBefore": 89,
+            "cashAfter": 11,
+            "fundBefore": 256.08857193062494,
+            "fundAfter": 256.08857193062494
+          },
+          {
+            "sessionMs": 582541,
+            "machineId": 1,
+            "upgradeType": "speed",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 90,
+            "cashBefore": 90,
+            "cashAfter": 0,
+            "fundBefore": 291.18603777812496,
+            "fundAfter": 291.18603777812496
+          },
+          {
+            "sessionMs": 591489,
+            "machineId": 0,
+            "upgradeType": "buffer",
+            "levelBefore": 3,
+            "levelAfter": 4,
+            "cost": 78,
+            "cashBefore": 82,
+            "cashAfter": 4,
+            "fundBefore": 323.753934896875,
+            "fundAfter": 323.753934896875
+          },
+          {
+            "sessionMs": 601299,
+            "machineId": 0,
+            "upgradeType": "speed",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 90,
+            "cashBefore": 101,
+            "cashAfter": 11,
+            "fundBefore": 359.45789743937496,
+            "fundAfter": 359.45789743937496
+          },
+          {
+            "sessionMs": 609879,
+            "machineId": 2,
+            "upgradeType": "speed",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 90,
+            "cashBefore": 94,
+            "cashAfter": 4,
+            "fundBefore": 390.6852708981249,
+            "fundAfter": 390.6852708981249
+          },
+          {
+            "sessionMs": 621446,
+            "machineId": 1,
+            "upgradeType": "value",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 107,
+            "cashBefore": 114,
+            "cashAfter": 7,
+            "fundBefore": 432.78256171937494,
+            "fundAfter": 432.78256171937494
+          },
+          {
+            "sessionMs": 629999,
+            "machineId": 0,
+            "upgradeType": "value",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 107,
+            "cashBefore": 108,
+            "cashAfter": 1,
+            "fundBefore": 463.91279525499993,
+            "fundAfter": 463.91279525499993
+          },
+          {
+            "sessionMs": 638651,
+            "machineId": 2,
+            "upgradeType": "value",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 107,
+            "cashBefore": 113,
+            "cashAfter": 6,
+            "fundBefore": 495.4009433668749,
+            "fundAfter": 495.4009433668749
+          },
+          {
+            "sessionMs": 645651,
+            "machineId": 1,
+            "upgradeType": "buffer",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 106,
+            "cashBefore": 116,
+            "cashAfter": 10,
+            "fundBefore": 520.8776988887499,
+            "fundAfter": 520.8776988887499
+          },
+          {
+            "sessionMs": 652824,
+            "machineId": 0,
+            "upgradeType": "buffer",
+            "levelBefore": 4,
+            "levelAfter": 5,
+            "cost": 106,
+            "cashBefore": 119,
+            "cashAfter": 13,
+            "fundBefore": 546.985408965625,
+            "fundAfter": 546.985408965625
+          },
+          {
+            "sessionMs": 661577,
+            "machineId": 1,
+            "upgradeType": "speed",
+            "levelBefore": 6,
+            "levelAfter": 7,
+            "cost": 124,
+            "cashBefore": 143,
+            "cashAfter": 19,
+            "fundBefore": 578.8435913968749,
+            "fundAfter": 578.8435913968749
+          },
+          {
+            "sessionMs": 668412,
+            "machineId": 0,
+            "upgradeType": "speed",
+            "levelBefore": 6,
+            "levelAfter": 7,
+            "cost": 124,
+            "cashBefore": 130,
+            "cashAfter": 6,
+            "fundBefore": 602.8099284812498,
+            "fundAfter": 602.8099284812498
+          },
+          {
+            "sessionMs": 676520,
+            "machineId": 2,
+            "upgradeType": "speed",
+            "levelBefore": 6,
+            "levelAfter": 7,
+            "cost": 124,
+            "cashBefore": 137,
+            "cashAfter": 13,
+            "fundBefore": 633.2305565162497,
+            "fundAfter": 633.2305565162497
+          },
+          {
+            "sessionMs": 684192,
+            "machineId": 1,
+            "upgradeType": "buffer",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 143,
+            "cashBefore": 147,
+            "cashAfter": 4,
+            "fundBefore": 661.1518969824998,
+            "fundAfter": 661.1518969824998
+          },
+          {
+            "sessionMs": 692640,
+            "machineId": 1,
+            "upgradeType": "value",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 150,
+            "cashBefore": 163,
+            "cashAfter": 13,
+            "fundBefore": 691.9000128512499,
+            "fundAfter": 691.9000128512499
+          },
+          {
+            "sessionMs": 699534,
+            "machineId": 0,
+            "upgradeType": "buffer",
+            "levelBefore": 5,
+            "levelAfter": 6,
+            "cost": 143,
+            "cashBefore": 144,
+            "cashAfter": 1,
+            "fundBefore": 715.7149441356249,
+            "fundAfter": 715.7149441356249
+          }
+        ],
+        "upgradesBoughtBeforeFunding": 27,
+        "totalUpgradesBought": 161,
+        "actualPurchases": 22
+      },
+      "returnDiag": {
+        "returnPhase": "complete",
+        "returnOrderIndex": 3,
+        "referenceRate": 1.1178,
+        "canonicalRate": 0.4447,
+        "first30SecActualRate": 1.5666666666666667,
+        "target": 79,
+        "startCounter": 63,
+        "countedProgress": 98,
+        "completedOrders": [
+          {
+            "orderIndex": 1,
+            "referenceRate": 1.4338,
+            "target": 101,
+            "countedProgress": 110,
+            "activeSimulationMs": 69692.80333333333,
+            "realizedRate": 1.5784,
+            "realizedNeutralRate": 1.2253,
+            "durationMs": 69693
+          },
+          {
+            "orderIndex": 2,
+            "referenceRate": 1.2252509973079,
+            "target": 86,
+            "countedProgress": 100,
+            "activeSimulationMs": 69264.30000000006,
+            "realizedRate": 1.4437,
+            "realizedNeutralRate": 1.1178,
+            "durationMs": 69264
+          },
+          {
+            "orderIndex": 3,
+            "referenceRate": 1.117828765177039,
+            "target": 79,
+            "countedProgress": 98,
+            "activeSimulationMs": 73172.50000000009,
+            "realizedRate": 1.3393,
+            "realizedNeutralRate": 1.1023,
+            "durationMs": 73173
+          }
+        ],
+        "expectedDuration": 210,
+        "observedDuration": 223.053,
+        "observedToExpectedRatio": 1.062
+      },
+      "sessionMs": 2086080,
+      "fundingPolicy": "balanced",
+      "fundingSelectedMs": null,
+      "fundReadyMs": 704284,
+      "smartphoneBuildMs": 706772,
+      "cashAtBuild": 173,
+      "firstSmartphoneMs": 707919,
+      "launchStartMs": 717517,
+      "launchCompleteMs": 789860,
+      "launchQualifiedActions": 1,
+      "fundingReferenceIncomePerSec": 8.319,
+      "fundingTarget": 730,
+      "effectiveContributionRate": 0.35,
+      "launchActionGate": "complete",
+      "freeUpgradeMode": "bonus_tier",
+      "shift1CompleteMs": 789860,
+      "returnChallengeCompleteMs": 1012913,
+      "freeUpgradeUsedMs": 1014358,
+      "timeToFirstInputMs": null,
+      "timeToFirstSaleMs": 390,
+      "timeToFirstUpgradeMs": null,
+      "timeToBottleneckShownMs": null,
+      "timeToSessionGoalStartMs": null,
+      "timeToSessionGoalCompleteMs": null,
+      "upgradesBought": 0,
+      "throughputInitial": null,
+      "throughputFinal": null,
+      "hintsShown": [],
+      "globalEventsSuppressed": 0,
+      "globalEventsSuppressedCount": 0,
+      "onboardingComplete": false,
+      "branchSelected": null,
+      "branchPurchaseTime": null,
+      "branchGoalCompletionTime": null,
+      "convergenceCompletionTime": null,
+      "nextMilestoneShownTime": null,
+      "toysMilestoneShownMs": null,
+      "toysThreshold": null,
+      "toysThresholdReachedMs": null,
+      "toysOpenedMs": null,
+      "firstToyActionMs": null,
+      "firstToyProducedMs": null,
+      "toyMasteryShownMs": null,
+      "toyMasteryCompleteMs": null,
+      "toyMasteryType": null,
+      "toyMasteryTarget": null,
+      "smartphonesMilestoneShownMs": null,
+      "lifetimeEarnedAtUnlock": null,
+      "lifetimeEarnedAt650": null,
+      "cashAtUnlock": null,
+      "upgradesAtFiveMinutes": null,
+      "upgradesAtToysUnlock": null,
+      "branchKpiAtToysUnlock": null,
+      "upgradesByType": {
+        "speed": 0,
+        "buffer": 0,
+        "value": 0
+      },
+      "canonicalLineIncomePerMin": 241274.05572239743,
+      "events": [
+        {
+          "name": "economic_metric_view",
+          "elapsedMs": 240,
+          "payload": {
+            "lineIncomePerMin": 0
+          },
+          "at": 1788652128889
+        },
+        {
+          "name": "first_upgrade_view",
+          "elapsedMs": 240,
+          "payload": {
+            "suggested": 1
+          },
+          "at": 1788652128889
+        },
+        {
+          "name": "first_sale",
+          "elapsedMs": 390,
+          "payload": {
+            "amount": 120637,
+            "golden": false
+          },
+          "at": 1788652129780
+        },
+        {
+          "name": "hint_deduplicated",
+          "elapsedMs": 390,
+          "payload": {
+            "hintId": "money_in_teach"
+          },
+          "at": 1788652129783
+        }
+      ],
+      "live": {
+        "branch": "throughput",
+        "OUTPUT": 2,
+        "lineIncomePerMin": 241274.1,
+        "WIP": 0,
+        "cash": 43965123
+      }
+    },
+    "shots": [
+      "validate-mc3-b-01-policy-choice.png",
+      "validate-mc3-b-02-funding.png",
+      "validate-mc3-b-03-ready.png",
+      "validate-mc3-b-04-first-phone.png",
+      "validate-mc3-b-05-launch.png",
+      "validate-mc3-b-06-shift1-preview.png",
+      "validate-mc3-b-07-return.png",
+      "validate-mc3-b-08-free-upgrade.png"
+    ]
+  },
+  "raw": {
+    "partA_criteria": {
+      "selectNeverBuilds": true,
+      "policyLocked": true,
+      "adaptiveTargetLocked": true,
+      "contributionBand": true,
+      "affordableOpportunitiesOk": true,
+      "buildBeforeReadyNoop": true,
+      "policyChangeRejected": true,
+      "fundNeverDecreased": true,
+      "fundingUpgradeAvailability": true,
+      "fundingPurchaseCountMatchesList": true,
+      "fundingReadyBand": true,
+      "buildCashDelta0": true,
+      "buildPolicyUnchanged": true,
+      "buildOnce": true,
+      "buildIdempotent": true,
+      "selectorGone": true,
+      "firstPhoneLe10s": true,
+      "entersBaselineOrLaunch": true,
+      "samplingReloadPhaseOk": true,
+      "samplingNotReset": true,
+      "samplingNoReturn": true,
+      "samplingHydrationDelta0": true,
+      "samplingProgressHydrateEqualsBefore": true,
+      "salesTapsDontQualify": true,
+      "wrongActionDoesNotQualify": true,
+      "oneRelevantActionQualifies": true,
+      "launchDurationBand": true,
+      "launchNotElapsedTimer": true,
+      "launchCompletedByBatchNotIdleTimer": true,
+      "shift1Immediate": true,
+      "noEmptyLabel": true,
+      "returnNotSameSession": true,
+      "returnAppearsOnReload": true,
+      "returnKindMatches": true,
+      "returnNoAutocompleteGrace": true,
+      "returnExactly3Orders": true,
+      "returnFreeNotBeforeThree": true,
+      "returnLabelsNeverEmpty": true,
+      "returnInputSeen": true,
+      "returnDurationBand": true,
+      "returnDurationPreferred": true,
+      "returnNotUnder90": true,
+      "returnNotOver5min": true,
+      "returnRatioOk": true,
+      "returnStartsAtZero": true,
+      "freeUpgradeGranted": true,
+      "freeGrantedOnlyAfter3": true,
+      "freeCreditSurvivesReload": true,
+      "freeSpendOk": true,
+      "freeSpendModeNormal": true,
+      "freeSpendLevelPlus1": true,
+      "freeSpendCashDelta0": true,
+      "freeConsumedAfterSuccess": true,
+      "freeSecondAttemptBlocked": true,
+      "bonusModeIsBonusTier": true,
+      "bonusPurchaseOk": true,
+      "bonusCashDelta0": true,
+      "bonusCreditConsumed": true,
+      "bonusNoDuplicateOnReload": true,
+      "buildFloor975": true,
+      "buildBand": true,
+      "buildBandSoft": true,
+      "campaignMarkersPresent": true
+    },
+    "partB_criteria": {
+      "selectNeverBuilds": false,
+      "policyLocked": true,
+      "adaptiveTargetLocked": true,
+      "contributionBand": false,
+      "affordableOpportunitiesOk": false,
+      "buildBeforeReadyNoop": false,
+      "fundNeverDecreased": true,
+      "fundingUpgradeAvailability": true,
+      "fundingPurchaseCountMatchesList": true,
+      "fundingReadyBand": false,
+      "buildCashDelta0": false,
+      "buildPolicyUnchanged": true,
+      "buildOnce": true,
+      "buildIdempotent": true,
+      "selectorGone": true,
+      "firstPhoneLe10s": true,
+      "entersBaselineOrLaunch": false,
+      "salesTapsDontQualify": true,
+      "wrongActionDoesNotQualify": true,
+      "oneRelevantActionQualifies": true,
+      "proofReloadPhaseOk": false,
+      "proofBatchPreserved": true,
+      "proofActionPreserved": true,
+      "proofTargetUnchanged": true,
+      "proofNoSamplingReset": true,
+      "proofHydrationDelta0": true,
+      "proofProgressHydrateEqualsBefore": true,
+      "launchDurationBand": true,
+      "launchNotElapsedTimer": true,
+      "launchCompletedByBatchNotIdleTimer": true,
+      "shift1Immediate": true,
+      "noEmptyLabel": true,
+      "returnNotSameSession": false,
+      "returnAppearsOnReload": false,
+      "returnKindMatches": false,
+      "returnNoAutocompleteGrace": false,
+      "returnExactly3Orders": true,
+      "returnFreeNotBeforeThree": true,
+      "returnLabelsNeverEmpty": false,
+      "returnInputSeen": true,
+      "returnDurationBand": false,
+      "returnDurationPreferred": false,
+      "returnNotUnder90": false,
+      "returnNotOver5min": true,
+      "returnRatioOk": false,
+      "returnStartsAtZero": false,
+      "freeUpgradeGranted": false,
+      "freeGrantedOnlyAfter3": false,
+      "freeCreditSurvivesReload": false,
+      "freeSpendCashDelta0": false,
+      "freeConsumed": false,
+      "buildFloor975": true,
+      "buildBand": false,
+      "buildBandSoft": false,
+      "campaignMarkersPresent": true
+    },
+    "partA_markers": {
+      "stage1": {
+        "sessMs": 56081,
+        "mcPhase": "idle",
+        "label": "CHOOSE: Throughput (Speed) or Margin (Value)",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "convergence": {
+        "sessMs": 205051,
+        "mcPhase": "idle",
+        "label": "TOYS — $233 / $650 EARNED",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "toysThreshold": {
+        "sessMs": 442007,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "toysReady": {
+        "sessMs": 442007,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "beforeOpen": {
+        "sessMs": 442095,
+        "mcPhase": "idle",
+        "label": "TOYS — $650 / $650 EARNED",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "afterOpen": {
+        "sessMs": 442268,
+        "mcPhase": "idle",
+        "label": "NEXT: Produce your first Toy",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "masteryShown": {
+        "sessMs": 443810,
+        "mcPhase": "idle",
+        "label": "TOY RUSH — 0 / 28 Toys",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "fundingChoice": {
+        "sessMs": 492735,
+        "mcPhase": "funding_choice",
+        "label": "SMARTPHONE FUND — choose BALANCED or FAST",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "atPolicyChoice": {
+        "sessMs": 494150,
+        "mcPhase": "funding_choice",
+        "label": "SMARTPHONE FUND — choose BALANCED or FAST",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "policySelected": {
+        "sessMs": 494324,
+        "mcPhase": "smartphone_funding",
+        "label": "SMARTPHONE FUND — $0 / $730 · BALANCED",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "ready": {
+        "sessMs": 704384,
+        "mcPhase": "smartphone_ready",
+        "label": "SMARTPHONE READY — BUILD SMARTPHONE LINE",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "afterBuild": {
+        "sessMs": 706852,
+        "mcPhase": "first_smartphone",
+        "label": "FIRST SMARTPHONE — Produce and sell your first Smartphone",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "firstPhone": {
+        "sessMs": 708249,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "baselineSamplingStart": {
+        "sessMs": 709160,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "beforeSamplingReload": {
+        "sessMs": 713307,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "afterSamplingReload": {
+        "sessMs": 713800,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "launchObserve": {
+        "sessMs": 714100,
+        "mcPhase": "baseline_sampling",
+        "label": "PHONE COMMISSIONING — sampling the line…",
+        "returnPhase": null,
+        "returnOrderIndex": null
+      },
+      "shift1": {
+        "sessMs": 790206,
+        "mcPhase": "return_preview",
+        "label": "SHIFT 1 COMPLETE · NEXT SHIFT ready on your next visit",
+        "returnPhase": "preview",
+        "returnOrderIndex": 0
+      },
+      "afterReturnReload": {
+        "sessMs": 791566,
+        "mcPhase": "return_challenge",
+        "label": "RETURN SHIFT — CALIBRATING LINE",
+        "returnPhase": "calibration",
+        "returnOrderIndex": 0
+      },
+      "returnDone": {
+        "sessMs": 1013509,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "afterFreeCreditReload": {
+        "sessMs": 1014361,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "afterSpendReload": {
+        "sessMs": 1014591,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      }
+    },
+    "partB_markers": {
+      "stage1": {
+        "sessMs": 1315822,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "toysThreshold": {
+        "sessMs": 1718691,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "beforeOpen": {
+        "sessMs": 1718751,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "afterOpen": {
+        "sessMs": 1718871,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "masteryShown": {
+        "sessMs": 1743729,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "atPolicyChoice": {
+        "sessMs": 1992925,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "policySelected": {
+        "sessMs": 1993052,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "ready": {
+        "sessMs": 1995522,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "afterBuild": {
+        "sessMs": 1996922,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "firstPhone": {
+        "sessMs": 1997125,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "baselineSamplingStart": {
+        "sessMs": 2028613,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "launchObserve": {
+        "sessMs": 2029228,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "beforeProofReload": {
+        "sessMs": 2081493,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "afterProofReload": {
+        "sessMs": 2081740,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "shift1": {
+        "sessMs": 2081873,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "afterReturnReload": {
+        "sessMs": 2082240,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "returnDone": {
+        "sessMs": 2085556,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      },
+      "afterFreeCreditReload": {
+        "sessMs": 2085780,
+        "mcPhase": "return_complete",
+        "label": "NEXT CATEGORY — SMARTPHONES — Expansion Fund",
+        "returnPhase": "complete",
+        "returnOrderIndex": 3
+      }
+    }
+  },
+  "cross": {
+    "fastFundingShorter": true,
+    "fastFundingRatio": 0.012,
+    "bothBuildAboveFloor": true,
+    "bothReturn3Orders": true
+  },
+  "verdict": {
+    "partA": {
+      "pass": 63,
+      "total": 63,
+      "fail": []
+    },
+    "partB": {
+      "pass": 30,
+      "total": 55,
+      "fail": [
+        "selectNeverBuilds",
+        "contributionBand",
+        "affordableOpportunitiesOk",
+        "buildBeforeReadyNoop",
+        "fundingReadyBand",
+        "buildCashDelta0",
+        "entersBaselineOrLaunch",
+        "proofReloadPhaseOk",
+        "returnNotSameSession",
+        "returnAppearsOnReload",
+        "returnKindMatches",
+        "returnNoAutocompleteGrace",
+        "returnLabelsNeverEmpty",
+        "returnDurationBand",
+        "returnDurationPreferred",
+        "returnNotUnder90",
+        "returnRatioOk",
+        "returnStartsAtZero",
+        "freeUpgradeGranted",
+        "freeGrantedOnlyAfter3",
+        "freeCreditSurvivesReload",
+        "freeSpendCashDelta0",
+        "freeConsumed",
+        "buildBand",
+        "buildBandSoft"
+      ]
+    },
+    "cross": {
+      "fastFundingShorter": true,
+      "fastFundingRatio": 0.012,
+      "bothBuildAboveFloor": true,
+      "bothReturn3Orders": true
+    }
+  },
+  "overallVerdict": "Return necesita rediseño",
+  "ux": {
+    "partA": {
+      "mode": "commissioning",
+      "wrongActionBlocked": true,
+      "relevantAction": true,
+      "feltLikeForcedWait": "should be NO — no minElapsed/hold gates"
+    },
+    "partB": {
+      "mode": "commissioning",
+      "wrongActionBlocked": true,
+      "relevantAction": true,
+      "feltLikeForcedWait": "should be NO — no minElapsed/hold gates"
+    },
+    "returnA": {
+      "returnPhase": "complete",
+      "returnOrderIndex": 3,
+      "referenceRate": 1.1178,
+      "canonicalRate": 0.4447,
+      "first30SecActualRate": 1.5666666666666667,
+      "target": 79,
+      "startCounter": 63,
+      "countedProgress": 98,
+      "completedOrders": 3,
+      "expectedDuration": 210,
+      "observedDuration": 223.053,
+      "observedToExpectedRatio": 1.041,
+      "observedDuration_s": 218.6,
+      "expectedDuration_s": 210,
+      "orderRecords": [
+        {
+          "orderIndex": 1,
+          "referenceRate": 1.4338,
+          "target": 101,
+          "countedProgress": 110,
+          "activeSimulationMs": 69692.80333333333,
+          "realizedRate": 1.5784,
+          "realizedNeutralRate": 1.2253,
+          "durationMs": 69693,
+          "observedAtSessMs": 870821
+        },
+        {
+          "orderIndex": 2,
+          "referenceRate": 1.2252509973079,
+          "target": 86,
+          "countedProgress": 100,
+          "activeSimulationMs": 69264.30000000006,
+          "realizedRate": 1.4437,
+          "realizedNeutralRate": 1.1178,
+          "durationMs": 69264,
+          "observedAtSessMs": 940080
+        },
+        {
+          "orderIndex": 3,
+          "referenceRate": 1.117828765177039,
+          "target": 79,
+          "countedProgress": 98,
+          "activeSimulationMs": 73172.50000000009,
+          "realizedRate": 1.3393,
+          "realizedNeutralRate": 1.1023,
+          "durationMs": 73173,
+          "observedAtSessMs": 1013509
+        }
+      ],
+      "capacityFeedbackSamples": [
+        {
+          "sessMs": 870821,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 871509,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 872206,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 872998,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 873694,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 874394,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 875094,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 875794,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 876491,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 877278,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 877963,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 878642,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 879327,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 880014,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 880707,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 881504,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 882204,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 882904,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 883604,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 884299,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 884991,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 885772,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 886459,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 887149,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 887842,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 888542,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 889242,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 890042,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 890742,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 891442,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 892134,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 892819,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 893494,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 894256,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 894931,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 895611,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 896297,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 896989,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 897684,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 898476,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 899164,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 899849,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 900539,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 901227,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 901922,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 902722,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 903421,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 904119,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 904816,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 905502,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 906186,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 906967,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 907656,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 908342,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 909026,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 909707,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 910384,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 911147,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 911827,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 912505,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 913190,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 913875,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 914562,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 915352,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 916052,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 916750,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 917450,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 918150,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 918850,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 919650,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 920350,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 921050,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 921747,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 922440,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 923135,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 923930,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 924619,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 925310,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 926002,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 926699,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 927389,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 928179,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 928869,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 929555,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 930244,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 930939,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 931634,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 932432,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 933127,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 933819,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 934509,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 935200,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 935889,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 936674,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 937362,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 938045,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 938722,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 939400,
+          "feedback": "1.43 → 1.23",
+          "orderIndex": 2
+        },
+        {
+          "sessMs": 940080,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 940852,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 941540,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 942234,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 942925,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 943620,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 944313,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 945097,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 945778,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 946455,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 947132,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 947808,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 948478,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 949238,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 949913,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 950598,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 951283,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 951973,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 952665,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 953445,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 954127,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 954812,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 955498,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 956182,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 956868,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 957637,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 958312,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 958975,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 959635,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 960295,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 960957,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 961700,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 962367,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 963040,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 963715,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 964392,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 965072,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 965840,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 966522,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 967202,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 967883,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 968562,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 969238,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 970003,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 970678,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 971440,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 972111,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 972786,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 973460,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 974310,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 974988,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 975663,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 976336,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 977011,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 977685,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 978436,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 979103,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 979765,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 980430,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 981096,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 981766,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 982523,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 983193,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 983860,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 984526,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 985195,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 985870,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 986636,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 987316,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 987998,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 988683,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 989368,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 990053,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 990826,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 991508,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 992186,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 992866,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 993546,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 994228,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 995005,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 995691,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 996385,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 997081,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 997778,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 998475,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 999271,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 999966,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1000661,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1001351,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1002038,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1002728,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1003519,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1004218,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1004918,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1005618,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1006318,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1007016,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1007814,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1008513,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1009213,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1009913,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1010613,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1011313,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1012113,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1012813,
+          "feedback": "1.23 → 1.12",
+          "orderIndex": 3
+        },
+        {
+          "sessMs": 1013509,
+          "feedback": "1.12 → 1.10",
+          "orderIndex": 3
+        }
+      ]
+    },
+    "returnB": {
+      "returnPhase": "complete",
+      "returnOrderIndex": 3,
+      "referenceRate": 1.1178,
+      "canonicalRate": 0.4447,
+      "first30SecActualRate": 1.5666666666666667,
+      "target": 79,
+      "startCounter": 63,
+      "countedProgress": 98,
+      "completedOrders": 3,
+      "expectedDuration": 210,
+      "observedDuration": 223.053,
+      "observedToExpectedRatio": 0,
+      "observedDuration_s": 0,
+      "expectedDuration_s": 210,
+      "orderRecords": [
+        {
+          "orderIndex": 1,
+          "referenceRate": 1.4338,
+          "target": 101,
+          "countedProgress": 110,
+          "activeSimulationMs": 69692.80333333333,
+          "realizedRate": 1.5784,
+          "realizedNeutralRate": 1.2253,
+          "durationMs": 69693,
+          "observedAtSessMs": 2085556
+        },
+        {
+          "orderIndex": 2,
+          "referenceRate": 1.2252509973079,
+          "target": 86,
+          "countedProgress": 100,
+          "activeSimulationMs": 69264.30000000006,
+          "realizedRate": 1.4437,
+          "realizedNeutralRate": 1.1178,
+          "durationMs": 69264,
+          "observedAtSessMs": 2085556
+        },
+        {
+          "orderIndex": 3,
+          "referenceRate": 1.117828765177039,
+          "target": 79,
+          "countedProgress": 98,
+          "activeSimulationMs": 73172.50000000009,
+          "realizedRate": 1.3393,
+          "realizedNeutralRate": 1.1023,
+          "durationMs": 73173,
+          "observedAtSessMs": 2085556
+        }
+      ],
+      "capacityFeedbackSamples": [
+        {
+          "sessMs": 2085556,
+          "feedback": "1.12 → 1.10",
+          "orderIndex": 3
+        }
+      ]
+    },
+    "samplingReload": {
+      "phaseBeforeSave": "baseline_sampling",
+      "samplingElapsedBeforeSave": 5468,
+      "sampleTicksBefore": 33,
+      "phaseAfterLoad": "baseline_sampling",
+      "samplingElapsedAfterLoad": 5778,
+      "sampleTicksAfter": 37,
+      "phaseOk": true,
+      "samplingContinued": true,
+      "noReturn": true,
+      "firstPhoneStillTrue": true,
+      "hydrate": {
+        "launchProgressBeforeSave": 0,
+        "launchProgressAfterHydrate": 0,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterFirstValidStep": null,
+        "firstValidStepDelta": 0,
+        "hydrationComplete": true,
+        "launchBatchProgress": 0,
+        "phase": "baseline_sampling",
+        "launchSampleMs": 5778
+      },
+      "afterFirstStep": {
+        "launchProgressBeforeSave": 0,
+        "launchProgressAfterHydrate": 0,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterFirstValidStep": null,
+        "firstValidStepDelta": 0,
+        "hydrationComplete": true,
+        "launchBatchProgress": 0,
+        "phase": "baseline_sampling",
+        "launchSampleMs": 5778
+      },
+      "launchProgressBeforeSave": 0,
+      "launchProgressAfterHydrate": 0,
+      "hydrationProgressDelta": 0,
+      "launchProgressAfterFirstValidStep": null,
+      "firstValidStepDelta": 0
+    },
+    "proofReload": {
+      "phaseBeforeSave": "return_complete",
+      "batchBefore": 54,
+      "gateBefore": "complete",
+      "targetBefore": 47,
+      "phaseAfterLoad": "return_complete",
+      "batchAfter": 54,
+      "gateAfter": "complete",
+      "targetAfter": 47,
+      "phaseOk": false,
+      "batchPreserved": true,
+      "gatePreserved": true,
+      "targetUnchanged": true,
+      "noBackToSampling": true,
+      "noReturn": false,
+      "hydrate": {
+        "launchProgressBeforeSave": 0,
+        "launchProgressAfterHydrate": 0,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterFirstValidStep": 1,
+        "firstValidStepDelta": 1,
+        "hydrationComplete": true,
+        "launchBatchProgress": 54,
+        "phase": "return_complete",
+        "launchSampleMs": 9145
+      },
+      "afterFirstStep": {
+        "launchProgressBeforeSave": 0,
+        "launchProgressAfterHydrate": 0,
+        "hydrationProgressDelta": 0,
+        "launchProgressAfterFirstValidStep": 1,
+        "firstValidStepDelta": 1,
+        "hydrationComplete": true,
+        "launchBatchProgress": 54,
+        "phase": "return_complete",
+        "launchSampleMs": 9145
+      },
+      "launchProgressBeforeSave": 0,
+      "launchProgressAfterHydrate": 0,
+      "hydrationProgressDelta": 0,
+      "launchProgressAfterFirstValidStep": 1,
+      "firstValidStepDelta": 1
+    },
+    "freeA": {
+      "ok": true,
+      "nearMax": false,
+      "type": "value",
+      "machine": 1,
+      "costListed": 11952,
+      "mode": "normal",
+      "levelBefore": 18,
+      "levelAfter": 19,
+      "cashBefore": 11951,
+      "cashAfter": 11951,
+      "cashDelta": 0,
+      "creditsAfter": 0,
+      "used": true,
+      "consumed": true,
+      "rewardId": "fu_s_mtp14emq_lsz5do"
+    },
+    "bonusA": {
+      "mode": "bonus_tier",
+      "details": [
+        "ONE FREE UPGRADE",
+        "Choose any upgrade — includes one BONUS TIER if your line is MAX."
+      ],
+      "label": "RETURN COMPLETE — claim ONE FREE UPGRADE",
+      "bonusButtonImplied": true,
+      "uiCopyHint": "BONUS +1 — FREE · $0",
+      "ok": true,
+      "cashBefore": 0,
+      "cashAfter": 0,
+      "cashDelta": 0,
+      "creditsAfter": 0,
+      "bonusGranted": true,
+      "bonusLevelDelta": 1,
+      "machine": 1,
+      "type": "value",
+      "used": true,
+      "consumed": true,
+      "levelBefore": 20,
+      "levelAfter": 20,
+      "rewardId": "fu_s_mtp14emq_lsz5do"
+    },
+    "authenticCheckpointB": "No authentic margin funding_choice checkpoint found; Part B ran from zero (Margin/FAST/events ON/390×844)."
+  }
+}

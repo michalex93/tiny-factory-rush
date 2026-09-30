@@ -169,6 +169,7 @@ export function validateSave(parsed: unknown): SaveData | null {
     data.version !== 2 &&
     data.version !== 3 &&
     data.version !== 4 &&
+    data.version !== 5 &&
     data.version !== SAVE_VERSION
   ) {
     return null;
@@ -221,6 +222,7 @@ export function validateSave(parsed: unknown): SaveData | null {
 
   const factory =
     (data.version === SAVE_VERSION ||
+      data.version === 5 ||
       data.version === 4 ||
       data.version === 3) &&
     data.factory?.line
@@ -231,6 +233,7 @@ export function validateSave(parsed: unknown): SaveData | null {
           unlocked,
           sessionGoal: data.factory?.sessionGoal,
           mcCampaign: data.factory?.mcCampaign,
+          redline: data.factory?.redline ?? null,
         };
 
   return {

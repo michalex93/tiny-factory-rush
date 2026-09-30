@@ -24,8 +24,13 @@ import {
   type SessionGoalState,
 } from './SessionGoal';
 import { classifyUpgradePayoff } from './UpgradePayoff';
+import {
+  RedlineRouting,
+  type RedlinePersistedState,
+} from './RedlineRouting';
 import { Upgrades } from './Upgrades';
 import type { Stats } from './Stats';
+import type { RedlineDock } from '../config/redline';
 
 export type BottleneckBadgeMode = 'hidden' | 'bottleneck' | 'improved_still';
 
@@ -130,6 +135,17 @@ export interface FactoryEvents {
   onGlobalEventSuppressed?: (kind: string) => void;
   onGlobalEventsResumed?: () => void;
   onOnboardingComplete?: () => void;
+  onRedlineTelemetry?: (
+    name: string,
+    props?: Record<string, string | number | boolean | null>,
+  ) => void;
+  onRedlineUnlock?: () => void;
+  onRedlineDelivery?: (
+    correct: boolean,
+    combo: number,
+    comboChanged: 'up' | 'down' | 'same',
+  ) => void;
+  onRedlinePhase?: (phase: string) => void;
 }
 
 export interface FactorySnapshot {
@@ -142,6 +158,8 @@ export interface FactorySnapshot {
   mcCampaign?: McCampaignState | null;
   hintUnderstood?: string[];
   selectedChoiceId?: string | null;
+  /** M-R1 REDLINE — Save v6 */
+  redline?: RedlinePersistedState | null;
 }
 
 /**
@@ -157,6 +175,7 @@ export class Factory {
   readonly sessionGoal = new SessionGoal();
   readonly mc = new McCampaign();
   readonly hints = new HintQueue();
+  redline: RedlineRouting;
   events: FactoryEvents = {};
 
   sessionMs = 0;
@@ -186,6 +205,8 @@ export class Factory {
   private firstToyProducedEmitted = false;
   /** Dev-only preview of badge states. */
   private previewBadgeActive = false;
+  /** Blocks launch-batch increments until first valid sim step after load. */
+  private pendingHydrationBarrier = false;
 
   constructor(economy?: Economy, upgrades?: Upgrades, progression?: Progression) {
     this.economy = economy ?? new Economy();
@@ -193,6 +214,9 @@ export class Factory {
     this.progression = progression ?? new Progression();
     this.eventsSys = new Events();
     this.line = new ProductionLine();
+    this.redline = new RedlineRouting(null, (name, props) => {
+      this.events.onRedlineTelemetry?.(name, props);
+    });
     this.wireLine();
     this.upgrades.applyTo(
       this.line.machines,
@@ -216,9 +240,21 @@ export class Factory {
           1,
           Math.round(this.economy.baseProductValue * mult * goldenMult),
         );
+        // REDLINE adapter: score delivery before single canonical creditSale
+        const delivery = this.redline.onCanonicalSell();
         const split = this.mc.splitSale(amount);
         this.economy.creditSale(amount, split.toCash);
         this.events.onSell?.(amount, 0.92, golden);
+        if (delivery) {
+          this.events.onRedlineDelivery?.(
+            delivery.correct,
+            delivery.combo,
+            delivery.comboChanged,
+          );
+          if (delivery.contractComplete) {
+            this.events.onRedlinePhase?.(this.redline.phase());
+          }
+        }
         this.notePossibleFirstToy(amount, golden);
         for (const ev of this.mc.noteSmartphoneSale(this, amount)) {
           this.dispatchMcEvent(ev);
@@ -229,6 +265,63 @@ export class Factory {
       onSpawn: (g) => this.events.onSpawn?.(g),
       onClickBoost: (id) => this.events.onClickBoost?.(id),
     };
+  }
+
+  /** Event-neutral OUTPUT/min (divides out temporary production Mult). */
+  eventNeutralThroughputPerMin(): number {
+    const mult = Math.max(1, this.eventsSys.productionMult);
+    return this.getThroughputPerMin() / mult;
+  }
+
+  /** Event-neutral LINE INCOME $/s for reward freeze. */
+  eventNeutralIncomePerSec(): number {
+    const mult = Math.max(1, this.eventsSys.productionMult);
+    return this.lineIncomePerMin() / 60 / mult;
+  }
+
+  startRedlineContract(seed?: number): boolean {
+    const prev = this.redline.phase();
+    const ok = this.redline.startContract({
+      activeMs: this.sessionMs,
+      eventNeutralThroughputPerMin: this.eventNeutralThroughputPerMin(),
+      incomePerSecRef: this.eventNeutralIncomePerSec(),
+      seed,
+    });
+    if (ok && this.redline.phase() !== prev) {
+      this.events.onRedlinePhase?.(this.redline.phase());
+    }
+    return ok;
+  }
+
+  setRedlineRoute(route: RedlineDock): ReturnType<RedlineRouting['setRoute']> {
+    return this.redline.setRoute(route);
+  }
+
+  coolRedlineSwitch(): boolean {
+    return this.redline.coolSwitch();
+  }
+
+  claimRedlineReward(): { cash: number; rewardId: string; granted: boolean } {
+    const r = this.redline.claimReward();
+    if (r.granted && r.cash > 0) {
+      this.economy.add(r.cash);
+    }
+    return r;
+  }
+
+  continueRedlineSummary(): void {
+    this.redline.continueFromSummary();
+    this.events.onRedlinePhase?.(this.redline.phase());
+  }
+
+  retryRedlineContract(): boolean {
+    const ok = this.redline.retryFromSummary({
+      activeMs: this.sessionMs,
+      eventNeutralThroughputPerMin: this.eventNeutralThroughputPerMin(),
+      incomePerSecRef: this.eventNeutralIncomePerSec(),
+    });
+    if (ok) this.events.onRedlinePhase?.(this.redline.phase());
+    return ok;
   }
 
   resetRuntime(): void {
@@ -273,6 +366,13 @@ export class Factory {
   }
 
   update(dtMs: number): void {
+    // Hydration barrier: mark ready before any sim step so deserialize/render
+    // cannot advance launch progress; first dt>0 step may then count real sales.
+    if (this.pendingHydrationBarrier && dtMs > 0) {
+      this.mc.markHydrationReady(this);
+      this.pendingHydrationBarrier = false;
+    }
+
     this.sessionMs += dtMs;
     this.economy.update(dtMs);
     this.eventsSys.update(dtMs);
@@ -294,6 +394,12 @@ export class Factory {
     this.updateToysMilestone();
     for (const ev of this.mc.update(this, dtMs)) {
       this.dispatchMcEvent(ev);
+    }
+    // REDLINE: active sim time only; hydrationProgressDelta = 0 (no offline catch-up)
+    const prevPhase = this.redline.phase();
+    this.redline.tick(dtMs, this.sessionMs);
+    if (this.redline.phase() !== prevPhase) {
+      this.events.onRedlinePhase?.(this.redline.phase());
     }
 
     if (this.improvedBadgeMs > 0 && !this.previewBadgeActive) {
@@ -504,6 +610,12 @@ export class Factory {
     }
     if (ev.type === 'convergence_goal_complete') {
       this.events.onConvergenceGoalComplete?.(ev.payload ?? {});
+      // M-R1: unlock REDLINE after full convergence → post_chain
+      if (this.redline.phase() === 'locked') {
+        this.redline.unlock(this.sessionMs);
+        this.events.onRedlineUnlock?.();
+        this.events.onRedlinePhase?.(this.redline.phase());
+      }
     }
     if (ev.type === 'next_milestone_shown') {
       this.events.onNextMilestoneShown?.(ev.payload ?? {});
@@ -578,7 +690,16 @@ export class Factory {
   }
 
   clickMachine(machineId: MachineId): boolean {
-    return this.line.clickMachine(machineId);
+    const ok = this.line.clickMachine(machineId);
+    if (
+      ok &&
+      this.mc.phase === 'return_challenge' &&
+      this.mc.state.returnChallenge
+    ) {
+      this.mc.state.returnChallenge.returnInputSeen = true;
+      this.mc.state.returnChallenge.postStartInput = true;
+    }
+    return ok;
   }
 
   buyUpgrade(machineId: MachineId, type: UpgradeType): boolean {
@@ -603,55 +724,52 @@ export class Factory {
       return false;
     }
 
-    // Free upgrade / BONUS TIER
-    if (this.mc.state.freeUpgradeCredits > 0 && !this.mc.state.freeUpgradeUsed) {
-      const mode = this.mc.computeFreeUpgradeMode(this);
-      this.mc.state.freeUpgradeMode = mode;
-      if (mode === 'bonus_tier' || this.upgrades.isMaxed(machineId, type)) {
-        if (mode !== 'bonus_tier') {
-          // Still space elsewhere — don't force bonus on a maxed slot
-          /* fall through to normal purchase attempt */
-        } else {
-          const consumed = this.mc.tryConsumeFreeUpgrade(this, machineId, type);
-          if (!consumed.ok) return false;
-          this.reapplyUpgrades();
-          this.dispatchMcEvent({
-            type: 'free_upgrade_used',
-            payload: this.mc.metricsPayload(this, {
-              machineId,
-              upgradeType: type,
-              freeUpgradeMode: 'bonus_tier',
-              freeUpgradeCashDelta: 0,
-            }),
-          });
-          this.pendingImpactCheckMs = UPGRADE_PAYOFF.settleMs;
-          return true;
-        }
-      }
-      if (mode === 'normal' && !this.upgrades.isMaxed(machineId, type)) {
-        const consumed = this.mc.tryConsumeFreeUpgrade(this, machineId, type);
-        if (!consumed.ok) return false;
-        const ok = this.upgrades.tryPurchase(machineId, type, () => true);
-        if (!ok) {
-          // restore credit if purchase failed somehow
-          this.mc.state.freeUpgradeCredits = 1;
-          this.mc.state.freeUpgradeUsed = false;
-          return false;
-        }
+    // Free upgrade / BONUS TIER — single authoritative domain command
+    if (
+      this.mc.state.freeUpgradeCredits > 0 &&
+      !this.mc.state.freeUpgradeUsed &&
+      !this.mc.state.freeUpgradeConsumed
+    ) {
+      const applied = this.mc.applyFreeUpgrade(this, machineId, type);
+      if (applied.ok) {
         this.reapplyUpgrades();
         this.dispatchMcEvent({
           type: 'free_upgrade_used',
           payload: this.mc.metricsPayload(this, {
             machineId,
             upgradeType: type,
-            freeUpgradeMode: 'normal',
+            freeUpgradeMode: applied.mode,
+            freeUpgradeCashDelta: applied.cashDelta,
+            levelBefore: applied.levelBefore,
+            levelAfter: applied.levelAfter,
+            effectiveLevelAfter: applied.effectiveLevelAfter ?? null,
+          }),
+        });
+        this.dispatchMcEvent({
+          type: 'free_upgrade_applied',
+          payload: this.mc.metricsPayload(this, {
+            machineId,
+            upgradeType: type,
+            freeUpgradeMode: applied.mode,
             freeUpgradeCashDelta: 0,
           }),
         });
         this.pendingImpactCheckMs = UPGRADE_PAYOFF.settleMs;
         return true;
       }
+      // Stale max / invalid: refresh mode and do not fall through to paid
+      this.mc.state.freeUpgradeMode = this.mc.computeFreeUpgradeMode(this);
+      if (applied.reason === 'stale_max' || applied.reason === 'consumed') {
+        return false;
+      }
+      // duplicate / verify_failed — stop
+      return false;
     }
+
+    const levelBeforePaid = this.upgrades.getLevel(machineId, type);
+    const cashBeforePaid = Math.floor(this.economy.coins);
+    const fundBeforePaid = this.mc.state.smartphoneFund;
+    const costListed = this.upgrades.costFor(machineId, type);
 
     const ok = this.upgrades.tryPurchase(machineId, type, (cost) =>
       this.economy.spend(cost),
@@ -659,7 +777,17 @@ export class Factory {
     if (!ok) return false;
 
     if (this.mc.phase === 'smartphone_funding') {
-      this.mc.state.fundingPurchases += 1;
+      this.mc.recordFundingPurchase(this, {
+        machineId,
+        upgradeType: type,
+        levelBefore: levelBeforePaid,
+        levelAfter: this.upgrades.getLevel(machineId, type),
+        cost: costListed,
+        cashBefore: cashBeforePaid,
+        cashAfter: Math.floor(this.economy.coins),
+        fundBefore: fundBeforePaid,
+        fundAfter: this.mc.state.smartphoneFund,
+      });
     }
 
     this.reapplyUpgrades();
@@ -1039,6 +1167,7 @@ export class Factory {
       mcCampaign: this.mc.snapshot(),
       hintUnderstood: this.hints.snapshot().understood,
       selectedChoiceId: this.sessionGoal.snapshot()?.selectedBranch ?? null,
+      redline: this.redline.toJSON(),
     };
   }
 
@@ -1068,6 +1197,23 @@ export class Factory {
       this.mc.beginAfterMastery(this);
     }
     this.hints.load({ understood: snapshot.hintUnderstood });
+    // Save v6 REDLINE — hydrate without advancing contract/cooldown
+    this.redline = RedlineRouting.fromJSON(snapshot.redline ?? null, (name, props) => {
+      this.events.onRedlineTelemetry?.(name, props);
+    });
+    // Legacy v5 post-convergence: unlock if already past convergence
+    if (
+      this.redline.phase() === 'locked' &&
+      snapshot.sessionGoal &&
+      (snapshot.sessionGoal.phase === 'post_chain' ||
+        snapshot.sessionGoal.phase === 'complete' ||
+        snapshot.sessionGoal.phase === 'toy_mastery' ||
+        snapshot.sessionGoal.phase === 'smartphones_horizon' ||
+        snapshot.sessionGoal.status === 'chain_complete' ||
+        snapshot.sessionGoal.nextMilestoneShown)
+    ) {
+      this.redline.unlock(this.sessionMs);
+    }
     if (this.hasRealProgress()) {
       this.eventsSys.resume();
       this.onboardingEventsLocked = false;
@@ -1075,6 +1221,9 @@ export class Factory {
       this.eventsSys.suppress();
       this.onboardingEventsLocked = true;
     }
+    // Resume hydration barrier for mid-launch / sampling loads
+    this.pendingHydrationBarrier =
+      this.mc.state.launchHydrationActive && !this.mc.state.hydrationComplete;
   }
 
   /** Boot hook after save apply — starts return challenge on new session. */

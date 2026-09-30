@@ -1,12 +1,14 @@
 /**
- * M-C.1 — Adaptive Expansion Fund, Commissioning Launch, normalized Return,
- * Bonus-tier free upgrade. Completes after Toy Mastery.
+ * M-C.3 — Adaptive Expansion Fund, Commissioning Launch, three adaptive Return
+ * orders, atomic free upgrade, launch hydration barrier. Completes after Toy Mastery.
  */
 import {
   SMARTPHONE_CAMPAIGN,
   computeFundTarget,
   clampReturnReference,
   roundReadableFund,
+  sanitizeRate,
+  returnOrderCapacityCopy,
   type MachineId,
   type UpgradeType,
 } from '../config/balance';
@@ -31,6 +33,14 @@ export type McPhase =
 export type LaunchActionGate = 'pending' | 'complete' | 'waived_at_cap';
 export type FreeUpgradeMode = 'none' | 'normal' | 'bonus_tier';
 
+export type ReturnPhase =
+  | 'preview'
+  | 'calibration'
+  | 'order_1'
+  | 'order_2'
+  | 'order_3'
+  | 'complete';
+
 export interface ShiftSummary {
   branch: BranchId | null;
   fundingPolicy: FundingPolicy | null;
@@ -50,33 +60,82 @@ export interface LaunchBaseline {
   bottleneckId: MachineId | null;
 }
 
+export interface CompletedOrderSummary {
+  orderIndex: number;
+  referenceRate: number;
+  target: number;
+  countedProgress: number;
+  activeSimulationMs: number;
+  realizedRate: number;
+  realizedNeutralRate: number;
+  durationMs: number;
+}
+
 export interface ReturnChallengeState {
   kind: 'flow' | 'margin';
   baselineOutput: number;
   baselineIncome: number;
   baselineWip: number;
   baselineBottleneck: MachineId | null;
-  /** Cumulative phone sales (flow) or $ revenue (margin). */
+  /** Cumulative phone sales (flow) or $ revenue (margin) — current order. */
   batchTarget: number;
   batchProgress: number;
   maxWip: number;
   startedAtMs: number | null;
   progress: number;
   postStartInput: boolean;
+  /** Alias of returnFinalConditionHoldMs. */
   sustainOkMs: number;
   /** Counter baselines at Return show (exclusive post-start progress). */
   phonesAtReturnStart: number;
   revenueAtReturnStart: number;
-  /** Realized reference rates (units/sec) after clamp. */
+  /** Realized reference rates (units/sec) after sanitize. */
   referencePhonesPerSec: number;
   referenceRevenuePerSec: number;
   canonicalPhonesPerSec: number;
   canonicalRevenuePerSec: number;
+  /** orderCount * orderEquivalentSeconds. */
   expectedDurationSec: number;
   /** First-30s diagnostics (filled during challenge). */
   actualPhonesFirst30Sec: number;
   actualRevenueFirst30Sec: number;
   first30SecSampleMs: number;
+
+  /** Internal adaptive-order phase (umbrella McPhase stays return_challenge). */
+  returnPhase: ReturnPhase;
+  /** 0 = calibration, 1–3 = orders. */
+  returnOrderIndex: number;
+  calibrationMs: number;
+  calibrationPhonesStart: number;
+  calibrationRevenueStart: number;
+  calibrationEventWeightedMs: number;
+  returnOrderReferenceRate: number;
+  returnOrderTarget: number;
+  returnOrderStartCounter: number;
+  returnOrderProgress: number;
+  returnOrderActiveSimulationMs: number;
+  returnOrderEventWeightedMs: number;
+  returnFinalConditionHoldMs: number;
+  /** MARGIN sustain baseline OUTPUT/min at order start. */
+  returnOrderOutputReference: number;
+  completedOrderSummaries: CompletedOrderSummary[];
+  returnInputSeen: boolean;
+  capacityFeedback: string | null;
+  /** Player-facing next-order copy (increased / stable / decreased). */
+  capacityCopy: string | null;
+}
+
+export interface FundingPurchaseRecord {
+  sessionMs: number;
+  machineId: MachineId;
+  upgradeType: UpgradeType;
+  levelBefore: number;
+  levelAfter: number;
+  cost: number;
+  cashBefore: number;
+  cashAfter: number;
+  fundBefore: number;
+  fundAfter: number;
 }
 
 export interface CampaignMarkers {
@@ -109,9 +168,19 @@ export interface McCampaignState {
   cashAtBuild: number | null;
 
   launchBaseline: LaunchBaseline | null;
+  /** Raw (event-inclusive) sampling baseline for diagnostics. */
+  rawLaunchBaseline: LaunchBaseline | null;
+  /** Same as launchBaseline when targets use event-neutral basis. */
+  eventNeutralLaunchBaseline: LaunchBaseline | null;
+  /** Mean temporary productionMult during sampling (≥1). */
+  baselineEventMultiplier: number;
+  launchTargetBasis: 'event_neutral' | 'raw' | null;
   launchSampleMs: number;
   launchSampleAccumTp: number;
   launchSampleAccumIncome: number;
+  launchSampleAccumTpNeutral: number;
+  launchSampleAccumIncomeNeutral: number;
+  launchSampleEventWeightedMs: number;
   launchSampleAccumWip: number;
   launchSampleAccumBlocked: number;
   launchSampleTicks: number;
@@ -134,13 +203,27 @@ export interface McCampaignState {
   /** Funding liquidity diagnostics (set at policy lock). */
   cheapestRelevantUpgradeCostAtFundingStart: number | null;
   secondCheapestRelevantUpgradeCost: number | null;
-  fundingPurchases: number;
+  fundingPurchaseCount: number;
+  fundingPurchases: FundingPurchaseRecord[];
+  upgradesBoughtBeforeFunding: number | null;
   /** Legacy fields kept for v4 migration / report compat. */
   launchBaselineOutput: number;
   launchBaselineIncome: number;
   launchActions: number;
   launchMinGateReachedMs: number | null;
   launchHoldMs: number;
+
+  /** Launch hydration barrier (blocks batch progress until first valid sim step). */
+  launchHydrationActive: boolean;
+  launchLastObservedCounter: number;
+  launchLastObservedPhones: number;
+  launchLastObservedRevenue: number;
+  launchProgressBeforeSave: number | null;
+  launchProgressAfterHydrate: number | null;
+  launchProgressAfterFirstValidStep: number | null;
+  hydrationProgressDelta: number;
+  firstValidStepDelta: number;
+  hydrationComplete: boolean;
 
   shift1Complete: boolean;
   shiftSummary: ShiftSummary | null;
@@ -151,10 +234,13 @@ export interface McCampaignState {
   freeUpgradeCredits: number;
   freeUpgradeGranted: boolean;
   freeUpgradeUsed: boolean;
+  freeUpgradeConsumed: boolean;
+  freeUpgradeRewardId: string | null;
   freeUpgradeMode: FreeUpgradeMode;
   bonusUpgradeMachineId: MachineId | null;
   bonusUpgradeType: UpgradeType | null;
   bonusUpgradeGranted: boolean;
+  bonusLevelDelta: number;
 
   campaignMarkers: CampaignMarkers;
   lastSessionEndedAt: number | null;
@@ -168,6 +254,16 @@ export interface McCampaignState {
 export interface McEvent {
   type: string;
   payload?: Record<string, number | string | boolean | null>;
+}
+
+export interface ApplyFreeUpgradeResult {
+  ok: boolean;
+  reason?: string;
+  mode: FreeUpgradeMode;
+  cashDelta: number;
+  levelBefore: number;
+  levelAfter: number;
+  effectiveLevelAfter?: number;
 }
 
 function blankMarkers(): CampaignMarkers {
@@ -186,15 +282,16 @@ function blankMarkers(): CampaignMarkers {
 }
 
 function blankReturn(): ReturnChallengeState {
+  const cfg = SMARTPHONE_CAMPAIGN.returnChallenge;
   return {
     kind: 'flow',
     baselineOutput: 0,
     baselineIncome: 0,
     baselineWip: 0,
     baselineBottleneck: null,
-    batchTarget: 1,
+    batchTarget: 0,
     batchProgress: 0,
-    maxWip: SMARTPHONE_CAMPAIGN.returnChallenge.maxWip,
+    maxWip: cfg.maxWip,
     startedAtMs: null,
     progress: 0,
     postStartInput: false,
@@ -205,10 +302,28 @@ function blankReturn(): ReturnChallengeState {
     referenceRevenuePerSec: 0,
     canonicalPhonesPerSec: 0,
     canonicalRevenuePerSec: 0,
-    expectedDurationSec: SMARTPHONE_CAMPAIGN.returnChallenge.equivalentSeconds,
+    expectedDurationSec: cfg.orderCount * cfg.orderEquivalentSeconds,
     actualPhonesFirst30Sec: 0,
     actualRevenueFirst30Sec: 0,
     first30SecSampleMs: 0,
+    returnPhase: 'preview',
+    returnOrderIndex: 0,
+    calibrationMs: 0,
+    calibrationPhonesStart: 0,
+    calibrationRevenueStart: 0,
+    calibrationEventWeightedMs: 0,
+    returnOrderReferenceRate: 0,
+    returnOrderTarget: 0,
+    returnOrderStartCounter: 0,
+    returnOrderProgress: 0,
+    returnOrderActiveSimulationMs: 0,
+    returnOrderEventWeightedMs: 0,
+    returnFinalConditionHoldMs: 0,
+    returnOrderOutputReference: 0,
+    completedOrderSummaries: [],
+    returnInputSeen: false,
+    capacityFeedback: null,
+    capacityCopy: null,
   };
 }
 
@@ -232,9 +347,16 @@ export function blankMcState(sessionId: string): McCampaignState {
     firstSmartphoneProduced: false,
     cashAtBuild: null,
     launchBaseline: null,
+    rawLaunchBaseline: null,
+    eventNeutralLaunchBaseline: null,
+    baselineEventMultiplier: 1,
+    launchTargetBasis: null,
     launchSampleMs: 0,
     launchSampleAccumTp: 0,
     launchSampleAccumIncome: 0,
+    launchSampleAccumTpNeutral: 0,
+    launchSampleAccumIncomeNeutral: 0,
+    launchSampleEventWeightedMs: 0,
     launchSampleAccumWip: 0,
     launchSampleAccumBlocked: 0,
     launchSampleTicks: 0,
@@ -253,12 +375,24 @@ export function blankMcState(sessionId: string): McCampaignState {
     smartphoneRevenueTotal: 0,
     cheapestRelevantUpgradeCostAtFundingStart: null,
     secondCheapestRelevantUpgradeCost: null,
-    fundingPurchases: 0,
+    fundingPurchaseCount: 0,
+    fundingPurchases: [],
+    upgradesBoughtBeforeFunding: null,
     launchBaselineOutput: 0,
     launchBaselineIncome: 0,
     launchActions: 0,
     launchMinGateReachedMs: null,
     launchHoldMs: 0,
+    launchHydrationActive: false,
+    launchLastObservedCounter: 0,
+    launchLastObservedPhones: 0,
+    launchLastObservedRevenue: 0,
+    launchProgressBeforeSave: null,
+    launchProgressAfterHydrate: null,
+    launchProgressAfterFirstValidStep: null,
+    hydrationProgressDelta: 0,
+    firstValidStepDelta: 0,
+    hydrationComplete: true,
     shift1Complete: false,
     shiftSummary: null,
     returnChallenge: null,
@@ -267,10 +401,13 @@ export function blankMcState(sessionId: string): McCampaignState {
     freeUpgradeCredits: 0,
     freeUpgradeGranted: false,
     freeUpgradeUsed: false,
+    freeUpgradeConsumed: false,
+    freeUpgradeRewardId: null,
     freeUpgradeMode: 'none',
     bonusUpgradeMachineId: null,
     bonusUpgradeType: null,
     bonusUpgradeGranted: false,
+    bonusLevelDelta: 0,
     campaignMarkers: blankMarkers(),
     lastSessionEndedAt: null,
     currentSessionId: sessionId,
@@ -299,6 +436,13 @@ function mark(
   }
 }
 
+function orderPhaseForIndex(n: number): ReturnPhase {
+  if (n === 1) return 'order_1';
+  if (n === 2) return 'order_2';
+  if (n === 3) return 'order_3';
+  return 'calibration';
+}
+
 export class McCampaign {
   state: McCampaignState;
 
@@ -321,7 +465,6 @@ export class McCampaign {
     if (this.state.smartphonesBuilt) return true;
     return (
       this.state.phase !== 'idle' &&
-      this.state.phase !== 'return_challenge' &&
       this.state.phase !== 'return_complete'
     );
   }
@@ -381,7 +524,9 @@ export class McCampaign {
     this.state.fundDepositBudget = 0;
     this.state.phase = 'smartphone_funding';
     this.state.fundingStartedAtMs = factory.sessionMs;
-    this.state.fundingPurchases = 0;
+    this.state.fundingPurchaseCount = 0;
+    this.state.fundingPurchases = [];
+    this.state.upgradesBoughtBeforeFunding = factory.upgrades.totalPurchased;
     const costs = this.relevantUpgradeCosts(factory);
     this.state.cheapestRelevantUpgradeCostAtFundingStart = costs[0] ?? null;
     this.state.secondCheapestRelevantUpgradeCost = costs[1] ?? null;
@@ -398,6 +543,31 @@ export class McCampaign {
         }),
       },
     ];
+  }
+
+  recordFundingPurchase(
+    factory: Factory,
+    record: Omit<FundingPurchaseRecord, 'sessionMs' | 'fundBefore' | 'fundAfter'> & {
+      sessionMs?: number;
+      fundBefore?: number;
+      fundAfter?: number;
+    },
+  ): void {
+    if (this.state.phase !== 'smartphone_funding') return;
+    const entry: FundingPurchaseRecord = {
+      sessionMs: record.sessionMs ?? Math.round(factory.sessionMs),
+      machineId: record.machineId,
+      upgradeType: record.upgradeType,
+      levelBefore: record.levelBefore,
+      levelAfter: record.levelAfter,
+      cost: record.cost,
+      cashBefore: record.cashBefore,
+      cashAfter: record.cashAfter,
+      fundBefore: record.fundBefore ?? this.state.smartphoneFund,
+      fundAfter: record.fundAfter ?? this.state.smartphoneFund,
+    };
+    this.state.fundingPurchases.push(entry);
+    this.state.fundingPurchaseCount = this.state.fundingPurchases.length;
   }
 
   /** Sorted ascending costs of non-max Speed/Buffer/Value slots. */
@@ -543,11 +713,15 @@ export class McCampaign {
   private updateBaselineSampling(factory: Factory, dtMs: number): void {
     const tp = factory.getThroughputPerMin();
     const income = factory.lineIncomePerMin();
+    const eventMult = Math.max(1, this.eventMult(factory));
     // Ignore zero ticks from reload/render
     if (tp > 0.05 || income > 0.05) {
       this.state.launchSampleMs += dtMs;
       this.state.launchSampleAccumTp += tp;
       this.state.launchSampleAccumIncome += income;
+      this.state.launchSampleAccumTpNeutral += tp / eventMult;
+      this.state.launchSampleAccumIncomeNeutral += income / eventMult;
+      this.state.launchSampleEventWeightedMs += dtMs * eventMult;
       this.state.launchSampleAccumWip += factory.getWip();
       this.state.launchSampleAccumBlocked += blockedShare(factory);
       this.state.launchSampleTicks += 1;
@@ -557,20 +731,42 @@ export class McCampaign {
       this.state.launchSampleTicks >= 4
     ) {
       const n = this.state.launchSampleTicks;
-      const baseline: LaunchBaseline = {
+      const raw: LaunchBaseline = {
         outputPerMin: +(this.state.launchSampleAccumTp / n).toFixed(2),
         lineIncomePerMin: +(this.state.launchSampleAccumIncome / n).toFixed(2),
         wip: Math.round(this.state.launchSampleAccumWip / n),
         blockedShare: +(this.state.launchSampleAccumBlocked / n).toFixed(3),
         bottleneckId: factory.line.getBottleneckId(),
       };
+      const neutral: LaunchBaseline = {
+        outputPerMin: +(this.state.launchSampleAccumTpNeutral / n).toFixed(2),
+        lineIncomePerMin: +(
+          this.state.launchSampleAccumIncomeNeutral / n
+        ).toFixed(2),
+        wip: raw.wip,
+        blockedShare: raw.blockedShare,
+        bottleneckId: raw.bottleneckId,
+      };
       // Floor baselines so targets never NaN
-      if (baseline.outputPerMin < 1) baseline.outputPerMin = 8;
-      if (baseline.lineIncomePerMin < 1) baseline.lineIncomePerMin = 40;
-      this.state.launchBaseline = baseline;
-      this.state.launchBaselineOutput = baseline.outputPerMin;
-      this.state.launchBaselineIncome = baseline.lineIncomePerMin;
-      this.armCommissioning(factory, baseline);
+      if (raw.outputPerMin < 1) raw.outputPerMin = 8;
+      if (raw.lineIncomePerMin < 1) raw.lineIncomePerMin = 40;
+      if (neutral.outputPerMin < 1) neutral.outputPerMin = 8;
+      if (neutral.lineIncomePerMin < 1) neutral.lineIncomePerMin = 40;
+
+      const avgMult =
+        this.state.launchSampleMs > 0
+          ? this.state.launchSampleEventWeightedMs / this.state.launchSampleMs
+          : 1;
+
+      this.state.rawLaunchBaseline = raw;
+      this.state.eventNeutralLaunchBaseline = neutral;
+      this.state.baselineEventMultiplier = +Math.max(1, avgMult).toFixed(3);
+      this.state.launchTargetBasis = 'event_neutral';
+      // Active baseline for target + sustain = event-neutral
+      this.state.launchBaseline = neutral;
+      this.state.launchBaselineOutput = neutral.outputPerMin;
+      this.state.launchBaselineIncome = neutral.lineIncomePerMin;
+      this.armCommissioning(factory, neutral);
     }
   }
 
@@ -739,6 +935,26 @@ export class McCampaign {
     return ev;
   }
 
+  armHydrationBarrier(): void {
+    this.state.launchHydrationActive = true;
+    this.state.hydrationComplete = false;
+    this.state.launchProgressBeforeSave = this.state.launchBatchProgress;
+    this.state.launchProgressAfterHydrate = this.state.launchBatchProgress;
+    this.state.launchProgressAfterFirstValidStep = null;
+    this.state.hydrationProgressDelta = 0;
+    this.state.firstValidStepDelta = 0;
+    this.state.launchLastObservedPhones = this.state.smartphonesSoldTotal;
+    this.state.launchLastObservedRevenue = this.state.smartphoneRevenueTotal;
+    this.state.launchLastObservedCounter = this.state.smartphonesSoldTotal;
+  }
+
+  markHydrationReady(_factory: Factory): void {
+    if (!this.state.launchHydrationActive) return;
+    this.state.hydrationComplete = true;
+    this.state.launchProgressAfterHydrate = this.state.launchBatchProgress;
+    this.state.hydrationProgressDelta = 0;
+  }
+
   noteSmartphoneSale(factory: Factory, amount: number): McEvent[] {
     if (factory.economy.currentProduct === 'smartphones' && amount > 0) {
       this.state.smartphonesSoldTotal += 1;
@@ -757,8 +973,15 @@ export class McCampaign {
       this.state.launchSampleTicks = 0;
       this.state.launchSampleAccumTp = 0;
       this.state.launchSampleAccumIncome = 0;
+      this.state.launchSampleAccumTpNeutral = 0;
+      this.state.launchSampleAccumIncomeNeutral = 0;
+      this.state.launchSampleEventWeightedMs = 0;
       this.state.launchSampleAccumWip = 0;
       this.state.launchSampleAccumBlocked = 0;
+      this.state.rawLaunchBaseline = null;
+      this.state.eventNeutralLaunchBaseline = null;
+      this.state.baselineEventMultiplier = 1;
+      this.state.launchTargetBasis = null;
       return [
         {
           type: 'smartphone_first_product',
@@ -770,12 +993,17 @@ export class McCampaign {
       ];
     }
 
-    // Commissioning batch (only after baseline armed)
+    // Commissioning batch (only after baseline armed; blocked during hydration)
     if (
       this.state.phase === 'smartphone_launch' &&
       this.state.launchBaseline &&
       factory.economy.currentProduct === 'smartphones'
     ) {
+      if (this.state.launchHydrationActive && !this.state.hydrationComplete) {
+        // Lifetime totals already updated; skip batch until hydration ready.
+        return [];
+      }
+      const before = this.state.launchBatchProgress;
       const branch = factory.sessionGoal.selectedBranch ?? 'throughput';
       if (branch === 'margin') {
         this.state.launchBatchProgress += amount;
@@ -784,6 +1012,17 @@ export class McCampaign {
       }
       this.state.launchProofPhones += 1;
       this.state.launchProofRevenue += amount;
+
+      if (
+        this.state.hydrationComplete &&
+        this.state.launchProgressAfterFirstValidStep == null
+      ) {
+        const delta = this.state.launchBatchProgress - before;
+        this.state.firstValidStepDelta = delta;
+        this.state.launchProgressAfterFirstValidStep =
+          this.state.launchBatchProgress;
+        this.state.launchHydrationActive = false;
+      }
     }
 
     // Return progress is derived from counters in updateReturn — do not
@@ -810,6 +1049,7 @@ export class McCampaign {
   ): McEvent[] {
     if (this.state.phase === 'return_challenge' && this.state.returnChallenge) {
       this.state.returnChallenge.postStartInput = true;
+      this.state.returnChallenge.returnInputSeen = true;
     }
 
     if (this.state.phase !== 'smartphone_launch') return [];
@@ -944,6 +1184,7 @@ export class McCampaign {
         payload: {
           kind: this.state.returnChallenge.kind,
           batchTarget: this.state.returnChallenge.batchTarget,
+          orderCount: SMARTPHONE_CAMPAIGN.returnChallenge.orderCount,
         },
       },
     ];
@@ -954,7 +1195,7 @@ export class McCampaign {
     summary: ShiftSummary,
   ): ReturnChallengeState {
     const kind = summary.branch === 'margin' ? 'margin' : 'flow';
-    const eq = SMARTPHONE_CAMPAIGN.returnChallenge.equivalentSeconds;
+    const cfg = SMARTPHONE_CAMPAIGN.returnChallenge;
     const proofSec = Math.max(0.001, this.state.launchProofMs / 1000);
     const realizedPhonesPerSec =
       this.state.launchProofPhones > 0
@@ -976,26 +1217,23 @@ export class McCampaign {
       ((bl?.lineIncomePerMin ?? summary.lineIncomePerMin) || 80) / 60,
     );
 
+    // Provisional refs from launch proof (overwritten by calibration)
     const refPhones = clampReturnReference(realizedPhonesPerSec, canonPhones);
     const refRevenue = clampReturnReference(
       realizedRevenuePerSec,
       canonRevenue,
     );
 
-    const batchTarget =
-      kind === 'margin'
-        ? Math.max(80, roundReadableFund(refRevenue * eq))
-        : Math.max(12, Math.ceil(refPhones * eq));
-
     return {
+      ...blankReturn(),
       kind,
       baselineOutput: +(refPhones * 60).toFixed(2),
       baselineIncome: +(refRevenue * 60).toFixed(2),
       baselineWip: factory.getWip(),
       baselineBottleneck: factory.line.getBottleneckId(),
-      batchTarget,
+      batchTarget: 0,
       batchProgress: 0,
-      maxWip: SMARTPHONE_CAMPAIGN.returnChallenge.maxWip,
+      maxWip: cfg.maxWip,
       startedAtMs: null,
       progress: 0,
       postStartInput: false,
@@ -1006,68 +1244,327 @@ export class McCampaign {
       referenceRevenuePerSec: +refRevenue.toFixed(4),
       canonicalPhonesPerSec: +canonPhones.toFixed(4),
       canonicalRevenuePerSec: +canonRevenue.toFixed(4),
-      expectedDurationSec: eq,
-      actualPhonesFirst30Sec: 0,
-      actualRevenueFirst30Sec: 0,
-      first30SecSampleMs: 0,
+      expectedDurationSec: cfg.orderCount * cfg.orderEquivalentSeconds,
+      returnPhase: 'preview',
+      returnOrderIndex: 0,
     };
   }
 
-  private beginReturnChallenge(factory: Factory): void {
+  private beginReturnCalibration(factory: Factory): void {
     const rc = this.state.returnChallenge;
     if (!rc) return;
+
+    // Mid-order reload: keep start counters / progress — never re-run completed orders
+    if (
+      rc.returnPhase === 'order_1' ||
+      rc.returnPhase === 'order_2' ||
+      rc.returnPhase === 'order_3'
+    ) {
+      if (rc.startedAtMs == null) rc.startedAtMs = factory.sessionMs;
+      return;
+    }
+    if (rc.returnPhase === 'complete') return;
+
+    // Incomplete calibration — continue without resetting measured ms if already started
+    if (rc.returnPhase === 'calibration' && rc.startedAtMs != null) {
+      return;
+    }
+
+    rc.returnPhase = 'calibration';
+    rc.returnOrderIndex = 0;
     rc.startedAtMs = factory.sessionMs;
+    rc.calibrationMs = 0;
+    rc.calibrationEventWeightedMs = 0;
+    rc.calibrationPhonesStart = this.state.smartphonesSoldTotal;
+    rc.calibrationRevenueStart = this.state.smartphoneRevenueTotal;
     rc.phonesAtReturnStart = this.state.smartphonesSoldTotal;
     rc.revenueAtReturnStart = this.state.smartphoneRevenueTotal;
+    rc.batchTarget = 0;
     rc.batchProgress = 0;
     rc.progress = 0;
+    rc.returnFinalConditionHoldMs = 0;
     rc.sustainOkMs = 0;
     rc.postStartInput = false;
+    rc.returnInputSeen = false;
+    rc.capacityFeedback = null;
+    rc.capacityCopy = null;
+    rc.returnOrderActiveSimulationMs = 0;
+    rc.returnOrderEventWeightedMs = 0;
+    rc.returnOrderProgress = 0;
+    rc.returnOrderTarget = 0;
     rc.actualPhonesFirst30Sec = 0;
     rc.actualRevenueFirst30Sec = 0;
     rc.first30SecSampleMs = 0;
+  }
+
+  private eventMult(factory: Factory): number {
+    const m = factory.eventsSys.productionMult;
+    return Number.isFinite(m) && m > 1 ? m : 1;
+  }
+
+  private currentReturnCounter(rc: ReturnChallengeState): number {
+    return rc.kind === 'margin'
+      ? this.state.smartphoneRevenueTotal
+      : this.state.smartphonesSoldTotal;
+  }
+
+  private allNormalMaxed(factory: Factory): boolean {
+    for (const type of ['speed', 'value', 'buffer'] as UpgradeType[]) {
+      for (const m of [0, 1, 2] as MachineId[]) {
+        if (type === 'buffer' && m === 2) continue;
+        if (!factory.upgrades.isMaxed(m, type)) return false;
+      }
+    }
+    return true;
+  }
+
+  private startOrder(
+    factory: Factory,
+    n: number,
+    referenceRate: number,
+  ): McEvent[] {
+    const rc = this.state.returnChallenge;
+    if (!rc) return [];
+    const cfg = SMARTPHONE_CAMPAIGN.returnChallenge;
+    const eq = cfg.orderEquivalentSeconds;
+
+    const target =
+      rc.kind === 'margin'
+        ? Math.max(80, roundReadableFund(referenceRate * eq))
+        : Math.max(8, Math.ceil(referenceRate * eq));
+
+    if (rc.kind === 'margin') {
+      rc.referenceRevenuePerSec = +referenceRate.toFixed(4);
+      rc.baselineIncome = +(referenceRate * 60).toFixed(2);
+    } else {
+      rc.referencePhonesPerSec = +referenceRate.toFixed(4);
+      rc.baselineOutput = +(referenceRate * 60).toFixed(2);
+    }
+
+    rc.returnOrderReferenceRate = referenceRate;
+    rc.returnOrderTarget = target;
+    rc.returnOrderStartCounter = this.currentReturnCounter(rc);
+    rc.returnOrderProgress = 0;
+    rc.returnOrderActiveSimulationMs = 0;
+    rc.returnOrderEventWeightedMs = 0;
+    rc.returnFinalConditionHoldMs = 0;
+    rc.sustainOkMs = 0;
+    rc.returnOrderOutputReference = factory.getThroughputPerMin();
+    rc.returnPhase = orderPhaseForIndex(n);
+    rc.returnOrderIndex = n;
+    rc.batchTarget = target;
+    rc.batchProgress = 0;
+    rc.progress = 0;
+
+    return [
+      {
+        type: 'return_order_start',
+        payload: this.metricsPayload(factory, {
+          orderIndex: n,
+          referenceRate: +referenceRate.toFixed(4),
+          target,
+          kind: rc.kind,
+        }),
+      },
+    ];
+  }
+
+  private finishOrder(factory: Factory, n: number): McEvent[] {
+    const rc = this.state.returnChallenge;
+    if (!rc) return [];
+    const cfg = SMARTPHONE_CAMPAIGN.returnChallenge;
+    const counted = rc.returnOrderProgress;
+    const activeSec = Math.max(0.001, rc.returnOrderActiveSimulationMs / 1000);
+    const eventSec = Math.max(0.001, rc.returnOrderEventWeightedMs / 1000);
+    const realizedRate = counted / activeSec;
+    const realizedNeutral = counted / eventSec;
+    const beforeRate = rc.returnOrderReferenceRate;
+    const after = realizedNeutral;
+
+    rc.capacityFeedback = `${beforeRate.toFixed(2)} → ${after.toFixed(2)}`;
+    const prevTarget = rc.returnOrderTarget;
+    rc.completedOrderSummaries.push({
+      orderIndex: n,
+      referenceRate: beforeRate,
+      target: rc.returnOrderTarget,
+      countedProgress: counted,
+      activeSimulationMs: rc.returnOrderActiveSimulationMs,
+      realizedRate: +realizedRate.toFixed(4),
+      realizedNeutralRate: +realizedNeutral.toFixed(4),
+      durationMs: Math.round(rc.returnOrderActiveSimulationMs),
+    });
+
+    const ev: McEvent[] = [
+      {
+        type: 'return_order_complete',
+        payload: this.metricsPayload(factory, {
+          orderIndex: n,
+          capacityFeedback: rc.capacityFeedback,
+          realizedNeutralRate: +realizedNeutral.toFixed(4),
+          referenceRate: +beforeRate.toFixed(4),
+          target: rc.returnOrderTarget,
+        }),
+      },
+    ];
+
+    if (n < cfg.orderCount) {
+      ev.push(...this.startOrder(factory, n + 1, realizedNeutral));
+      const nextTarget = this.state.returnChallenge?.returnOrderTarget ?? 0;
+      rc.capacityCopy = returnOrderCapacityCopy(prevTarget, nextTarget);
+      ev.push({
+        type: 'return_order_capacity_copy',
+        payload: {
+          previousTarget: prevTarget,
+          nextTarget,
+          capacityCopy: rc.capacityCopy,
+        },
+      });
+    } else {
+      rc.capacityCopy = null;
+      ev.push(...this.completeReturn(factory));
+    }
+    return ev;
   }
 
   private updateReturn(factory: Factory, dtMs: number): McEvent[] {
     const ev: McEvent[] = [];
     const rc = this.state.returnChallenge;
     if (!rc || rc.startedAtMs == null) return ev;
-    const cfg = SMARTPHONE_CAMPAIGN.returnChallenge;
-    const elapsed = factory.sessionMs - rc.startedAtMs;
-    if (elapsed < cfg.armGraceMs) return ev;
+    if (rc.returnPhase === 'complete') return ev;
 
-    // Progress = exclusive delta after Return start (same units as target)
-    const countedPhones = Math.max(
-      0,
-      this.state.smartphonesSoldTotal - rc.phonesAtReturnStart,
-    );
-    const countedRevenue = Math.max(
-      0,
-      this.state.smartphoneRevenueTotal - rc.revenueAtReturnStart,
-    );
-    rc.batchProgress =
-      rc.kind === 'margin' ? countedRevenue : countedPhones;
+    const cfg = SMARTPHONE_CAMPAIGN.returnChallenge;
+
+    // —— Calibration ——
+    if (rc.returnPhase === 'calibration' || rc.returnPhase === 'preview') {
+      if (rc.returnPhase === 'preview') {
+        rc.returnPhase = 'calibration';
+      }
+      // Ignore armGrace during calibration
+      const tp = factory.getThroughputPerMin();
+      const income = factory.lineIncomePerMin();
+      const productOk = factory.economy.currentProduct === 'smartphones';
+      const salesOrOutput =
+        tp > 0.5 ||
+        income > 0.5 ||
+        this.state.smartphonesSoldTotal > rc.calibrationPhonesStart;
+      if (productOk && salesOrOutput && dtMs > 0) {
+        const em = this.eventMult(factory);
+        rc.calibrationMs += dtMs;
+        rc.calibrationEventWeightedMs += dtMs * em;
+      }
+
+      if (rc.first30SecSampleMs < 30_000) {
+        const countedPhones = Math.max(
+          0,
+          this.state.smartphonesSoldTotal - rc.phonesAtReturnStart,
+        );
+        const countedRevenue = Math.max(
+          0,
+          this.state.smartphoneRevenueTotal - rc.revenueAtReturnStart,
+        );
+        rc.first30SecSampleMs = Math.min(30_000, rc.first30SecSampleMs + dtMs);
+        rc.actualPhonesFirst30Sec = countedPhones;
+        rc.actualRevenueFirst30Sec = countedRevenue;
+      }
+
+      rc.progress = Math.min(1, rc.calibrationMs / Math.max(1, cfg.calibrationMs));
+
+      // Prefer full calibrationMs; require at least calibrationMinValidMs
+      if (rc.calibrationMs >= cfg.calibrationMs) {
+        const phonesDelta = Math.max(
+          0,
+          this.state.smartphonesSoldTotal - rc.calibrationPhonesStart,
+        );
+        const revenueDelta = Math.max(
+          0,
+          this.state.smartphoneRevenueTotal - rc.calibrationRevenueStart,
+        );
+        const calibSec = Math.max(0.001, rc.calibrationMs / 1000);
+        const eventSec = Math.max(0.001, rc.calibrationEventWeightedMs / 1000);
+        const rawPhones = phonesDelta / calibSec;
+        const rawRevenue = revenueDelta / calibSec;
+        const neutralPhones = phonesDelta / eventSec;
+        const neutralRevenue = revenueDelta / eventSec;
+        const fallbackPhones = Math.max(0.05, rc.canonicalPhonesPerSec);
+        const fallbackRevenue = Math.max(0.5, rc.canonicalRevenuePerSec);
+
+        if (rc.kind === 'flow') {
+          // Prefer event-neutral rate; raw kept as floor diagnostic via sanitize fallback
+          const measured =
+            neutralPhones > 0 ? neutralPhones : rawPhones;
+          rc.referencePhonesPerSec = +sanitizeRate(
+            measured,
+            fallbackPhones,
+          ).toFixed(4);
+          ev.push(...this.startOrder(factory, 1, rc.referencePhonesPerSec));
+        } else {
+          const measured =
+            neutralRevenue > 0 ? neutralRevenue : rawRevenue;
+          rc.referenceRevenuePerSec = +sanitizeRate(
+            measured,
+            fallbackRevenue,
+          ).toFixed(4);
+          ev.push(...this.startOrder(factory, 1, rc.referenceRevenuePerSec));
+        }
+      }
+      return ev;
+    }
+
+    // —— Active order ——
+    if (
+      rc.returnPhase !== 'order_1' &&
+      rc.returnPhase !== 'order_2' &&
+      rc.returnPhase !== 'order_3'
+    ) {
+      return ev;
+    }
+
+    const counter = this.currentReturnCounter(rc);
+    rc.returnOrderProgress = Math.max(0, counter - rc.returnOrderStartCounter);
+    rc.batchProgress = rc.returnOrderProgress;
+    rc.batchTarget = rc.returnOrderTarget;
+
+    if (dtMs > 0) {
+      const em = this.eventMult(factory);
+      rc.returnOrderActiveSimulationMs += dtMs;
+      rc.returnOrderEventWeightedMs += dtMs * em;
+    }
 
     if (rc.first30SecSampleMs < 30_000) {
+      const countedPhones = Math.max(
+        0,
+        this.state.smartphonesSoldTotal - rc.phonesAtReturnStart,
+      );
+      const countedRevenue = Math.max(
+        0,
+        this.state.smartphoneRevenueTotal - rc.revenueAtReturnStart,
+      );
       rc.first30SecSampleMs = Math.min(30_000, rc.first30SecSampleMs + dtMs);
       rc.actualPhonesFirst30Sec = countedPhones;
       rc.actualRevenueFirst30Sec = countedRevenue;
     }
 
     let sustain = false;
-    if (rc.batchProgress >= rc.batchTarget) {
+    if (rc.returnOrderProgress >= rc.returnOrderTarget) {
       if (rc.kind === 'margin') {
         sustain =
           factory.getThroughputPerMin() >=
-          rc.baselineOutput * cfg.marginMinOutputMult * 0.97;
+          rc.returnOrderOutputReference * cfg.marginMinOutputMult;
       } else {
         sustain = factory.getWip() <= rc.maxWip;
       }
     }
-    if (sustain) rc.sustainOkMs += dtMs;
-    else rc.sustainOkMs = 0;
+    if (sustain) {
+      rc.returnFinalConditionHoldMs += dtMs;
+    } else {
+      rc.returnFinalConditionHoldMs = 0;
+    }
+    rc.sustainOkMs = rc.returnFinalConditionHoldMs;
 
-    rc.progress = Math.min(1, rc.batchProgress / Math.max(1, rc.batchTarget));
+    rc.progress = Math.min(
+      1,
+      rc.returnOrderProgress / Math.max(1, rc.returnOrderTarget),
+    );
     const buckets = cfg.progressBuckets;
     while (
       this.state.returnProgressBucketsEmitted < buckets.length &&
@@ -1076,17 +1573,23 @@ export class McCampaign {
       this.state.returnProgressBucketsEmitted += 1;
     }
 
+    const inputOk = rc.returnInputSeen || this.allNormalMaxed(factory);
     if (
-      rc.batchProgress >= rc.batchTarget &&
-      rc.sustainOkMs >= cfg.sustainWindowMs &&
-      rc.postStartInput
+      rc.returnOrderProgress >= rc.returnOrderTarget &&
+      rc.returnFinalConditionHoldMs >= cfg.sustainWindowMs &&
+      inputOk
     ) {
-      ev.push(...this.completeReturn(factory));
+      ev.push(...this.finishOrder(factory, rc.returnOrderIndex));
     }
     return ev;
   }
 
   private completeReturn(factory: Factory): McEvent[] {
+    const rc = this.state.returnChallenge;
+    if (rc) {
+      rc.returnPhase = 'complete';
+      rc.returnOrderIndex = SMARTPHONE_CAMPAIGN.returnChallenge.orderCount;
+    }
     this.state.returnChallengeComplete = true;
     this.state.phase = 'return_complete';
     mark(this.state, 'returnCompleteCampaignMs', factory.sessionMs);
@@ -1100,11 +1603,15 @@ export class McCampaign {
       this.state.freeUpgradeGranted = true;
       this.state.freeUpgradeCredits = 1;
       this.state.freeUpgradeMode = this.computeFreeUpgradeMode(factory);
+      if (!this.state.freeUpgradeRewardId) {
+        this.state.freeUpgradeRewardId = `fu_${this.state.currentSessionId}`;
+      }
       ev.push({
         type: 'free_upgrade_granted',
         payload: {
           credits: 1,
           freeUpgradeMode: this.state.freeUpgradeMode,
+          freeUpgradeRewardId: this.state.freeUpgradeRewardId,
         },
       });
     }
@@ -1123,26 +1630,141 @@ export class McCampaign {
     return 'bonus_tier';
   }
 
+  /**
+   * Atomic free-upgrade apply. Consumes credit only after verified success.
+   */
+  applyFreeUpgrade(
+    factory: Factory,
+    machineId: MachineId,
+    type: UpgradeType,
+  ): ApplyFreeUpgradeResult {
+    const fail = (
+      reason: string,
+      mode: FreeUpgradeMode,
+      levelBefore: number,
+      levelAfter: number,
+    ): ApplyFreeUpgradeResult => ({
+      ok: false,
+      reason,
+      mode,
+      cashDelta: 0,
+      levelBefore,
+      levelAfter,
+    });
+
+    if (this.state.freeUpgradeConsumed || this.state.freeUpgradeCredits <= 0) {
+      return fail(
+        'consumed',
+        this.state.freeUpgradeMode,
+        factory.upgrades.getLevel(machineId, type),
+        factory.upgrades.getLevel(machineId, type),
+      );
+    }
+    if (this.state.freeUpgradeUsed) {
+      return fail(
+        'duplicate',
+        this.state.freeUpgradeMode,
+        factory.upgrades.getLevel(machineId, type),
+        factory.upgrades.getLevel(machineId, type),
+      );
+    }
+
+    let mode = this.computeFreeUpgradeMode(factory);
+    const cashBefore = factory.economy.coins;
+    const levelBefore = factory.upgrades.getLevel(machineId, type);
+
+    if (mode === 'normal' && factory.upgrades.isMaxed(machineId, type)) {
+      mode = this.computeFreeUpgradeMode(factory);
+      if (mode === 'bonus_tier') {
+        // continue bonus path below
+      } else if (factory.upgrades.isMaxed(machineId, type)) {
+        return fail('stale_max', mode, levelBefore, levelBefore);
+      }
+    }
+
+    if (mode === 'none') {
+      return fail('consumed', mode, levelBefore, levelBefore);
+    }
+
+    if (mode === 'normal') {
+      if (factory.upgrades.isMaxed(machineId, type)) {
+        return fail('stale_max', mode, levelBefore, levelBefore);
+      }
+      const purchased = factory.upgrades.tryPurchase(machineId, type, () => true);
+      if (!purchased) {
+        return fail('purchase_failed', mode, levelBefore, levelBefore);
+      }
+      const levelAfter = factory.upgrades.getLevel(machineId, type);
+      const cashAfter = factory.economy.coins;
+      if (levelAfter !== levelBefore + 1 || cashAfter !== cashBefore) {
+        // Rollback level / purchase count — never consume credit
+        factory.upgrades.levels[machineId][type] = levelBefore;
+        factory.upgrades.totalPurchased = Math.max(
+          0,
+          factory.upgrades.totalPurchased - 1,
+        );
+        return fail('verify_failed', mode, levelBefore, levelBefore);
+      }
+
+      this.state.freeUpgradeCredits = 0;
+      this.state.freeUpgradeUsed = true;
+      this.state.freeUpgradeConsumed = true;
+      this.state.freeUpgradeMode = mode;
+      mark(this.state, 'freeUpgradeUsedCampaignMs', factory.sessionMs);
+      if (!this.state.freeUpgradeRewardId) {
+        this.state.freeUpgradeRewardId = `fu_${this.state.currentSessionId}`;
+      }
+      return {
+        ok: true,
+        mode,
+        cashDelta: 0,
+        levelBefore,
+        levelAfter,
+      };
+    }
+
+    // bonus_tier — do NOT call tryPurchase / spend; level stays MAX
+    this.state.bonusUpgradeGranted = true;
+    this.state.bonusUpgradeMachineId = machineId;
+    this.state.bonusUpgradeType = type;
+    this.state.bonusLevelDelta = 1;
+
+    const cashAfter = factory.economy.coins;
+    const levelAfter = factory.upgrades.getLevel(machineId, type);
+    if (cashAfter !== cashBefore || levelAfter !== levelBefore) {
+      this.state.bonusUpgradeGranted = false;
+      this.state.bonusUpgradeMachineId = null;
+      this.state.bonusUpgradeType = null;
+      this.state.bonusLevelDelta = 0;
+      return fail('verify_failed', mode, levelBefore, levelBefore);
+    }
+
+    this.state.freeUpgradeCredits = 0;
+    this.state.freeUpgradeUsed = true;
+    this.state.freeUpgradeConsumed = true;
+    this.state.freeUpgradeMode = mode;
+    mark(this.state, 'freeUpgradeUsedCampaignMs', factory.sessionMs);
+    if (!this.state.freeUpgradeRewardId) {
+      this.state.freeUpgradeRewardId = `fu_${this.state.currentSessionId}`;
+    }
+
+    return {
+      ok: true,
+      mode,
+      cashDelta: 0,
+      levelBefore,
+      levelAfter,
+      effectiveLevelAfter: levelBefore + this.state.bonusLevelDelta,
+    };
+  }
+
   tryConsumeFreeUpgrade(
     factory: Factory,
     machineId: MachineId,
     type: UpgradeType,
   ): { ok: boolean; mode: FreeUpgradeMode; cashDelta: number } {
-    if (this.state.freeUpgradeCredits <= 0 || this.state.freeUpgradeUsed) {
-      return { ok: false, mode: 'none', cashDelta: 0 };
-    }
-    const mode = this.computeFreeUpgradeMode(factory);
-    this.state.freeUpgradeMode = mode;
-    this.state.freeUpgradeCredits = 0;
-    this.state.freeUpgradeUsed = true;
-    mark(this.state, 'freeUpgradeUsedCampaignMs', factory.sessionMs);
-
-    if (mode === 'bonus_tier') {
-      this.state.bonusUpgradeGranted = true;
-      this.state.bonusUpgradeMachineId = machineId;
-      this.state.bonusUpgradeType = type;
-    }
-    return { ok: true, mode, cashDelta: 0 };
+    const r = this.applyFreeUpgrade(factory, machineId, type);
+    return { ok: r.ok, mode: r.mode, cashDelta: r.cashDelta };
   }
 
   onSessionBoot(factory: Factory, isLoadedSave: boolean): McEvent[] {
@@ -1174,7 +1796,7 @@ export class McCampaign {
     ) {
       this.state.returnChallengeStarted = true;
       this.state.phase = 'return_challenge';
-      this.beginReturnChallenge(factory);
+      this.beginReturnCalibration(factory);
       mark(this.state, 'returnShownCampaignMs', factory.sessionMs);
       const absenceMs =
         this.state.lastSessionEndedAt != null
@@ -1192,6 +1814,7 @@ export class McCampaign {
         payload: {
           kind: this.state.returnChallenge.kind,
           batchTarget: this.state.returnChallenge.batchTarget,
+          returnPhase: this.state.returnChallenge.returnPhase,
         },
       });
       ev.push({
@@ -1206,8 +1829,17 @@ export class McCampaign {
       !inMidCampaign
     ) {
       this.state.phase = 'return_challenge';
+      // Resume mid-order / mid-calib without resetting counters
       if (this.state.returnChallenge.startedAtMs == null) {
-        this.beginReturnChallenge(factory);
+        this.beginReturnCalibration(factory);
+      } else if (
+        this.state.returnChallenge.returnPhase === 'preview' ||
+        (this.state.returnChallenge.returnPhase === 'calibration' &&
+          this.state.returnChallenge.calibrationMs <
+            SMARTPHONE_CAMPAIGN.returnChallenge.calibrationMinValidMs &&
+          this.state.returnChallenge.startedAtMs == null)
+      ) {
+        this.beginReturnCalibration(factory);
       }
     }
 
@@ -1261,6 +1893,13 @@ export class McCampaign {
     return remaining / Math.max(0.25, capped);
   }
 
+  private formatReturnProgress(rc: ReturnChallengeState): string {
+    if (rc.kind === 'margin') {
+      return `$${Math.floor(rc.batchProgress)} / $${rc.batchTarget}`;
+    }
+    return `${Math.floor(rc.batchProgress)} / ${rc.batchTarget} phones`;
+  }
+
   label(factory: Factory): string {
     const s = this.state;
     switch (s.phase) {
@@ -1293,10 +1932,22 @@ export class McCampaign {
       case 'return_challenge': {
         const rc = s.returnChallenge;
         if (!rc) return 'RETURN CHALLENGE';
-        if (rc.kind === 'margin') {
-          return `MARGIN RESTART — $${Math.floor(rc.batchProgress)} / $${rc.batchTarget}`;
+        if (
+          rc.returnPhase === 'calibration' ||
+          rc.returnPhase === 'preview'
+        ) {
+          return 'RETURN SHIFT — CALIBRATING LINE';
         }
-        return `FLOW RESTART — ${Math.floor(rc.batchProgress)} / ${rc.batchTarget} phones`;
+        if (rc.returnPhase === 'order_1') {
+          return `RETURN SHIFT — ORDER 1/3 — ${this.formatReturnProgress(rc)}`;
+        }
+        if (rc.returnPhase === 'order_2') {
+          return `RETURN SHIFT — ORDER 2/3 — ${this.formatReturnProgress(rc)}`;
+        }
+        if (rc.returnPhase === 'order_3') {
+          return `RETURN SHIFT — FINAL ORDER — ${this.formatReturnProgress(rc)}`;
+        }
+        return `RETURN SHIFT — ${this.formatReturnProgress(rc)}`;
       }
       case 'return_complete':
         return s.freeUpgradeCredits > 0
@@ -1342,6 +1993,9 @@ export class McCampaign {
       ];
     }
     if (s.phase === 'smartphone_launch') {
+      const branch = factory.sessionGoal.selectedBranch ?? 'throughput';
+      const cfg = SMARTPHONE_CAMPAIGN.launch;
+      const baseline = s.launchBaseline;
       const lines: string[] = [
         `Batch ${Math.floor(s.launchBatchProgress)} / ${s.launchBatchTarget}`,
         `OUTPUT ${factory.getThroughputPerMin().toFixed(0)} · INC $${factory.lineIncomePerMin().toFixed(0)}/min · WIP ${factory.getWip()}`,
@@ -1356,25 +2010,80 @@ export class McCampaign {
           `Suggested: M${r.machineId + 1} ${r.type.toUpperCase()} — ${r.reason}`,
         );
       }
+      const batchDone =
+        s.launchBatchTarget > 0 &&
+        s.launchBatchProgress >= s.launchBatchTarget;
+      const actionDone =
+        s.launchActionGate === 'complete' ||
+        s.launchActionGate === 'waived_at_cap';
+      if (batchDone && actionDone && baseline) {
+        if (branch === 'margin') {
+          const need = baseline.outputPerMin * cfg.marginMinOutputMult;
+          const now = Math.max(
+            factory.getThroughputPerMin(),
+            s.launchTpEma,
+          );
+          if (s.launchSustainOkMs > 0) {
+            lines.push(
+              `HOLD OUTPUT ≥ ${need.toFixed(0)} · ${(s.launchSustainOkMs / 1000).toFixed(1)}s`,
+            );
+          } else {
+            lines.push(
+              `NEED OUTPUT ≥ ${need.toFixed(0)} (now ${now.toFixed(0)})`,
+            );
+          }
+        } else {
+          const wip = factory.getWip();
+          if (wip <= cfg.maxWip && s.launchSustainOkMs > 0) {
+            lines.push(
+              `HOLD WIP ≤ ${cfg.maxWip} · ${(s.launchSustainOkMs / 1000).toFixed(1)}s`,
+            );
+          } else {
+            lines.push(`NEED WIP ≤ ${cfg.maxWip} (now ${wip})`);
+          }
+        }
+      }
       return lines;
     }
     if (s.phase === 'return_preview' || s.phase === 'shift_1_complete') {
       const rc = s.returnChallenge;
+      const kind = rc?.kind === 'margin' ? 'MARGIN' : 'FLOW';
       return [
         'SHIFT 1 COMPLETE',
         rc
-          ? rc.kind === 'margin'
-            ? `Next visit: earn $${rc.batchTarget} from phones`
-            : `Next visit: sell ${rc.batchTarget} phones`
+          ? `Next visit: ${kind} — 3 adaptive orders after calibration`
           : 'Challenge waits for your next visit',
       ];
     }
     if (s.phase === 'return_challenge' && s.returnChallenge) {
       const rc = s.returnChallenge;
-      return [
-        rc.kind === 'margin' ? 'MARGIN RESTART' : 'FLOW RESTART',
-        `Progress ${Math.floor(rc.progress * 100)}% · WIP ≤ ${rc.maxWip}`,
+      if (
+        rc.returnPhase === 'calibration' ||
+        rc.returnPhase === 'preview'
+      ) {
+        return [
+          'CALIBRATING LINE',
+          `Valid sim ${(rc.calibrationMs / 1000).toFixed(1)}s / ${(SMARTPHONE_CAMPAIGN.returnChallenge.calibrationMs / 1000).toFixed(0)}s`,
+          `OUTPUT ${factory.getThroughputPerMin().toFixed(0)} · WIP ${factory.getWip()}`,
+        ];
+      }
+      const orderLabel =
+        rc.returnPhase === 'order_3'
+          ? 'FINAL ORDER'
+          : `ORDER ${rc.returnOrderIndex}/3`;
+      const lines = [
+        orderLabel,
+        `${this.formatReturnProgress(rc)}`,
+        `WIP ≤ ${rc.maxWip} · hold ${(rc.returnFinalConditionHoldMs / 1000).toFixed(1)}s`,
       ];
+      if (rc.capacityFeedback) {
+        lines.push('ORDER COMPLETE');
+        lines.push(`New capacity detected: ${rc.capacityFeedback}`);
+        if (rc.capacityCopy) {
+          lines.push(rc.capacityCopy);
+        }
+      }
+      return lines;
     }
     if (s.phase === 'return_complete') {
       if (s.freeUpgradeCredits > 0) {
@@ -1455,8 +2164,15 @@ export class McCampaign {
           }
         : null,
       returnChallenge: this.state.returnChallenge
-        ? { ...this.state.returnChallenge }
+        ? {
+            ...this.state.returnChallenge,
+            completedOrderSummaries:
+              this.state.returnChallenge.completedOrderSummaries.map((s) => ({
+                ...s,
+              })),
+          }
         : null,
+      fundingPurchases: this.state.fundingPurchases.map((r) => ({ ...r })),
     };
   }
 
@@ -1468,6 +2184,22 @@ export class McCampaign {
     const base = blankMcState(
       data.currentSessionId ?? sessionId ?? newSessionId(),
     );
+
+    // Migrate legacy fundingPurchases number → count + empty array
+    let fundingPurchases: FundingPurchaseRecord[] = [];
+    let fundingPurchaseCount = 0;
+    const rawPurchases = (data as { fundingPurchases?: unknown }).fundingPurchases;
+    if (typeof rawPurchases === 'number') {
+      fundingPurchaseCount = Math.max(0, rawPurchases);
+      fundingPurchases = [];
+    } else if (Array.isArray(rawPurchases)) {
+      fundingPurchases = rawPurchases as FundingPurchaseRecord[];
+      fundingPurchaseCount =
+        data.fundingPurchaseCount ?? fundingPurchases.length;
+    } else if (typeof data.fundingPurchaseCount === 'number') {
+      fundingPurchaseCount = data.fundingPurchaseCount;
+    }
+
     this.state = {
       ...base,
       ...data,
@@ -1484,15 +2216,52 @@ export class McCampaign {
         (data.fundingPolicy === 'balanced' || data.fundingPolicy === 'fast'),
       freeUpgradeCredits: Math.max(0, data.freeUpgradeCredits ?? 0),
       freeUpgradeMode: data.freeUpgradeMode ?? 'none',
+      freeUpgradeConsumed: data.freeUpgradeConsumed ?? false,
+      freeUpgradeRewardId: data.freeUpgradeRewardId ?? null,
+      bonusLevelDelta: data.bonusLevelDelta ?? 0,
+      fundingPurchaseCount,
+      fundingPurchases,
+      upgradesBoughtBeforeFunding:
+        data.upgradesBoughtBeforeFunding ?? null,
+      launchHydrationActive: data.launchHydrationActive ?? false,
+      launchLastObservedCounter: data.launchLastObservedCounter ?? 0,
+      launchLastObservedPhones: data.launchLastObservedPhones ?? 0,
+      launchLastObservedRevenue: data.launchLastObservedRevenue ?? 0,
+      launchProgressBeforeSave: data.launchProgressBeforeSave ?? null,
+      launchProgressAfterHydrate: data.launchProgressAfterHydrate ?? null,
+      launchProgressAfterFirstValidStep:
+        data.launchProgressAfterFirstValidStep ?? null,
+      hydrationProgressDelta: data.hydrationProgressDelta ?? 0,
+      firstValidStepDelta: data.firstValidStepDelta ?? 0,
+      hydrationComplete: data.hydrationComplete ?? true,
       campaignMarkers: {
         ...blankMarkers(),
         ...(data.campaignMarkers ?? {}),
       },
       launchBaseline: data.launchBaseline ?? null,
+      rawLaunchBaseline: data.rawLaunchBaseline ?? null,
+      eventNeutralLaunchBaseline:
+        data.eventNeutralLaunchBaseline ?? data.launchBaseline ?? null,
+      baselineEventMultiplier: data.baselineEventMultiplier ?? 1,
+      launchTargetBasis: data.launchTargetBasis ?? null,
+      launchSampleAccumTpNeutral: data.launchSampleAccumTpNeutral ?? 0,
+      launchSampleAccumIncomeNeutral:
+        data.launchSampleAccumIncomeNeutral ?? 0,
+      launchSampleEventWeightedMs: data.launchSampleEventWeightedMs ?? 0,
       launchRecommended: data.launchRecommended ?? null,
       shiftSummary: data.shiftSummary ?? null,
       returnChallenge: data.returnChallenge
-        ? { ...blankReturn(), ...data.returnChallenge }
+        ? {
+            ...blankReturn(),
+            ...data.returnChallenge,
+            completedOrderSummaries: Array.isArray(
+              data.returnChallenge.completedOrderSummaries,
+            )
+              ? data.returnChallenge.completedOrderSummaries.map((s) => ({
+                  ...s,
+                }))
+              : [],
+          }
         : null,
     };
 
@@ -1517,6 +2286,14 @@ export class McCampaign {
         Math.ceil((bl.outputPerMin * eq) / 60),
       );
       this.state.launchActionGate = this.state.launchActionGate || 'pending';
+    }
+
+    // Launch hydration barrier on load mid-commissioning / sampling
+    if (
+      this.state.phase === 'smartphone_launch' ||
+      this.state.phase === 'baseline_sampling'
+    ) {
+      this.armHydrationBarrier();
     }
   }
 }

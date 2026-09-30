@@ -60,8 +60,11 @@ export type TelemetryEventName =
   | 'return_challenge_shown'
   | 'return_challenge_start'
   | 'return_challenge_complete'
+  | 'return_order_start'
+  | 'return_order_complete'
   | 'free_upgrade_granted'
   | 'free_upgrade_used'
+  | 'free_upgrade_applied'
   | 'payoff_preview_used'
   | 'economic_metric_view'
   | 'hint_displayed'
@@ -73,7 +76,21 @@ export type TelemetryEventName =
   | 'onboarding_complete'
   | 'tutorial_hint_shown'
   | 'tutorial_skip'
-  | 'confusion_signal';
+  | 'confusion_signal'
+  | 'redline_available'
+  | 'redline_cta_clicked'
+  | 'redline_tutorial_start'
+  | 'redline_first_switch'
+  | 'redline_contract_start'
+  | 'redline_contract_complete'
+  | 'redline_contract_miss'
+  | 'redline_summary_shown'
+  | 'redline_reward_granted'
+  | 'redline_replay_start'
+  | 'redline_combo_peak'
+  | 'redline_heat_warning'
+  | 'redline_jam_created'
+  | 'redline_jam_resolved';
 
 export interface TelemetryEvent {
   name: TelemetryEventName;
@@ -317,10 +334,20 @@ export class Telemetry {
         } | null;
         cheapestRelevantUpgradeCostAtFundingStart?: number | null;
         secondCheapestRelevantUpgradeCost?: number | null;
-        fundingPurchases?: number;
+        fundingPurchases?: unknown;
+        fundingPurchaseCount?: number;
+        upgradesBoughtBeforeFunding?: number | null;
         smartphonesSoldTotal?: number;
         smartphoneRevenueTotal?: number;
         campaignMarkers?: object;
+        hydrationProgressDelta?: number;
+        firstValidStepDelta?: number;
+        launchProgressBeforeSave?: number | null;
+        launchProgressAfterHydrate?: number | null;
+        launchProgressAfterFirstValidStep?: number | null;
+        freeUpgradeConsumed?: boolean;
+        freeUpgradeRewardId?: string | null;
+        bonusLevelDelta?: number;
       };
     };
     sessionGoal: { selectedBranch: string | null };
@@ -328,6 +355,7 @@ export class Telemetry {
     lineIncomePerMin: () => number;
     getWip: () => number;
     economy: { coins: number };
+    upgrades?: { totalPurchased: number };
   }): Record<string, unknown> {
     const base = this.buildReport();
     const mc = factory?.mc;
@@ -369,8 +397,14 @@ export class Telemetry {
               : null,
             returnTarget: rc?.batchTarget ?? null,
             returnProgress: rc?.batchProgress ?? null,
+            returnPhase: (rc as { returnPhase?: string } | null)?.returnPhase ?? null,
+            returnOrderIndex:
+              (rc as { returnOrderIndex?: number } | null)?.returnOrderIndex ?? null,
             freeUpgradeMode: st.freeUpgradeMode ?? 'none',
             freeUpgradeCashDelta: 0,
+            freeUpgradeConsumed: st.freeUpgradeConsumed ?? false,
+            hydrationProgressDelta: st.hydrationProgressDelta ?? null,
+            launchProgressAfterHydrate: st.launchProgressAfterHydrate ?? null,
           }
         : null,
       funding: st
@@ -382,11 +416,21 @@ export class Telemetry {
               second: st.secondCheapestRelevantUpgradeCost ?? null,
             },
             affordableUpgradeOpportunities: null,
-            actualPurchases: st.fundingPurchases ?? 0,
+            fundingPurchaseCount: st.fundingPurchaseCount ?? 0,
+            fundingPurchases: Array.isArray(st.fundingPurchases)
+              ? st.fundingPurchases
+              : [],
+            upgradesBoughtBeforeFunding: st.upgradesBoughtBeforeFunding ?? null,
+            totalUpgradesBought: factory?.upgrades?.totalPurchased ?? null,
+            actualPurchases: st.fundingPurchaseCount ?? 0,
           }
         : null,
       returnDiag: rc
         ? {
+            returnPhase:
+              (rc as { returnPhase?: string }).returnPhase ?? null,
+            returnOrderIndex:
+              (rc as { returnOrderIndex?: number }).returnOrderIndex ?? null,
             referenceRate:
               rc.kind === 'margin'
                 ? (rc.referenceRevenuePerSec ?? null)
@@ -405,6 +449,9 @@ export class Telemetry {
                 ? (rc.revenueAtReturnStart ?? null)
                 : (rc.phonesAtReturnStart ?? null),
             countedProgress: rc.batchProgress,
+            completedOrders:
+              (rc as { completedOrderSummaries?: unknown[] })
+                .completedOrderSummaries ?? [],
             expectedDuration: expectedReturnSec,
             observedDuration: observedReturnSec,
             observedToExpectedRatio:

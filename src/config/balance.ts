@@ -1,6 +1,6 @@
 /** Central game balance — industrial-casual factory. */
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 export const SAVE_KEY = 'tiny-factory-rush-save';
 
 export const MACHINE_COUNT = 3;
@@ -317,6 +317,10 @@ export {
   computeFundTarget,
   roundReadableFund,
   clampReturnReference,
+  sanitizeRate,
+  classifyReturnTargetChange,
+  returnOrderCapacityCopy,
+  type ReturnTargetChange,
 } from './smartphoneCampaign';
 
 export const HINT_QUEUE = {

@@ -13,8 +13,10 @@ import { Factory } from '../systems/Factory';
 import { Platform } from '../systems/Platform';
 import { SaveSystem, type SaveData } from '../systems/SaveSystem';
 import { Stats } from '../systems/Stats';
-import { Telemetry } from '../systems/Telemetry';
+import { Telemetry, type TelemetryEventName } from '../systems/Telemetry';
 import type { ActiveBoost } from '../systems/Events';
+import { REDLINE, type RedlineDock } from '../config/redline';
+import { planRedlineLayout, type RedlineLayoutPlan } from '../systems/RedlineLayout';
 
 export interface GameRegistry {
   factory: Factory;
@@ -59,7 +61,18 @@ export class GameScene extends Phaser.Scene {
     machineX: number[];
     bufferX: number[];
     y: number;
-  } = { machineX: [], bufferX: [], y: LAYOUT.factoryY };
+    sinkX: number;
+  } = { machineX: [], bufferX: [], y: LAYOUT.factoryY, sinkX: 0 };
+
+  private redlinePlan: RedlineLayoutPlan | null = null;
+  private redlineContainer!: Phaser.GameObjects.Container;
+  private redlineRouteHighlight!: Phaser.GameObjects.Graphics;
+  private redlineSwitchBtn!: Phaser.GameObjects.Container;
+  private redlineSwitchLabel!: Phaser.GameObjects.Text;
+  private redlineModeLabel!: Phaser.GameObjects.Text;
+  private redlineStdDock!: Phaser.GameObjects.Container;
+  private redlinePriDock!: Phaser.GameObjects.Container;
+  private reducedMotion = false;
 
   constructor() {
     super('GameScene');
@@ -72,7 +85,13 @@ export class GameScene extends Phaser.Scene {
     this.factory = new Factory();
     this.drawBackground();
     this.buildFactoryView();
+    this.buildRedlineView();
     this.buildBanners();
+
+    this.reducedMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     this.saveSystem = new SaveSystem(
       {
@@ -312,6 +331,26 @@ export class GameScene extends Phaser.Scene {
       onConvergenceGoalComplete: (payload) => {
         this.telemetry.emit('convergence_goal_complete', payload);
       },
+      onRedlineTelemetry: (name, props) => {
+        this.telemetry.emit(name as TelemetryEventName, props);
+      },
+      onRedlineUnlock: () => {
+        this.game.events.emit('redline-unlock');
+      },
+      onRedlineDelivery: (correct, combo, comboChanged) => {
+        this.game.events.emit('redline-delivery', {
+          correct,
+          combo,
+          comboChanged,
+        });
+        if (!this.muted) {
+          this.audio.play(correct ? 'sell' : 'click');
+        }
+      },
+      onRedlinePhase: (phase) => {
+        this.game.events.emit('redline-phase', { phase });
+        this.syncRedlineVisuals();
+      },
       onNextMilestoneShown: (payload) => {
         this.telemetry.emit('next_milestone_shown', payload);
         this.telemetry.once('toys_milestone_shown', payload);
@@ -523,7 +562,10 @@ export class GameScene extends Phaser.Scene {
       'return_challenge_shown',
       'return_challenge_start',
       'return_challenge_complete',
+      'return_order_start',
+      'return_order_complete',
       'free_upgrade_granted',
+      'free_upgrade_applied',
     ]);
     if (once.has(type)) {
       this.telemetry.once(type as Parameters<Telemetry['once']>[0], payload);
@@ -585,6 +627,7 @@ export class GameScene extends Phaser.Scene {
     this.stats.update(dt);
     this.telemetry.noteUpgradesAtFive(this.factory.upgrades.totalPurchased);
     this.syncVisuals();
+    this.syncRedlineVisuals();
     this.syncHintBanner();
   }
 
@@ -689,6 +732,7 @@ export class GameScene extends Phaser.Scene {
       machineX: [positions.m0, positions.m1, positions.m2],
       bufferX: [positions.b0, positions.b1],
       y: factoryY,
+      sinkX: positions.sink,
     };
 
     // Source label
@@ -708,20 +752,250 @@ export class GameScene extends Phaser.Scene {
       this.buildBuffer(i, this.layoutNodes.bufferX[i]!);
     }
 
+    // Legacy sink marker kept as line end anchor (fork attaches after)
     this.add
       .image(positions.sink, factoryY, 'coin')
-      .setDisplaySize(36, 36)
-      .setTint(0xffd166);
+      .setDisplaySize(28, 28)
+      .setTint(0xffd166)
+      .setAlpha(0.55);
     this.add
-      .text(positions.sink, factoryY + 42, 'SINK', {
+      .text(positions.sink, factoryY + 38, 'OUT', {
         fontFamily: 'Segoe UI, system-ui, sans-serif',
-        fontSize: '12px',
+        fontSize: '11px',
         color: '#ffd166',
       })
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setAlpha(0.7);
 
     void machineWidth;
     void machineHeight;
+  }
+
+  private buildRedlineView(): void {
+    const plan = planRedlineLayout(
+      this.layoutNodes.sinkX,
+      this.layoutNodes.y,
+      LAYOUT.width,
+      LAYOUT.height,
+    );
+    this.redlinePlan = plan;
+
+    this.redlineContainer = this.add.container(0, 0).setDepth(25);
+    this.redlineRouteHighlight = this.add.graphics().setDepth(24);
+    this.redlineContainer.add(this.redlineRouteHighlight);
+
+    const stdVis = REDLINE.dockVisual.standard;
+    const priVis = REDLINE.dockVisual.priority;
+
+    this.redlineStdDock = this.makeDock(
+      plan.standardDock.x + plan.standardDock.w / 2,
+      plan.standardDock.y + plan.standardDock.h / 2,
+      plan.standardDock.w,
+      plan.standardDock.h,
+      stdVis.color,
+      `${stdVis.symbol} ${stdVis.letter}`,
+      'STANDARD',
+    );
+    this.redlinePriDock = this.makeDock(
+      plan.priorityDock.x + plan.priorityDock.w / 2,
+      plan.priorityDock.y + plan.priorityDock.h / 2,
+      plan.priorityDock.w,
+      plan.priorityDock.h,
+      priVis.color,
+      `${priVis.symbol} ${priVis.letter}`,
+      'PRIORITY',
+    );
+    this.redlineContainer.add([this.redlineStdDock, this.redlinePriDock]);
+
+    const sw = plan.switchControl;
+    const swBody = this.add
+      .rectangle(0, 0, sw.w, sw.h, 0x243447, 0.95)
+      .setStrokeStyle(2, 0x7a8fa6);
+    this.redlineSwitchLabel = this.add
+      .text(0, -6, 'ROUTE', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '12px',
+        fontStyle: 'bold',
+        color: '#e8eef5',
+      })
+      .setOrigin(0.5);
+    this.redlineModeLabel = this.add
+      .text(0, 10, 'AUTO', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '11px',
+        color: '#8ab4c8',
+      })
+      .setOrigin(0.5);
+    this.redlineSwitchBtn = this.add.container(
+      sw.x + sw.w / 2,
+      sw.y + sw.h / 2,
+      [swBody, this.redlineSwitchLabel, this.redlineModeLabel],
+    );
+    this.redlineSwitchBtn.setSize(sw.w, sw.h);
+    this.redlineSwitchBtn.setInteractive({ useHandCursor: true });
+    this.redlineSwitchBtn.on('pointerdown', () => this.onRedlineSwitchTap());
+    this.redlineContainer.add(this.redlineSwitchBtn);
+
+    this.syncRedlineVisuals();
+  }
+
+  private makeDock(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    color: number,
+    symbol: string,
+    label: string,
+  ): Phaser.GameObjects.Container {
+    const body = this.add
+      .rectangle(0, 0, w, h, color, 0.35)
+      .setStrokeStyle(2, color);
+    const sym = this.add
+      .text(0, -6, symbol, {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '13px',
+        fontStyle: 'bold',
+        color: '#e8eef5',
+      })
+      .setOrigin(0.5);
+    const lab = this.add
+      .text(0, 10, label, {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '9px',
+        color: '#cde0f0',
+      })
+      .setOrigin(0.5);
+    return this.add.container(x, y, [body, sym, lab]);
+  }
+
+  private onRedlineSwitchTap(): void {
+    if (!this.factory.redline.isManual()) return;
+    const cur = this.factory.redline.selectedRoute();
+    const next: RedlineDock = cur === 'standard' ? 'priority' : 'standard';
+    const r = this.factory.setRedlineRoute(next);
+    if (r.jammed) {
+      this.offerHint({
+        id: 'redline_jam',
+        text: 'SWITCH JAMMED — tap COOL SWITCH or wait',
+        priority: 'critical',
+        ttlMs: 3_000,
+      });
+      this.game.events.emit('redline-jam');
+    } else if (r.ok) {
+      this.syncRedlineVisuals();
+      if (!this.muted) this.audio.play('click');
+    }
+  }
+
+  /** Public API for UIScene CTA / summary actions. */
+  startRedlineFromCta(): boolean {
+    this.factory.redline.clickCta();
+    const ok = this.factory.startRedlineContract();
+    if (ok) {
+      const c = this.factory.redline.getContract();
+      if (c && c.state.tutorialHintsShown > 0) {
+        this.offerHint({
+          id: 'redline_hint_route',
+          text: 'Tap ROUTE to switch Standard ↔ Priority',
+          priority: 'critical',
+          ttlMs: 5_000,
+        });
+        this.offerHint({
+          id: 'redline_hint_dest',
+          text: 'Match the dock to each product destination (S/A vs P/B)',
+          priority: 'objective',
+          ttlMs: 5_000,
+        });
+      }
+      this.syncRedlineVisuals();
+      this.game.events.emit('redline-started');
+    }
+    return ok;
+  }
+
+  coolRedlineFromUi(): boolean {
+    const ok = this.factory.coolRedlineSwitch();
+    this.syncRedlineVisuals();
+    return ok;
+  }
+
+  continueRedlineFromUi(): void {
+    this.factory.claimRedlineReward();
+    this.factory.continueRedlineSummary();
+    this.syncRedlineVisuals();
+    this.game.events.emit('redline-continued');
+  }
+
+  retryRedlineFromUi(): boolean {
+    const ok = this.factory.retryRedlineContract();
+    this.syncRedlineVisuals();
+    return ok;
+  }
+
+  private syncRedlineVisuals(): void {
+    if (!this.redlinePlan || !this.redlineRouteHighlight) return;
+    const phase = this.factory.redline.phase();
+    const manual = this.factory.redline.isManual();
+    const route = this.factory.redline.selectedRoute();
+    const plan = this.redlinePlan;
+
+    this.redlineModeLabel.setText(manual ? 'MANUAL' : 'AUTO');
+    this.redlineModeLabel.setColor(manual ? '#ffd166' : '#8ab4c8');
+    this.redlineSwitchBtn.setAlpha(phase === 'locked' ? 0.55 : 1);
+
+    const g = this.redlineRouteHighlight;
+    g.clear();
+    const activeColor =
+      route === 'priority'
+        ? REDLINE.dockVisual.priority.color
+        : REDLINE.dockVisual.standard.color;
+    const inactiveAlpha = 0.25;
+    // Stem from OUT to fork
+    g.lineStyle(4, 0x7a8fa6, 0.7);
+    g.lineBetween(
+      this.layoutNodes.sinkX,
+      plan.forkY,
+      plan.forkX,
+      plan.forkY,
+    );
+    // Standard branch
+    g.lineStyle(
+      route === 'standard' ? 5 : 3,
+      REDLINE.dockVisual.standard.color,
+      route === 'standard' ? 1 : inactiveAlpha,
+    );
+    g.lineBetween(
+      plan.forkX,
+      plan.forkY,
+      plan.standardDock.x + plan.standardDock.w / 2,
+      plan.standardDock.y + plan.standardDock.h / 2,
+    );
+    // Priority branch
+    g.lineStyle(
+      route === 'priority' ? 5 : 3,
+      REDLINE.dockVisual.priority.color,
+      route === 'priority' ? 1 : inactiveAlpha,
+    );
+    g.lineBetween(
+      plan.forkX,
+      plan.forkY,
+      plan.priorityDock.x + plan.priorityDock.w / 2,
+      plan.priorityDock.y + plan.priorityDock.h / 2,
+    );
+
+    // Highlight active dock
+    this.redlineStdDock.setScale(route === 'standard' ? 1.08 : 1);
+    this.redlinePriDock.setScale(route === 'priority' ? 1.08 : 1);
+    this.redlineStdDock.setAlpha(route === 'standard' ? 1 : 0.65);
+    this.redlinePriDock.setAlpha(route === 'priority' ? 1 : 0.65);
+
+    if (manual && !this.reducedMotion) {
+      this.redlineSwitchBtn.setScale(1.02);
+    } else {
+      this.redlineSwitchBtn.setScale(1);
+    }
+    void activeColor;
   }
 
   private buildMachine(id: MachineId, x: number): void {
@@ -1259,10 +1533,15 @@ export class GameScene extends Phaser.Scene {
 
   buyUpgrade(machineId: MachineId, type: UpgradeType): boolean {
     const before = this.factory.upgrades.totalPurchased;
+    const freeCreditsBefore = this.factory.mc.state.freeUpgradeCredits;
     const beforeTp = this.factory.getThroughputPerMin();
     const beforeWip = this.factory.getWip();
     const ok = this.factory.buyUpgrade(machineId, type);
-    if (ok && this.factory.upgrades.totalPurchased > before) {
+    const freeApplied =
+      ok &&
+      freeCreditsBefore > 0 &&
+      this.factory.mc.state.freeUpgradeCredits < freeCreditsBefore;
+    if (ok && (this.factory.upgrades.totalPurchased > before || freeApplied)) {
       this.stats.recordUpgrade();
       this.audio.play('upgrade');
       this.telemetry.upgradesBought += 1;

@@ -314,18 +314,41 @@ describe('M-C.1 return + free upgrade', () => {
     }
     f2.loadRuntime(snap);
     f2.bootMcSession(true);
-    // Complete return by easing targets
-    const rc = f2.mc.state.returnChallenge!;
-    rc.batchTarget = 2;
-    rc.startedAtMs =
-      f2.sessionMs - SMARTPHONE_CAMPAIGN.returnChallenge.armGraceMs - 1;
+    // Complete three tiny adaptive orders
     let h = 0;
-    while (!f2.mc.state.returnChallengeComplete && h < 400) {
-      f2.buyUpgrade(1, 'speed'); // marks postStartInput via noteQualified or return
-      f2.mc.state.returnChallenge!.postStartInput = true;
-      f2.mc.state.returnChallenge!.batchProgress = 2;
-      f2.mc.state.returnChallenge!.sustainOkMs =
-        SMARTPHONE_CAMPAIGN.returnChallenge.sustainWindowMs;
+    while (!f2.mc.state.returnChallengeComplete && h < 800) {
+      const rc = f2.mc.state.returnChallenge!;
+      if (rc.returnPhase === 'calibration' || rc.returnPhase === 'preview') {
+        rc.calibrationMs = SMARTPHONE_CAMPAIGN.returnChallenge.calibrationMs;
+        rc.calibrationEventWeightedMs =
+          SMARTPHONE_CAMPAIGN.returnChallenge.calibrationMs;
+        // Force a tiny measured rate via counter bump
+        f2.mc.state.smartphonesSoldTotal = rc.calibrationPhonesStart + 5;
+        f2.mc.state.smartphoneRevenueTotal = rc.calibrationRevenueStart + 200;
+      } else if (rc.returnPhase.startsWith('order')) {
+        rc.returnOrderTarget = 2;
+        rc.batchTarget = 2;
+        rc.returnOrderStartCounter =
+          rc.kind === 'margin'
+            ? f2.mc.state.smartphoneRevenueTotal
+            : f2.mc.state.smartphonesSoldTotal;
+        if (rc.kind === 'margin') {
+          f2.mc.state.smartphoneRevenueTotal = rc.returnOrderStartCounter + 2;
+        } else {
+          f2.mc.state.smartphonesSoldTotal = rc.returnOrderStartCounter + 2;
+        }
+        rc.returnOrderProgress = 2;
+        rc.batchProgress = 2;
+        rc.returnInputSeen = true;
+        rc.postStartInput = true;
+        rc.returnFinalConditionHoldMs =
+          SMARTPHONE_CAMPAIGN.returnChallenge.sustainWindowMs;
+        rc.sustainOkMs = rc.returnFinalConditionHoldMs;
+        rc.returnOrderOutputReference = Math.max(
+          1,
+          f2.getThroughputPerMin(),
+        );
+      }
       sim(f2, 500);
       h += 1;
     }
@@ -336,6 +359,7 @@ describe('M-C.1 return + free upgrade', () => {
     expect(f2.economy.coins).toBe(0);
     expect(f2.mc.state.bonusUpgradeGranted).toBe(true);
     expect(f2.mc.state.freeUpgradeCredits).toBe(0);
+    expect(f2.mc.state.freeUpgradeConsumed).toBe(true);
 
     const snap2 = f2.toSnapshot();
     const f3 = new Factory();

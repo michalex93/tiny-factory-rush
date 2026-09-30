@@ -40,6 +40,15 @@ export class UIScene extends Phaser.Scene {
   private refreshAcc = 0;
   private upgradeViewLogged = false;
 
+  private redlineCta!: Phaser.GameObjects.Container;
+  private redlineHud!: Phaser.GameObjects.Text;
+  private redlinePreview!: Phaser.GameObjects.Text;
+  private redlineHeat!: Phaser.GameObjects.Text;
+  private redlineCoolBtn!: Phaser.GameObjects.Text;
+  private redlineSummary!: Phaser.GameObjects.Container;
+  private redlineSummaryText!: Phaser.GameObjects.Text;
+  private redlineUnlockAtMs: number | null = null;
+
   constructor() {
     super('UIScene');
   }
@@ -53,6 +62,7 @@ export class UIScene extends Phaser.Scene {
     this.buildUnlockButton();
     this.buildUpgradePanel();
     this.buildMute();
+    this.buildRedlineUi();
 
     // Start hidden — progressive disclosure
     this.setUpgradePanelVisible(false);
@@ -74,12 +84,18 @@ export class UIScene extends Phaser.Scene {
     this.game.events.on('session-goal', this.onSessionGoalEvent, this);
     this.game.events.on('optimization-choice', this.onChoiceReady, this);
     this.game.events.on('payoff-banner', this.onPayoffBanner, this);
+    this.game.events.on('redline-unlock', this.onRedlineUnlock, this);
+    this.game.events.on('redline-delivery', this.onRedlineDelivery, this);
+    this.game.events.on('redline-phase', () => this.refreshRedlineUi(), this);
+    this.game.events.on('redline-started', () => this.refreshRedlineUi(), this);
 
     this.events.on('shutdown', () => {
       this.game.events.off('sell', this.onSell, this);
       this.game.events.off('unlock', this.onUnlockFeedback, this);
       this.game.events.off('upgrade-impact', this.onImpact, this);
       this.game.events.off('bottleneck-shown', this.onBottleneckShown, this);
+      this.game.events.off('redline-unlock', this.onRedlineUnlock, this);
+      this.game.events.off('redline-delivery', this.onRedlineDelivery, this);
     });
   }
 
@@ -355,6 +371,242 @@ export class UIScene extends Phaser.Scene {
     });
   }
 
+  private buildRedlineUi(): void {
+    const ctaBg = this.add
+      .rectangle(0, 0, 180, 48, 0xc45c26, 0.95)
+      .setStrokeStyle(2, 0xffd166);
+    const ctaLabel = this.add
+      .text(0, 0, 'REDLINE ORDER', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '15px',
+        fontStyle: 'bold',
+        color: '#fff8f0',
+      })
+      .setOrigin(0.5);
+    this.redlineCta = this.add
+      .container(LAYOUT.width / 2, LAYOUT.height - 88, [ctaBg, ctaLabel])
+      .setDepth(60)
+      .setVisible(false);
+    ctaBg.setInteractive({ useHandCursor: true });
+    ctaBg.on('pointerdown', () => {
+      const game = this.getGameScene();
+      if (!game) return;
+      game.startRedlineFromCta();
+      this.refreshRedlineUi();
+    });
+
+    this.redlineHud = this.add
+      .text(LAYOUT.width / 2, 48, '', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '13px',
+        fontStyle: 'bold',
+        color: '#e8eef5',
+        backgroundColor: '#1a2332ee',
+        padding: { x: 10, y: 6 },
+        align: 'center',
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(55)
+      .setVisible(false);
+
+    this.redlinePreview = this.add
+      .text(LAYOUT.width / 2, 78, '', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '14px',
+        color: '#ffd166',
+        backgroundColor: '#15202bcc',
+        padding: { x: 8, y: 4 },
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(55)
+      .setVisible(false);
+
+    this.redlineHeat = this.add
+      .text(LAYOUT.width / 2, LAYOUT.factoryY + 78, '', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '13px',
+        fontStyle: 'bold',
+        color: '#e76f51',
+        backgroundColor: '#15202bee',
+        padding: { x: 8, y: 4 },
+      })
+      .setOrigin(0.5)
+      .setDepth(56)
+      .setVisible(false);
+
+    this.redlineCoolBtn = this.add
+      .text(LAYOUT.width / 2, LAYOUT.factoryY + 108, '❄ COOL SWITCH', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '14px',
+        fontStyle: 'bold',
+        color: '#4cc9f0',
+        backgroundColor: '#15202bee',
+        padding: { x: 12, y: 8 },
+      })
+      .setOrigin(0.5)
+      .setDepth(57)
+      .setVisible(false)
+      .setInteractive({ useHandCursor: true });
+    this.redlineCoolBtn.on('pointerdown', () => {
+      const game = this.getGameScene();
+      game?.coolRedlineFromUi();
+      this.refreshRedlineUi();
+    });
+
+    const sumBg = this.add
+      .rectangle(0, 0, 360, 280, 0x15202b, 0.96)
+      .setStrokeStyle(2, 0x52b788);
+    this.redlineSummaryText = this.add
+      .text(0, -40, '', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '15px',
+        color: '#e8eef5',
+        align: 'center',
+        lineSpacing: 6,
+      })
+      .setOrigin(0.5);
+    const contBtn = this.add
+      .text(-70, 100, 'CONTINUE', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '14px',
+        fontStyle: 'bold',
+        color: '#15202b',
+        backgroundColor: '#52b788',
+        padding: { x: 14, y: 8 },
+      })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
+    const retryBtn = this.add
+      .text(70, 100, 'RETRY', {
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+        fontSize: '14px',
+        fontStyle: 'bold',
+        color: '#e8eef5',
+        backgroundColor: '#2a3f55',
+        padding: { x: 14, y: 8 },
+      })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
+    contBtn.on('pointerdown', () => {
+      const game = this.getGameScene();
+      game?.continueRedlineFromUi();
+      this.refreshRedlineUi();
+    });
+    retryBtn.on('pointerdown', () => {
+      const game = this.getGameScene();
+      game?.retryRedlineFromUi();
+      this.refreshRedlineUi();
+    });
+    this.redlineSummary = this.add
+      .container(LAYOUT.width / 2, LAYOUT.height * 0.42, [
+        sumBg,
+        this.redlineSummaryText,
+        contBtn,
+        retryBtn,
+      ])
+      .setDepth(70)
+      .setVisible(false);
+  }
+
+  private onRedlineUnlock(): void {
+    const reg = this.getRegistry();
+    this.redlineUnlockAtMs = reg?.factory.sessionMs ?? 0;
+    this.refreshRedlineUi();
+  }
+
+  private onRedlineDelivery(payload: {
+    correct: boolean;
+    combo: number;
+    comboChanged: string;
+  }): void {
+    const color = payload.correct ? '#52b788' : '#e76f51';
+    const msg = payload.correct
+      ? payload.comboChanged === 'up'
+        ? `CORRECT · COMBO x${payload.combo}`
+        : 'CORRECT'
+      : `WRONG ROUTE · COMBO x${payload.combo}`;
+    this.floating.spawn(LAYOUT.width / 2, LAYOUT.factoryY - 70, msg, color);
+    this.refreshRedlineUi();
+  }
+
+  private refreshRedlineUi(): void {
+    const reg = this.getRegistry();
+    if (!reg) return;
+    const rl = reg.factory.redline;
+    const phase = rl.phase();
+    const sessionMs = reg.factory.sessionMs;
+
+    // CTA ≤2s after unlock, only while available (no spam during cooldown)
+    const unlockAt = this.redlineUnlockAtMs ?? rl.state.unlockAtActiveMs;
+    const ctaReady =
+      phase === 'available' &&
+      (unlockAt == null || sessionMs - unlockAt <= 120_000);
+    const showCtaSoon =
+      phase === 'available' &&
+      unlockAt != null &&
+      sessionMs - unlockAt >= 0 &&
+      sessionMs - unlockAt <= 2_000;
+    this.redlineCta.setVisible(
+      phase === 'available' && (showCtaSoon || ctaReady),
+    );
+    // Prefer showing CTA immediately after unlock (≤2s contract)
+    if (phase === 'available') this.redlineCta.setVisible(true);
+    if (phase === 'cooldown') this.redlineCta.setVisible(false);
+
+    const contract = rl.getContract();
+    if (phase === 'active' && contract) {
+      const snap = contract.snapshot();
+      const remain = Math.max(0, snap.deadlineMs - snap.elapsedMs);
+      const preview = contract
+        .previewNext(3)
+        .map((d) => (d === 'priority' ? 'P/B' : 'S/A'))
+        .join(' → ');
+      this.redlineHud
+        .setText(
+          `REDLINE  ${snap.correct}/${snap.targetCount}  ·  ${(remain / 1000).toFixed(0)}s  ·  COMBO x${snap.combo}`,
+        )
+        .setVisible(true);
+      this.redlinePreview.setText(`NEXT  ${preview || '—'}`).setVisible(true);
+
+      if (snap.heatEnabled && (snap.heat >= 70 || snap.jamActive)) {
+        const heatMsg = snap.jamActive
+          ? `⚠ SWITCH JAMMED — cool or wait`
+          : `⚠ HEAT ${Math.round(snap.heat)} — slow route spam`;
+        this.redlineHeat.setText(heatMsg).setVisible(true);
+        this.redlineCoolBtn.setVisible(snap.jamActive || snap.heat >= 70);
+      } else {
+        this.redlineHeat.setVisible(false);
+        this.redlineCoolBtn.setVisible(false);
+      }
+      this.redlineSummary.setVisible(false);
+    } else if (phase === 'summary' && contract) {
+      this.redlineHud.setVisible(false);
+      this.redlinePreview.setVisible(false);
+      this.redlineHeat.setVisible(false);
+      this.redlineCoolBtn.setVisible(false);
+      const snap = contract.snapshot();
+      const acc = contract.accuracy();
+      const nextGoal = reg.factory.sessionLabel() || 'Keep optimizing';
+      this.redlineSummaryText.setText(
+        [
+          'REDLINE SUMMARY',
+          `${snap.correct}/${snap.correct + snap.wrong} correct · ${(acc * 100).toFixed(0)}%`,
+          `Max combo x${snap.comboPeak} · Grade ${snap.grade ?? 'MISS'}`,
+          `Reward $${snap.rewardCash}`,
+          '',
+          `Next: ${nextGoal}`,
+        ].join('\n'),
+      );
+      this.redlineSummary.setVisible(true);
+    } else {
+      this.redlineHud.setVisible(false);
+      this.redlinePreview.setVisible(false);
+      this.redlineHeat.setVisible(false);
+      this.redlineCoolBtn.setVisible(false);
+      this.redlineSummary.setVisible(false);
+    }
+  }
+
   private refreshAll(): void {
     this.refreshHud();
     this.refreshLayers();
@@ -362,6 +614,7 @@ export class UIScene extends Phaser.Scene {
     this.refreshUnlock();
     this.refreshDetail();
     this.refreshGoal();
+    this.refreshRedlineUi();
   }
 
   private refreshLayers(): void {
@@ -519,7 +772,14 @@ export class UIScene extends Phaser.Scene {
     ) {
       const plan = goal.planLabel();
       const main = reg.factory.sessionLabel();
-      const text = plan && !mc.isActive ? `${plan} · ${main}` : main;
+      let text = plan && !mc.isActive ? `${plan} · ${main}` : main;
+      // During REDLINE contract: keep factory goal visible as compact secondary
+      if (reg.factory.redline.phase() === 'active') {
+        text = `REDLINE · ${main || 'factory running'}`;
+        this.goalText.setFontSize('13px');
+      } else {
+        this.goalText.setFontSize('15px');
+      }
       this.goalText.setText(text || 'Keep optimizing').setVisible(true);
       if (
         mc.phase === 'smartphone_ready' ||
