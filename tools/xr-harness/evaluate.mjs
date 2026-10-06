@@ -30,6 +30,7 @@ const flat = {
   voluntaryTurns: session.engagement?.voluntaryTurns,
   fpsLowPercentile: session.performance?.fpsLowPercentile,
   criticalErrors: session.performance?.criticalErrors,
+  testedOnRealHardware: session.performance?.testedOnRealHardware,
   handsFirstComplete: session.interaction?.handsFirstComplete,
   seatedComplete: session.interaction?.seatedComplete,
   realTableMatters: session.interaction?.realTableMatters,
