@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 
-const file = process.argv[2];
+const args = process.argv.slice(2);
+const strict = args.includes('--strict');
+const file = args.find((x) => x !== '--strict');
+
 if (!file) {
-  console.error('Usage: node tools/xr-harness/evaluate.mjs <session.json>');
+  console.error('Usage: node tools/xr-harness/evaluate.mjs <session.json> [--strict]');
   process.exit(2);
 }
 
@@ -30,41 +33,49 @@ const flat = {
 };
 
 const results = [];
-let kill = false;
+let blocked = false;
+
+function missingStatus(rule) {
+  if (strict && rule.severity === 'kill') {
+    blocked = true;
+    return 'BLOCK';
+  }
+  return 'MISSING';
+}
 
 for (const [key, rule] of Object.entries(criteria.criteria)) {
   const value = flat[key];
   if (value === null || value === undefined) {
-    results.push({ key, status: 'MISSING', value });
+    results.push({ key, status: missingStatus(rule), value });
     continue;
   }
   let pass = true;
   if ('max' in rule) pass = pass && value <= rule.max;
   if ('min' in rule) pass = pass && value >= rule.min;
   const status = pass ? 'PASS' : rule.severity.toUpperCase();
-  if (status === 'KILL') kill = true;
+  if (status === 'KILL') blocked = true;
   results.push({ key, status, value, rule });
 }
 
 for (const [key, rule] of Object.entries(criteria.booleans)) {
   const value = flat[key];
   if (value === null || value === undefined) {
-    results.push({ key, status: 'MISSING', value });
+    results.push({ key, status: missingStatus(rule), value });
     continue;
   }
   const pass = value === rule.expected;
   const status = pass ? 'PASS' : rule.severity.toUpperCase();
-  if (status === 'KILL') kill = true;
+  if (status === 'KILL') blocked = true;
   results.push({ key, status, value, rule });
 }
 
 const pad = (s, n) => String(s).padEnd(n);
-console.log(`XR HARNESS — ${session.sessionId ?? 'unknown session'}`);
+console.log(`XR HARNESS — ${session.sessionId ?? 'unknown session'}${strict ? ' [STRICT]' : ''}`);
 console.log('-'.repeat(72));
 for (const r of results) {
   console.log(`${pad(r.status, 8)} ${pad(r.key, 28)} ${String(r.value)}`);
 }
 console.log('-'.repeat(72));
-console.log(kill ? 'OVERALL: KILL/PIVOT GATE TRIGGERED' : 'OVERALL: NO KILL GATE TRIGGERED');
+console.log(blocked ? 'OVERALL: BLOCKED / KILL-PIVOT GATE TRIGGERED' : 'OVERALL: NO BLOCKING GATE TRIGGERED');
 
-process.exit(kill ? 1 : 0);
+process.exit(blocked ? 1 : 0);
