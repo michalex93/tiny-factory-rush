@@ -14,3 +14,9 @@ coverage/
 
 # Autonomous loop runtime state (logs, prompts, gate reports, locks)
 .agent/
+
+# IWSDK managed runtime local state / build output
+.iwsdk/
+xr-iwsdk/.iwsdk/
+xr-iwsdk/dist/
+xr-iwsdk/_tmp-*.json

@@ -159,51 +159,57 @@ function timeToEarned(
 }
 
 describe('M-B.2 Toys threshold search', () => {
-  it('prints earned timelines for threshold pick', () => {
-    const rows = [];
-    for (const branch of ['throughput', 'margin'] as const) {
-      for (const mode of ['none', 'typical', 'early'] as const) {
-        rows.push(runPathWithSeries(branch, mode));
+  // Heavy multi-path sim search; under parallel suite load on low-RAM hosts
+  // this exceeds vitest's default 5s even though the assertions are unchanged.
+  it(
+    'prints earned timelines for threshold pick',
+    () => {
+      const rows = [];
+      for (const branch of ['throughput', 'margin'] as const) {
+        for (const mode of ['none', 'typical', 'early'] as const) {
+          rows.push(runPathWithSeries(branch, mode));
+        }
       }
-    }
 
-    const candidates = [700, 750, 800, 850, 900, 950];
-    console.log('\n=== Earned at convergence / end ===');
-    for (const r of rows) {
-      console.log(
-        `${r.branch}/${r.mode}: conv=${(r.convMs / 1000).toFixed(0)}s earned@conv=${r.earnedAtConv} end=${r.earnedEnd} ups@5=${r.upsAt5} upsEnd=${r.upsEnd}`,
-      );
-      console.log(
-        '  samples:',
-        r.series
-          .filter((_, i) => i % 2 === 0)
-          .map((s) => `${(s.t / 1000).toFixed(0)}s:$${s.e}`)
-          .join(' | '),
-      );
-    }
+      const candidates = [700, 750, 800, 850, 900, 950];
+      console.log('\n=== Earned at convergence / end ===');
+      for (const r of rows) {
+        console.log(
+          `${r.branch}/${r.mode}: conv=${(r.convMs / 1000).toFixed(0)}s earned@conv=${r.earnedAtConv} end=${r.earnedEnd} ups@5=${r.upsAt5} upsEnd=${r.upsEnd}`,
+        );
+        console.log(
+          '  samples:',
+          r.series
+            .filter((_, i) => i % 2 === 0)
+            .map((s) => `${(s.t / 1000).toFixed(0)}s:$${s.e}`)
+            .join(' | '),
+        );
+      }
 
-    console.log('\n=== Threshold fitness (want unlock 5–8 min; not at conv; early≥4min; none≤8min) ===');
-    for (const thr of candidates) {
-      const scores = rows.map((r) => {
-        const t = timeToEarned(r.series, thr, r.convMs, r.earnedAtConv);
-        const ok =
-          t !== null &&
-          r.earnedAtConv < thr &&
-          t >= 4 * 60_000 &&
-          t <= 8 * 60_000 &&
-          (r.mode !== 'early' || t >= 4 * 60_000) &&
-          (r.mode !== 'none' || t <= 8 * 60_000);
-        return {
-          key: `${r.branch}/${r.mode}`,
-          tSec: t == null ? null : +(t / 1000).toFixed(0),
-          ok,
-        };
-      });
-      const pass = scores.filter((s) => s.ok).length;
-      console.log(
-        `thr=${thr} pass=${pass}/${scores.length}`,
-        scores.map((s) => `${s.key}:${s.tSec ?? 'never'}${s.ok ? '✓' : '✗'}`).join(' '),
-      );
-    }
-  });
+      console.log('\n=== Threshold fitness (want unlock 5–8 min; not at conv; early≥4min; none≤8min) ===');
+      for (const thr of candidates) {
+        const scores = rows.map((r) => {
+          const t = timeToEarned(r.series, thr, r.convMs, r.earnedAtConv);
+          const ok =
+            t !== null &&
+            r.earnedAtConv < thr &&
+            t >= 4 * 60_000 &&
+            t <= 8 * 60_000 &&
+            (r.mode !== 'early' || t >= 4 * 60_000) &&
+            (r.mode !== 'none' || t <= 8 * 60_000);
+          return {
+            key: `${r.branch}/${r.mode}`,
+            tSec: t == null ? null : +(t / 1000).toFixed(0),
+            ok,
+          };
+        });
+        const pass = scores.filter((s) => s.ok).length;
+        console.log(
+          `thr=${thr} pass=${pass}/${scores.length}`,
+          scores.map((s) => `${s.key}:${s.tSec ?? 'never'}${s.ok ? '✓' : '✗'}`).join(' '),
+        );
+      }
+    },
+    30_000,
+  );
 });
