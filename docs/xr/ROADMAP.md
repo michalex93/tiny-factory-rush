@@ -1,137 +1,372 @@
-# XR Competition Roadmap v0.2
+# XR Competition Roadmap v1.0
 
 Status legend: TODO / DOING / BLOCKED / DONE / KILLED
-All dates 2026, Celaya time (CST, UTC-6). The machine-readable version of this plan is `tasks/queue.json` (the autonomous loop executes it; see `docs/xr/AUTONOMY.md`).
+All dates 2026, Celaya time (CST, UTC-6).
 
-## Fixed external dates
-- Competition window opened: Sep 24.
-- **Official deadline: Wed Nov 18, 14:00 CST** (12:00 PT).
-- Judging: ~Nov 18 – Dec 9. Winners: ~Dec 11. Build must stay free and available until then.
+Machine-readable execution plan: `tasks/queue.json`.
+Autonomous-loop rules: `docs/xr/AUTONOMY.md`.
 
-## Internal milestones (hard)
-| Date | Milestone | Gate |
-|---|---|---|
-| Mon Oct 12 | Stack decided (D-007) from kill-test evidence | G-P1 |
-| Sun Oct 18 | Signature mechanic decided (D-016) after graybox playtest (Sat Oct 17) | — |
-| Sun Nov 1 | Tier 0 core proven: G-T0 passes → Tier 2 window opens | G-T0 |
-| Tue Oct 27 | Art direction locked (style board + single asset source) | — |
-| Sat Nov 7, 23:59 | Feature freeze | G-FREEZE |
-| Mon Nov 16, 20:00 | Internal submission | G-SUBMIT |
+## External dates
+- Competition opened: Sep 24.
+- Official deadline: **Wed Nov 18, 14:00 CST** (12:00 PT).
+- Judging: ~Nov 18 – Dec 9.
+- Winner announcement: ~Dec 11.
+
+## Internal hard dates
+| Date | Milestone |
+|---|---|
+| Oct 6 | Final planning freeze merged |
+| Oct 10–12 | Stack decision from real evidence |
+| Oct 15 | Traffix XR competitor checkpoint |
+| Oct 18 | Signature interaction decision |
+| Oct 24 | Art direction locked |
+| Nov 1 | Tier-0 core / first-five gate |
+| Nov 7 | Feature freeze |
+| Nov 13 | Hardening complete + gameplay capture |
+| Nov 16, 20:00 | Internal submission deadline |
+
+If headset/tooling delivery delays the stack decision, compress feature breadth, not hardening or submission margin.
+
+## Operating principle: product before perfection
+From the stack decision onward, maintain a runnable end-to-end build.
+
+Do not spend a week perfecting an isolated subsystem that has never been experienced inside the full loop.
+
+The order is:
+1. interaction proof;
+2. walking skeleton;
+3. complete crude judge journey;
+4. signature evidence;
+5. polish;
+6. optional breadth.
 
 ## Gates
-- **G-P1 (kill test):** both candidate stacks (or the one that survives) show table placement, one grab, rotate/place, generous snap, simple product flow, and a target-hardware profile. Evidence in `evidence/xr/EXP-XR-01/` + perf record.
-- **G-T0 (core proven):** hands-first end-to-end, seated within 2 ft, FoV check passes for critical elements (`npm run xr:fov`), ≥60 fps low-percentile in a busy state on Quest, first-five-minutes medians within targets for ≥5 naive players, signature mechanic implemented, zero critical errors.
-- **G-FREEZE:** no new mechanics after this; only feel, art, audio, legibility, bugs.
-- **G-SUBMIT:** `docs/xr/COMPETITION_CHECKLIST.md` fully checked with evidence links.
 
-## Phase 0 — Foundation (Oct 5–7)
+### G-P1 — stack kill test
+Purpose: choose the technology that gets us to a polished product fastest.
+
+Compare the two candidates with the **same minimal scenario**:
+- tabletop placement/fallback;
+- grab -> move -> rotate -> release;
+- forgiving snap;
+- hand-loss recovery;
+- simple 10-token belt animation;
+- gaze/head-gaze highlight where supported;
+- simulator/agent-tooling path;
+- real Quest performance and interaction evidence.
+
+Do **not** build the production simulation twice before this decision.
+
+Decision dimensions:
+- interaction reliability;
+- time-to-iterate;
+- target-hardware performance/headroom;
+- quality of agent runtime tooling;
+- anchoring/scene support;
+- implementation friction;
+- distribution convenience.
+
+No engine receives a default win because it was common among prior submissions.
+
+### G-WALK — walking skeleton
+Immediately after stack selection, the chosen build must produce a crude end-to-end loop:
+table -> start -> products move -> visible jam -> physical fix -> recovery -> reward.
+
+No final art required.
+
+Exit requirement:
+a naive observer can explain the loop from a short capture.
+
+### G-SIG — signature evidence
+By Oct 18, distinguish:
+- **signature interaction**: what the player physically does;
+- **magic moment**: the world's memorable crisis/payoff;
+- **sensory identity**: the motion/audio feedback.
+
+Do not "choose" overflow, REDLINE and rhythm as if they were the same design category.
+
+### G-T0 — competition core proven
+Must have:
+- hands-first end-to-end;
+- seated play within comfortable reach;
+- reliable core input with measured false activations / intended-action success;
+- a complete 6–8 minute journey;
+- first-five timings inside target range for naive players;
+- real table materially matters;
+- signature interaction implemented;
+- coherent art/audio direction in the actual build;
+- target hardware >= competition performance requirement with headroom;
+- zero critical runtime errors.
+
+FoV is evaluated as a comfort/legibility constraint, not as "every world object must fit a static 70×66° cone simultaneously."
+
+### G-FREEZE
+Nov 7.
+No new mechanics after this gate.
+
+Only:
+- interaction reliability;
+- game feel;
+- art/audio;
+- onboarding;
+- performance;
+- accessibility fixes;
+- bugs;
+- submission materials.
+
+### G-SUBMIT
+Every material competition claim maps to evidence.
+
+## Parallel work lanes
+Starting as soon as the stack kill test begins, work in parallel:
+
+### Lane A — Interaction / runtime
+Hands, intent, anchoring, performance, recovery.
+
+### Lane B — Gameplay
+Walking skeleton, crisis, intervention, contracts, grade, replay.
+
+### Lane C — Art + audio
+Visual identity, silhouette language, materials, factory rhythm, spatial cues.
+
+### Lane D — Retention + pitch
+Daily Shift, visible persistence, 10-second silent test, competition scorecard, trailer story.
+
+Do not postpone Lane C until gameplay is "finished."
+
+---
+
+## Phase 0 — Foundation (Oct 5–6)
 Status: DOING
 
-Deliverables:
-- [x] product thesis
-- [x] agent rules
-- [x] decision log
-- [x] experiment register
-- [x] competition checklist
-- [x] harness scaffold
-- [x] skill system scaffold
-- [x] Meta VR Start approval (welcome email received 2026-10-05)
-- [x] competitive research + success factors (`docs/xr/RESEARCH_2025_WINNERS.md`)
-- [x] autonomous development system (loop, gates, review packet, hooks) — `docs/xr/AUTONOMY.md`
-- [ ] Devpost registration confirmed (H-001, Oct 6)
-- [ ] Quest 3/3S in hand, developer mode on (H-002, Oct 8)
-- [ ] toolchains installed: Unity 6000.0 LTS + Meta XR Core SDK v207 + Meta XR Simulator; Node 22 + IWSDK CLI (H-003, Oct 7)
+Done:
+- product thesis;
+- agent rules;
+- decision log;
+- experiment register;
+- competition checklist;
+- harness scaffold;
+- skill system;
+- competitive research;
+- autonomous loop/gates/review system.
 
-Exit gate: agents can start technical work without rediscovering scope, criteria or test protocol.
+Human prerequisites:
+- Devpost registration;
+- Quest access;
+- local toolchains;
+- loop selftest.
 
-## Phase 1 — Technical kill test (Oct 8–12)
-Agents build both kill-test scaffolds in parallel (IWSDK and Unity), simulator first, device as soon as the headset arrives.
+Exit:
+repo can begin technical work without rediscovering scope.
 
-Must prove:
-- table/surface placement;
-- one object grab (intent-buffered);
-- rotation/placement;
-- generous snapping;
-- simple product flow driven by `xr/sim-core`;
-- gaze + pinch selection works (eye gaze where available, fallback on Quest 3);
-- target-hardware profiling.
+---
 
-Decision (D-007, Oct 12): pick the stack that wins on interaction quality + performance + agent tooling. Do not build content here.
+## Phase 1 — Interaction-first stack kill test (Oct 7–12)
 
-## Phase 2 — Core physical loop (Oct 13–24)
-Build only:
-- source; belt/connection; processor; buffer; sink;
-- visible queue; one bottleneck;
-- overflow prototype (inside FoV, toward the player, diagnostic);
-- REDLINE gate variants for EXP-XR-03;
-- contracts + grade; 1-of-3 draft;
-- gaze + pinch inspect/upgrade (Tier 1, cheap once Phase 1 proved it).
+### Important change from v0.2
+The kill test happens **before** building a full shared XR simulation core.
 
-Graybox playtest Sat Oct 17 → signature decision Sun Oct 18.
+Each candidate gets the smallest comparable scenario possible.
 
-Exit gate: a new player understands "stuff goes in -> line jams -> I fix it -> flow improves" without technical explanation.
+Required:
+- table placement/fallback;
+- one grabbable module;
+- move/rotate/snap;
+- tunable intent smoothing;
+- short tracking-loss recovery;
+- 10 moving tokens using trivial local behavior;
+- gaze/head-gaze highlight if available;
+- screenshot/runtime observation through each stack's agent tooling;
+- real Quest test.
 
-## Phase 3 — First five minutes (Oct 25–Nov 1)
-Implement:
-- diegetic onboarding;
-- first reward; first visible problem; first physical intervention; first payoff;
-- simple grade; one draft choice;
-- reason to come back skeleton (persistence + product ladder + best grade) — Tier 1 but scheduled here;
-- FoV pass on the whole layout (VR Glasses budget).
+Human stack decision immediately after evidence report.
 
-Test with at least five naive players (Sat Oct 31; see `docs/xr/PLAYTEST_PLAN.md`).
+Exit: G-P1.
 
-Exit gate (part of G-T0): median first successful delivery < 60 s and no participant requires an engineering explanation.
+---
 
-## Phase 4 — Game feel and art (Oct 27–Nov 7, overlaps)
-Art lock Tue Oct 27. Then work only on:
-- snap quality; animation; silhouettes; audio (factory rhythm);
-- spatial feedback; lighting/material coherence;
-- legibility; error recovery.
+## Phase 2 — Walking skeleton + signature prototypes (stack decision -> Oct 18)
 
-EXP-XR-06 art A/B with ≥20 people by Tue Nov 3.
+### First objective: whole product in ugly form
+Within 48–72 h of stack selection, create:
+- source;
+- one processor;
+- one buffer;
+- sink;
+- products;
+- jam;
+- one intervention;
+- recovery;
+- money/grade;
+- restart/next shift.
 
-Exit gate: the build no longer looks or feels like a prototype.
+This is the first integrated product.
 
-## Phase 5 — Replayability slice (Oct 28–Nov 7, parallel)
-- 2–3 contract variants; small draft pool; 4–5 turn run;
-- daily contract (seeded);
-- persistence verified across app restarts.
+Then:
+- extract/harden the deterministic simulation rules;
+- add table-layout adaptation;
+- prototype overflow;
+- prototype REDLINE interaction variants;
+- prototype factory-rhythm feedback;
+- instrument hand intent.
 
-Exit gate: players voluntarily start another turn in free play.
+### Oct 15 — competitor checkpoint
+Review Traffix XR's actual launch materials/reviews/playthroughs.
 
-## Tier 2 window (Nov 1–7, only if G-T0 passed)
-In this order, each behind its own experiment/gate:
-1. Pass-the-headset party mode (turns per player, no networking).
-2. Accessibility pack (one-handed mode, left/right swap, high-contrast, captions for audio cues).
-3. Async daily-contract leaderboard.
-4. Spatial "foreman" callouts (agentic interaction experiment; no wall of text).
-5. Colocated multiplayer — only if 1–4 are done and green.
+Answer:
+- what does it already own?
+- what complaints appear?
+- what would make Tiny Factory look derivative?
+- what industrial-strategy behaviors remain clearly ours?
 
-## Phase 6 — Hardening (Nov 8–13)
+Do not pivot from one review. Update only if evidence materially changes differentiation.
+
+### Oct 17 — naive graybox playtest
 Test:
-- real Quest; different tables/rooms; seated play;
-- left/right handed users; hand loss/reacquisition;
-- pause/resume; performance + 20-minute thermal run;
-- save/reload; clean-device install path.
+- interaction intent;
+- overflow comprehension/delight;
+- REDLINE variants;
+- full rough shift comprehension.
+
+### Oct 18 — signature lock
+Owner records D-016 decision based on evidence.
+
+Exit: G-SIG.
+
+---
+
+## Phase 3 — First five minutes + early product polish (Oct 18–Nov 1)
+
+### Timing target
+- action <=15 s;
+- first product/reward <=45 s;
+- clear problem <=120 s;
+- meaningful intervention <=180 s;
+- recovery payoff <=240 s;
+- grade / next-shift invitation <=300 s.
+
+### Art/audio starts early
+By ~Oct 10–12:
+- style-board v0;
+- premium kinetic industrial desk-toy direction;
+- silhouette rules;
+- small palette/material system;
+- audio language.
+
+By Oct 20:
+- first visual A/B and 10-second silent test.
+
+By Oct 24:
+- art direction lock.
+
+### Naive tests
+Run an early first-five test around Oct 24–25.
+Run the final pre-gate first-five test around Oct 31.
+
+Do not wait until Oct 31 to discover the onboarding is broken.
+
+Exit: G-T0 on Nov 1.
+
+---
+
+## Phase 4 — Reason to come back + replayability (parallel, Oct 24–Nov 7)
+
+Minimum:
+- best grade/profit persistence;
+- date-seeded Daily Shift;
+- one visible cross-session growth element;
+- at least one product milestone;
+- 2–3 contract variants;
+- small draft pool only if it improves "one more shift."
+
+Do not require all five web product tiers before submission.
+Do not require online leaderboard.
+
+Second-session test remains evidence, not a checkbox.
+
+---
+
+## Optional stretch decision (after G-T0 only)
+
+G-T0 does **not** automatically unlock a pile of Tier-2 work.
+
+The owner writes a short score-per-hour decision and may authorize **zero or one** stretch item.
+
+Possible candidates:
+1. stronger accessibility option;
+2. cheap pass-the-headset social mode;
+3. online Daily Shift leaderboard;
+4. agentic foreman;
+5. multiplayer.
+
+Default: build none and spend the time on polish.
+
+Reason: official rules allow only one prize per Entry; award-category shopping is not a rational substitute for main-score quality.
+
+---
+
+## Phase 5 — Feature freeze and hardening (Nov 7–13)
 
 No new mechanics.
 
-## Phase 7 — Submission (Nov 12–16)
-Prepare:
-- real gameplay capture on Quest; <3 minute video that opens with the magic moment;
-- English Devpost write-up organized by the four criteria + one-line tagline;
-- "new features since pre-competition build" summary (Adapted division);
-- screenshots; release-date statement;
-- APK in release channel named "Competition" (or WebXR URL); free until winners;
-- checklist audit; final rules re-check within 72 h of submission.
+Test:
+- Quest 3/3S;
+- 20-minute thermal/performance run;
+- multiple tables/rooms;
+- seated use;
+- left/right and one-hand paths where supported;
+- hand loss/reacquisition;
+- false activations;
+- pause/resume;
+- clean install/open path;
+- persistence;
+- logs.
 
-Internal target: Mon Nov 16, 20:00 CST.
+Art/audio/onboarding may still be refined.
 
-## Current next actions
-1. H-001 Devpost registration (Oct 6).
-2. H-002/H-003 headset + toolchains (Oct 7–8).
-3. Agents: A-002 `xr/sim-core` + golden vectors (Oct 8), then A-004/A-005 kill-test scaffolds (Oct 10).
+---
+
+## Phase 6 — Submission (Nov 12–16)
+
+Prepare in parallel:
+- gameplay capture on real Quest;
+- <3 min trailer;
+- Devpost text organized by four judging criteria;
+- adaptation baseline evidence;
+- current-build evidence;
+- screenshots;
+- release-date statement;
+- license/attribution audit;
+- distribution path;
+- final rules re-check.
+
+Trailer rule:
+lead with whichever magic moment actually won the evidence gate.
+Do not hard-code overflow in the shot list before that evidence exists.
+
+Internal submit: Nov 16, 20:00 CST.
+
+---
+
+## Competition scorecard cadence
+Update `docs/xr/COMPETITION_SCORECARD.md` at:
+- stack decision;
+- signature lock;
+- G-T0;
+- feature freeze;
+- pre-submission.
+
+The scorecard is diagnostic, not a self-awarded numeric score.
 
 ## Scope guard
-If work does not advance the current exit gate, it is backlog. Tier 2 work before G-T0 is rejected by the loop (`tasks/queue.json` dependencies).
+If work does not improve:
+- meaningful decision;
+- physical legibility;
+- interaction reliability;
+- delight/game feel;
+- repeat usage;
+- or one of the four judging criteria,
+
+it is backlog.
+
+After this v1.0 freeze, change design only because of measured evidence, official-rule changes, or a clearly documented competitor event.
