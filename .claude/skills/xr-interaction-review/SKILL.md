@@ -2,6 +2,7 @@
 name: xr-interaction-review
 description: Use for grab, snap, rotate, route, gaze, hand loss, menus and any hands-first interaction.
 ---
+<!-- Generated from skills/xr-interaction-review/SKILL.md by `npm run skills:sync`. Edit the source, not this copy. -->
 
 # Skill: XR Interaction Review
 
