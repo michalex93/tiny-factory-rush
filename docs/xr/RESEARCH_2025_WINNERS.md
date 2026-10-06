@@ -1,67 +1,245 @@
-# Research: what wins (2025 edition, current top MR games, platform direction)
+# Research: what wins — evidence notes for Tiny Factory Rush XR
 
-Collected 2026-10-05. Counts come from the 2025 Devpost gallery filters (own counts) and the winners' Devpost pages. Use this file as the success-factor checklist; cite it in reviews.
+Updated: 2026-10-06
 
-## 2025 Meta Horizon Start Developer Competition — numbers
-- 2,865 participants, 655 projects, 32 awards ($1.5M). Window Nov 5 – Dec 9, 2025.
-- Tracks: Gaming 353 (54%), Entertainment 90; rest Lifestyle.
-- Updated vs new: 222 updated (34%) won 14 awards (6.3% win rate) vs 433 new won 18 (4.2%).
-- Submitter type: organizations 210 → 16 wins (7.6%); teams 125 → 6 (4.8%); individuals 320 → 10 (3.1%).
-- Gaming by submitter: organizations 117 → 10 wins (8.5%); teams 62 → 2 (3.2%); individuals 172 → 3 (1.7%). The 6 main gaming prizes: 5 organizations, 1 team, 0 individuals.
-- 6 of the 10 individual wins came from technology-specific awards (hands, camera+AI, IWSDK, Spatial SDK, Android) that do **not** exist in 2026.
-- Capabilities: hand interactions in 59% of projects vs 69% of winners; multiplayer in 22% of projects vs 34% of winners and **47% of gaming winners (7 of 15)**.
-- Build path: Unity 68% of projects; WebXR 75 projects → 4 wins (2 via IWSDK-only award, 2 Judges' Choice), none in main tracks.
-- Closest theme precedents: Pack Attack (delivery-line MR party game, Social honorable mention); Loop One: Done (MR automation game) submitted an update and did not win.
+This document supports design decisions. It is **not** a recipe for copying winners.
 
-## 2026 edition — structure
-- $1M, 20 awards: per track (Gaming, Entertainment, Productivity) × division (New, Adapted/Updated) a winner + runner-up; six $25k special awards (Social & Multiplayer, Agentic Interaction, Reason to Come Back, First Five Minutes, Accessibility Forward, Boldest Original Concept); two $20k Judges' Choice.
-- 2,182 participants registered on 2026-10-05 (day 12 of 55). Projection: ~660–910 submissions; Adapted Gaming ~120–230.
+## Method caution
 
-## Shared traits of winners (from their Devpost write-ups)
-1. **One signature interaction, explainable in a sentence.** Tiny Golf: pinch-pull-release slingshot on a tabletop course. Awesome Hand: your hands are the physics objects. Little Critters: squash enemies against real walls. Final Throwdown: punch with tracked fists.
-2. **Familiar premise, zero explanation.** Tiny Golf picked golf on purpose so all effort went into interaction.
-3. **Product, not demo.** Tiny Golf shipped brand identity and a trailer within the month and treated it as a store-ready product; Le Dino Labo (experienced studio) cut features to polish snap/feedback/lighting; Pocket Lands launched early access two days after winners were announced.
-4. **Hands by intent, not raw gestures.** Little Critters supports multiple grab poses discovered in playtests and never drops carried items when hands leave tracking view; Pocket Lands disables raycast when the pinch point is near world blocks to avoid conflicts; Hand Survivor kept gestures distinct to avoid false triggers.
-5. **Early tests with new people.** Final Throwdown: public playtest at a library + Discord beta; redesigned the boss so players never need locomotion (seated-friendly).
-6. **Short sessions + growth.** Hand Survivor: skill draft at level-ups + persistent codex/achievements. Le Dino Labo: collection/museum planned.
-7. **Performance discipline.** Pocket Lands: large diorama at smooth 90 fps; Hand Survivor: pooling, event-driven updates, GC care; HandCraft XR (WebXR): instancing, batching, adaptive shadows.
-8. **Reuse of prior work.** Tiny Golf reused older Unity systems; Pocket Lands' engine took a year; Saber Punks had 5 years of gameplay before adding MR.
+Three evidence classes are kept separate:
 
-## Current top MR / hands games (2025–2026)
-- UploadVR 2025: Best MR game Little Critters; best hand-tracking game Jigsaw Night; best early-access MR game Laser Dance; MR nominees include Table Troopers, Crystal Commanders, Star Wars: Beyond Victory; early-access MR nominees include Loop One: Done and Galactic Traffic Control.
-- VR.org (Sep 2026) best MR games: Laser Dance, Starship Home, Little Critters, Cybercore Protocol, Wall Town Wonders, Drop Dead: The Cabin, Demeo Battles, Cubism. Common traits: obvious premise, uses real room geometry, short sessions, hands supported, $10–20.
-- Table Troopers (Meta case study): hands-first tabletop strategy; "all you need is pinch"; required 99.9% hand reliability before shipping hands; intent inference (uses the pose from ~0.5 s before release); units that fall off the table stay on the floor; pillars: minimal friction, no artificial locomotion, MR first, hands first, short sessions, high replayability; 4.8★; DLC > half of revenue; Horizon+ grew MAU >5×.
-- Revenue charts are dominated by free-to-play social games (UG, Animal Company, Gorilla Tag) and evergreen hits; 2026 trend: simulators/action up, puzzle/casual down.
+1. **Official / primary** — Meta developer documentation, official competition rules, winner pages / developer case studies.
+2. **Observed counts** — manual counts from the 2025 Devpost gallery. Useful descriptively; do not treat them as causal.
+3. **Design inference** — our interpretation, always subject to playtest.
 
-## Platform direction (Meta Connect 2026)
-- Meta VR Glasses (spring 2027): ~100 g, eye tracking + hands primary, controllers optional, FoV ≈ 70×66° vs Quest 3 110×96°; Meta advises moving key UI toward the center.
-- SDK v207: ISDK Gaze Interaction; Eye Gaze Interaction building block (switches gaze/raycast by device); Meta VR Simulator with VR Glasses profile (hand tracking via laptop camera); Meta XR Operator for Unity (agents build/test/verify).
-- Store prioritizes hand-tracked titles for hands-only users.
+Important:
+- Engine share among winners does not prove an engine causes winning.
+- Multiplayer being overrepresented among winners does not prove adding multiplayer improves our odds.
+- A feature used by a winner should not be copied unless it serves our own core loop.
+- 2026 allows only **one prize per Entry**, so feature-shopping across special awards is strategically weak.
 
-## Key success factors → where they live in our plan
-| Factor | Plan location |
+---
+
+## 2025 Meta Horizon Start Developer Competition — reliable baseline
+
+Meta's official winner recap reports:
+- nearly 3,000 developers;
+- more than 650 new/significantly updated projects;
+- 32 awards;
+- Best Casual Game winner: Tiny Golf;
+- runner-up: Little Critters hands update;
+- three Hand Interaction winners: Hand Survivor, Pocket Lands, Awesome Hand;
+- IWSDK winners: The Nanauts and Dun Jun.
+
+Primary source:
+https://developers.meta.com/vr/blog/meta-horizon-start-developer-competition-meet-the-winners/
+
+### Traits worth learning from
+
+#### Tiny Golf
+- premise instantly understandable;
+- one physical interaction can explain the game;
+- store/product presentation, not just a technology demo;
+- reused prior technology, so "built during competition" did not mean "everything from zero."
+
+#### Little Critters
+- adapted/updated precedent directly relevant to us;
+- playtests revealed real users do not all grab in the way developers expect;
+- hand tracking needs recovery behavior, not just gesture detection.
+
+#### Hand Survivor / Dun Jun / Awesome Hand
+- hands-first can support action;
+- the problem is not "speed" by itself;
+- ambiguous, repetitive or precision-sensitive gestures are the danger;
+- gestures must align with fantasy and be distinguishable.
+
+#### Pocket Lands
+- strong prior engine investment;
+- context helps arbitrate input conflicts;
+- smooth performance and tactile spatial interaction matter more than feature count.
+
+### General winner pattern
+Our strongest inference:
+**familiar fantasy + one clear physical verb + product-level polish + evidence from naive users.**
+
+Do not infer:
+"copy pinch", "copy 0.5 seconds", "copy multiplayer", or "copy Unity."
+
+---
+
+## 2026 official judging
+
+Four criteria, 25% each:
+1. Innovation & Creativity.
+2. Experience Design.
+3. Technical Implementation.
+4. Polish & Presentation.
+
+Official rules emphasize:
+- hands-first end-to-end;
+- seated/context-specific design;
+- habit-forming purpose;
+- purposeful passthrough;
+- FoV-aware design;
+- gaze interactions as a platform capability;
+- hand tracking;
+- spatial anchoring/scene behavior;
+- >=60 fps on Quest;
+- real gameplay and strong presentation.
+
+Special awards include:
+- Social & Multiplayer;
+- Agentic Interaction;
+- Reason to Come Back;
+- First Five Minutes;
+- Accessibility Forward;
+- Boldest Original Concept.
+
+Rule that affects strategy:
+**one prize per Entry.**
+
+Primary sources:
+- https://start-developer-competition-26.devpost.com/rules
+- https://start-developer-competition-26.devpost.com/details/faqs
+- https://start-developer-competition-26.devpost.com/details/special-awards
+
+---
+
+## Table Troopers — strongest commercial reference
+
+Meta's developer case study describes a hands-first tabletop MR strategy title.
+
+Key lessons:
+- design started from what hand tracking + MR could uniquely enable;
+- "all you need is pinch" means low conceptual friction, not simplistic implementation;
+- 90% hand reliability was not considered launch quality;
+- intent inference improved aiming/release;
+- simplifying mechanics can be better than complicating input;
+- objects leaving the playfield and remaining in the real room can create delight;
+- long-term business came from strong core loop + community + content cadence, not MR novelty alone.
+
+Commercial signal from Meta's case study:
+- 4.8-star rating;
+- Horizon+ materially expanded usage;
+- DLC became more than half of revenue;
+- repeat DLC purchasers exist.
+
+Primary source:
+https://developers.meta.com/vr/discover/success-stories/table-troopers/
+
+Implication for us:
+- tabletop strategy is commercially credible;
+- "things fall off the table" is not enough to differentiate;
+- reliability/intent must be a first-class product requirement.
+
+---
+
+## Loop One: Done — direct thematic competitor
+
+Current positioning:
+MR/VR factory automation; tactile building/problem solving; recipes/research/facilities; improved hand tracking and micro-gestures.
+
+Source:
+https://www.uploadvr.com/loop-one-done-adds-vr/
+
+Implication:
+Tiny Factory must not present as another automation sandbox.
+Our wedge is **short live industrial crises + strategic intervention + money/grade + recovery**, not endless automation construction.
+
+---
+
+## Traffix XR: Cities of Tomorrow — mandatory checkpoint
+
+Scheduled launch: 2026-10-15.
+
+It occupies:
+- tabletop MR;
+- hands;
+- flow/routing;
+- miniature city;
+- visible traffic problems;
+- procedural/creative elements.
+
+This makes "tabletop + flow + hands" insufficient differentiation.
+
+Checkpoint on launch:
+1. inspect reviews and real playthrough footage;
+2. identify what players praise/complain about;
+3. identify which visual/interaction language it already owns;
+4. re-run the 10-second differentiation question;
+5. do not pivot from one review.
+
+Our intended separation:
+**industrial operation under controlled pressure, physical production, profit/grade, live reconfiguration, crisis/recovery**, not relaxed traffic design.
+
+---
+
+## Platform direction — Meta VR Glasses / SDK 207
+
+Official Meta material:
+- VR Glasses: hands + eyes primary;
+- FoV roughly 70° × 66° versus Quest 3 ~110° × 96°;
+- Store discovery benefits hands-compatible titles;
+- v207 Simulator supports VR Glasses profile and Look + Pinch;
+- Core SDK v207 adds FoV simulation / readiness tooling;
+- XR Operator can let coding agents observe/interact/verify running XR apps;
+- IWSDK has a VR Glasses path using gaze targeting + pinch selection.
+
+Sources:
+- https://developers.meta.com/blog/meta-connect-recap/
+- https://developers.meta.com/vr/downloads/package/meta-xr-core-sdk/207.0/
+- https://developers.meta.com/vr/downloads/package/meta-xr-simulator-windows/207.0/
+- https://developers.meta.com/vr/documentation/iwsdk/guides/get-started-glasses/
+
+Implication:
+FoV-aware design and gaze/pinch are valuable.
+But we should not compress the entire tabletop into a static 70×66° screenshot. The current action/state must remain comfortable and discoverable across devices.
+
+---
+
+## Stack evidence
+
+### IWSDK/WebXR
+2025 proved IWSDK can produce award-winning immersive experiences.
+2026 rules explicitly accept a hosted IWSDK URL.
+
+### Unity
+Strong current Meta tooling:
+- Interaction SDK / MRUK ecosystem;
+- XR Simulator;
+- XR Operator;
+- v207 gaze / device-readiness path.
+
+Decision rule:
+choose by our own kill-test evidence, not winner frequency.
+
+---
+
+## Success factors translated to our project
+
+| Evidence pattern | Tiny Factory requirement |
 |---|---|
-| Signature interaction in one sentence | D-016 (decide Oct 18), PRODUCT_THESIS wedge |
-| Familiar premise | D-002 |
-| Real room matters | Pillar 3, D-015 |
-| Hands by intent | EXP-XR-11, skills/xr-interaction-review |
-| Product-level polish | ART_DIRECTION v0.2, Phase 4 |
-| Early naive playtests | PLAYTEST_PLAN |
-| Short sessions + reason to come back | D-006, D-014, EXP-XR-10 |
-| Platform alignment (gaze, FoV, seated) | D-012, D-013, EXP-XR-08/09 |
-| Social (stretch) | D-011 Tier 2 |
-| Strong submission | COMPETITION_CHECKLIST v0.2 |
+| Obvious physical verb | signature interaction must be demonstrated in seconds |
+| Hands by intent | measure false activations + intended-action success + tracking recovery |
+| Real space matters | table size/edge changes layout and crisis |
+| Short complete moment | competition journey <=8 min |
+| Early naive tests | multiple tests before Oct 31 |
+| Product, not demo | art/audio/pitch in parallel |
+| Repeat use | Daily Shift + saved best + visible growth |
+| Performance discipline | real Quest profiling before feature freeze |
+| Platform capabilities used strategically | hands/passthrough/anchors/FoV + useful gaze path |
+| Prior work reuse | preserve/adapt web rules where valuable, not web UI |
 
-## Sources
-- 2025 gallery: https://start-developer-competition.devpost.com/project-gallery
-- Winners: https://developers.meta.com/horizon/blog/meta-horizon-start-developer-competition-meet-the-winners/
-- Devpost pages: tiny-golf, little-critters, realcast-game-working-title (Le Dino Labo), saber-punks, pack-attack, handsurvivor, pocket-lands, awesome-hand, nanauts, dunjun, sumo-boxing (Final Throwdown), handcraft-xr-winter-edition (https://devpost.com/software/<slug>)
-- 2026 rules: https://start-developer-competition-26.devpost.com/rules
-- Table Troopers: https://developers.meta.com/horizon/discover/success-stories/table-troopers/
-- UploadVR awards 2025: https://uploadvr.com/best-2025-hand-tracking-mixed-reality-early-access-games
-- VR.org best MR 2026: https://vr.org/best-mixed-reality-games
-- Loop One: Done: https://www.uploadvr.com/loop-one-done-early-access/ ; https://vrdb.app/game/7997634810352504
-- Galactic Traffic Control: https://uploadvr.com/galactic-traffic-control-vr-mini-mode
-- Connect 2026 recap: https://developers.meta.com/horizon/blog/meta-connect-recap-start-building-the-future-of-vr/
-- ISDK gaze: https://developers.meta.com/vr/documentation/spatial-sdk/spatial-sdk-isdk-gaze/
-- Best-selling Quest games (May 2026): https://www.roadtovr.com/?p=127181
+---
+
+## Things we must NOT infer from the research
+
+- "Unity wins more, therefore Unity wins."
+- "Social games won, therefore add multiplayer."
+- "Table Troopers used intent history, therefore 0.5 s is the correct value."
+- "Little Critters supported many grab poses, therefore our game needs pinch/claw/fist from day one."
+- "Overflow is novel because it uses a real table."
+- "Toy/diorama art is distinctive."
+- "Special-award eligibility increases expected prize value if it damages main-track polish."
+
+These are exactly the kinds of cargo-cult conclusions the experiments are designed to prevent.

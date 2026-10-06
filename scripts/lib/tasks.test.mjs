@@ -41,13 +41,16 @@ describe('validateQueue', () => {
 });
 
 describe('selectNext / isEligible', () => {
-  it('orders by tier, then due date, then file order, and respects dependencies', () => {
+  it('orders by due date, then tier, then file order, and respects dependencies', () => {
     const queue = q(
       t('A-010', { tier: 1, due: '2026-10-08' }),
       t('A-011', { due: '2026-10-12' }),
       t('A-012', { due: '2026-10-09', depends_on: ['A-013'] }),
       t('A-013', { due: '2026-10-11' }),
     );
+    expect(selectNext(queue).id).toBe('A-010');
+    queue.tasks[0].status = 'done';
+    queue.tasks[0].evidence = ['e'];
     expect(selectNext(queue).id).toBe('A-013');
     queue.tasks[3].status = 'done';
     queue.tasks[3].evidence = ['e'];

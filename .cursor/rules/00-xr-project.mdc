@@ -3,19 +3,27 @@ description: Tiny Factory Rush XR project operating rules
 alwaysApply: true
 ---
 
-Read AGENTS.md before modifying the project.
+Read AGENTS.md before changing the project.
 
-For XR work, also read:
+For XR/product work also read:
 - docs/xr/PRODUCT_THESIS.md
 - docs/xr/ROADMAP.md
 - docs/xr/DECISIONS.md
+- docs/xr/COMPETITION_SCORECARD.md
 
 Rules:
-- game first, industrial engineering invisible;
-- tabletop MR, hands-first;
-- visible consequences over numerical dashboards;
-- one polished mechanic over broad scope;
-- do not add workers, detailed safety, detailed quality, detailed maintenance, multiplayer, AI assistant, or complex supply-chain features without an accepted experiment/decision;
-- preserve the pre-competition Git history;
-- never claim a test passed unless it was actually run;
-- update docs only when evidence or project state changed.
+- game first; industrial engineering stays in system rules, not academic vocabulary;
+- tabletop MR, hands-first end-to-end;
+- interpret hand intent; do not copy gestures/timing constants from other games;
+- visible consequences over dashboards;
+- build a runnable walking skeleton before perfecting architecture;
+- art/audio/pitch progress in parallel with gameplay;
+- signature interaction = player verb; overflow = possible crisis/magic moment; rhythm = feedback;
+- one polished core before optional stretch;
+- optional stretch is owner-authorized, never automatic;
+- do not add workers, detailed safety/quality/maintenance, multiplayer, agentic AI, online leaderboard or complex supply chain without an accepted owner decision/task;
+- preserve pre-competition Git history;
+- never claim simulator evidence is Quest evidence;
+- never claim a test passed unless actually run;
+- protected product/governance files may not be changed by autonomous implementation agents;
+- after the v1.0 design freeze, product changes require measured evidence, official-rule changes or a documented competitor event.

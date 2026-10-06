@@ -108,7 +108,15 @@
     "tools/xr-harness/fov-check.mjs",
     "prompts/**",
     "vite.config.ts",
-    "tsconfig.json"
+    "tsconfig.json",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".cursor/rules/**",
+    "docs/xr/PRODUCT_THESIS.md",
+    "docs/xr/ROADMAP.md",
+    "docs/xr/DECISIONS.md",
+    "docs/xr/COMPETITION_SCORECARD.md",
+    "package.json"
   ],
   "stepTimeoutMinutes": 20
 }

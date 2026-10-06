@@ -21,20 +21,25 @@ const flat = {
   firstProblemSec: session.timing?.firstProblemSec,
   firstDecisionSec: session.timing?.firstDecisionSec,
   firstPayoffSec: session.timing?.firstPayoffSec,
+  journeyCompleteSec: session.timing?.journeyCompleteSec,
   fatigueRating5: session.comfort?.fatigueRating5,
   interactionErrorsPerMin: session.interaction?.interactionErrorsPerMin,
+  falseActivationsPerMin: session.interaction?.falseActivationsPerMin,
+  intendedActionSuccessRate: session.interaction?.intendedActionSuccessRate,
+  trackingRecoverySec: session.interaction?.trackingRecoverySec,
   voluntaryTurns: session.engagement?.voluntaryTurns,
   fpsLowPercentile: session.performance?.fpsLowPercentile,
   criticalErrors: session.performance?.criticalErrors,
+  testedOnRealHardware: session.performance?.testedOnRealHardware,
   handsFirstComplete: session.interaction?.handsFirstComplete,
   seatedComplete: session.interaction?.seatedComplete,
   realTableMatters: session.interaction?.realTableMatters,
-  testedOnRealHardware: session.performance?.testedOnRealHardware,
   airplaneRadiusOk: session.interaction?.airplaneRadiusOk,
   fovCriticalInView: session.interaction?.fovCriticalInView,
   gazePinchWorks: session.interaction?.gazePinchWorks,
   overflowSeenInFov: session.engagement?.overflowSeenInFov,
-  persistenceAcrossSessions: session.engagement?.persistenceAcrossSessions
+  persistenceAcrossSessions: session.engagement?.persistenceAcrossSessions,
+  completeMomentUnder10Min: session.engagement?.completeMomentUnder10Min
 };
 
 const results = [];
@@ -76,11 +81,11 @@ for (const [key, rule] of Object.entries(criteria.booleans)) {
 
 const pad = (s, n) => String(s).padEnd(n);
 console.log(`XR HARNESS — ${session.sessionId ?? 'unknown session'}${strict ? ' [STRICT]' : ''}`);
-console.log('-'.repeat(72));
+console.log('-'.repeat(78));
 for (const r of results) {
-  console.log(`${pad(r.status, 8)} ${pad(r.key, 28)} ${String(r.value)}`);
+  console.log(`${pad(r.status, 8)} ${pad(r.key, 30)} ${String(r.value)}`);
 }
-console.log('-'.repeat(72));
+console.log('-'.repeat(78));
 console.log(blocked ? 'OVERALL: BLOCKED / KILL-PIVOT GATE TRIGGERED' : 'OVERALL: NO BLOCKING GATE TRIGGERED');
 
 process.exit(blocked ? 1 : 0);

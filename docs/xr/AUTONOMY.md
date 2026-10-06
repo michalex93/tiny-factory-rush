@@ -1,78 +1,284 @@
-# Autonomous development system
+# Autonomous development system — v1.0
 
-Goal: maximum verified progress per day with agents working unattended, while every claim stays backed by evidence and a human (+ an external reviewer) steers once or twice a day.
+Goal: maximize **verified** progress per day without allowing an unattended agent to redefine the product, weaken its own grader, or compound several structural mistakes before a human sees them.
 
 ## Guía rápida (ES)
-1. **Una vez:** `npm ci`, `npm run gates`, `npm run loop:selftest` (prueba de punta a punta del loop con un agente simulado: fusiona lo honesto y bloquea trampas). Inicia sesión en Claude Code (`claude`) o Codex.
-2. **Cada mañana:** `npm run tasks -- human` (lo que te toca: visor, decisiones, playtests). Atiende eso primero.
-3. **Lanzar el loop** desde tu rama de integración limpia: `npm run loop -- --agent claude` (o `--agent codex`). Para tareas que necesitan Unity o el visor contigo presente: `npm run loop -- --include-pair`.
-4. **Detenerlo con calma:** crea el archivo `.agent/STOP` (o Ctrl+C una vez).
-5. **Al terminar cada corrida** se genera `review/REVIEW-*.md`. Léelo, pega la última sección en ChatGPT/Claude como revisor externo, y convierte lo útil en tareas (`"status": "proposed"` → `todo`).
-6. **Trabajo interactivo** con Claude Code: `/next-task`, `/review-diff`, `/handoff`. Los hooks aplican las mismas reglas.
+
+### Una vez
+```bash
+npm ci
+npm run gates
+npm run loop:selftest
+npm run loop -- --dry-run
+```
+
+Confirm Claude/Codex headless invocation works on the actual Windows PC.
+
+### Cada mañana
+1. `npm run tasks -- human`
+2. unblock human/pair tasks first;
+3. review any proposed tasks;
+4. start the loop from a clean integration branch.
+
+### Start
+```bash
+npm run loop -- --agent claude
+```
+
+Use `--include-pair` only while physically present for hardware/Unity/headset tasks.
+
+### Stop
+Create:
+`.agent/STOP`
+
+or press Ctrl+C once.
+
+### Every run
+Read the generated `review/REVIEW-*.md`.
+Use an external model for independent review of important changes.
+
+---
+
+## Conservative default
+
+The default unattended budget is intentionally limited:
+- max 3 tasks/run;
+- ~4 h run budget;
+- stop after 2 consecutive blocked tasks.
+
+Why:
+during stack selection and early product formation, a subtle structural mistake can still pass unit tests and poison downstream tasks.
+
+After the stack, core interaction and local Windows loop are proven, the owner may deliberately increase the limits.
+
+Do not measure productivity by number of autonomous merges.
+
+---
 
 ## Architecture
+
 ```
-tasks/queue.json ──► npm run loop (scripts/agent-loop.mjs)
-   (contract)          for each eligible task (tier → due date → order):
-                         branch agent/<id>-<run>
-                         attempt 1..3: fresh agent session  ◄── prompts/task.md (+ retry.md with the gate failure)
-                           agent: skills/autonomous-task (orient → health check → search → plan → test first →
-                                  implement → verify → verifier + reviewer subagents → progress → tasks set → commit)
-                           Claude hooks: Stop = quick gates must be green · PreToolUse = protected files denied
-                         independent gates: npm run gates --base <task base>  (full level)
-                         green + task done with evidence → merge --no-ff into integration
-                         else → status blocked + note, branch kept as agent/failed/<id>-<run>
-                       2 blocked in a row → stop (systemic problem)
-                       end → review/REVIEW-<stamp>.md (+ external-review prompt) committed
+tasks/queue.json
+      |
+      v
+scripts/agent-loop.mjs
+      |
+      +--> isolated agent/<task> branch
+      |      |
+      |      +--> fresh agent attempt
+      |      +--> task-specific acceptance
+      |      +--> verifier
+      |      +--> adversarial reviewer
+      |
+      +--> deterministic gates
+              |
+              +--> green + evidence + done -> merge to integration
+              |
+              +--> fail -> retry / block / preserve failed branch
+
+end of run
+      |
+      v
+review packet -> human + external reviewer
 ```
 
-## Practices adopted and where they live
-| Practice | Source | Mechanism in this repo |
-|---|---|---|
-| JSON feature/task list with pass/fail; agents may not edit the tests/criteria | Anthropic, *Effective harnesses for long-running agents* (agents are less likely to rewrite JSON than Markdown) | `tasks/queue.json`; immutable fields enforced by `diff:anticheat` |
-| One feature per session; start by reading progress + git log + running a basic check | same | prompt steps 1–2; `skills/autonomous-task` |
-| Verify end-to-end like a user before marking done | same; Claude Code best practices ("give Claude a check it can run") | `verify` commands per task, screenshots in `evidence/`, `task:evidence` gate |
-| Progress file + descriptive commits; leave a clean state | same | `progress/PROGRESS.md` (append-only gate), loop auto-commit + `<ID>:` commits |
-| Deterministic gate on stopping | Claude Code docs: Stop hooks block a turn until a script passes; `/goal` alternative | `.claude/hooks/stop-gate.mjs` |
-| Adversarial second opinion in a fresh context; reviewers report only correctness/requirement gaps | Claude Code best practices (verification subagent; avoid over-engineering from reviewers) | `.claude/agents/verifier.md`, `.claude/agents/reviewer.md`, `prompts/reviewer.md` |
-| Fresh session instead of piling corrections | Claude Code best practices (after two failed corrections, clear and re-prompt) | new `claude -p` per attempt, failure summary in `prompts/retry.md`; reset before final attempt |
-| Loop the same prompt, one item per loop, search before building, backpressure from tests/types | Geoffrey Huntley, *Ralph* | `scripts/agent-loop.mjs` + `prompts/task.md` step 3; gates as backpressure |
-| Agents append learnings for the next agent | Ralph (AGENT.md), Scott Logic agentic-loop write-up | AGENTS.md → Learnings; progress "Learnings" line |
-| Spec → plan → tasks → implement → converge | GitHub Spec Kit | PRODUCT_THESIS/DECISIONS (spec) → ROADMAP (plan) → queue (tasks) → loop (implement) → review packet (converge) |
-| Test-first, evidence over claims, root cause before fixes, two-stage review | obra/Superpowers | skills: autonomous-task, verification-before-completion, systematic-debugging; verifier then reviewer |
-| Watch the "genie": deleted/disabled tests, unrequested features | Kent Beck, *Augmented coding: beyond the vibes* | `scripts/lib/anticheat.mjs` (test counts, skips, `.only`, protected files), reviewer checklist |
-| Clear success criteria; sandbox/allowlist for YOLO; scoped credentials | Simon Willison, *Designing agentic loops* | testable acceptance criteria; `--allowedTools` allowlist in `agent-loop.config.json`; no push from agents |
-| Agents that can see and drive the running XR app | Meta XR Operator (Unity, MCP: screenshots, head pose, pinch/poke/grab, gaze-and-pinch, scene graph); IWSDK `iwsdk` CLI + `iwsdk-runtime` MCP + Playwright headless "agent" mode | kill-test tasks A-004/A-005 require agent-captured screenshots |
-| Headless automation flags | Claude Code `claude -p` (`--permission-mode`, `--allowedTools`, `--output-format json`); Codex `codex exec --sandbox workspace-write -` | `agent-loop.config.json` agents |
+One task per agent session.
 
-## Safety model
-- Agents never push, switch branches or edit the grading machinery (permissions deny list + PreToolUse hook + `diff:anticheat`).
-- Work is merged only when the loop's own gates pass (the agent's claim is not trusted).
-- Failed work is never lost: `agent/failed/*` branches.
-- For more autonomy use `--agent claude-auto` (Claude Code auto mode with a classifier) or run inside a container/VM. Never give agents production credentials; the loop does not need any.
+---
+
+## Autonomy boundary
+
+### Agents MAY
+- implement a task;
+- add tests;
+- capture emulator/simulator evidence;
+- update task status/notes/evidence;
+- append progress;
+- add a newly discovered task as `proposed`.
+
+### Agents MAY NOT redefine
+- product thesis;
+- roadmap gates;
+- accepted decisions;
+- competition strategy;
+- root grading rules;
+- root toolchain contract;
+- their own acceptance criteria.
+
+Governance is owner-controlled.
+
+---
+
+## Protected files
+
+The deterministic anti-cheat/protected list includes infrastructure plus product governance, including:
+- AGENTS.md;
+- CLAUDE.md;
+- .cursor/rules/**;
+- docs/xr/PRODUCT_THESIS.md;
+- docs/xr/ROADMAP.md;
+- docs/xr/DECISIONS.md;
+- docs/xr/COMPETITION_SCORECARD.md;
+- gates / loop / hooks / prompts;
+- harness grading code;
+- root package.json/tooling contracts.
+
+If a protected file needs changing, that is an owner/governance task, not something the implementing agent should "fix."
+
+---
+
+## Shell / credential safety
+
+The standard Claude unattended command is intentionally narrower than a normal interactive coding session.
+
+Do not run long unattended loops in an environment containing:
+- production credentials;
+- unrelated SSH keys;
+- cloud-admin tokens;
+- banking/payment credentials;
+- secrets not needed by the repo.
+
+For `claude-auto` or broader permissions:
+use a dedicated VM/container or otherwise isolated development environment.
+
+The allowlist is not a security boundary against malicious code. It is an accident-prevention mechanism.
+
+Dependency/toolchain changes belong to human/pair tasks unless explicitly approved.
+
+---
+
+## Why the grader is outside the agent's control
+
+Gates run independently after the agent exits.
+
+They check:
+- task schema;
+- typecheck;
+- unit tests;
+- build;
+- harness smoke fixture;
+- FoV heuristic;
+- anti-cheat diff;
+- required evidence path;
+- append-only progress;
+- lane-specific tests.
+
+Anti-cheat catches:
+- deleted test files;
+- reduced test counts;
+- new skips/todos;
+- focused tests;
+- protected-file edits;
+- changes to immutable task contracts.
+
+Important limitation:
+an evidence path existing does **not** prove the evidence is good.
+The verifier/reviewer/human still inspect visual and hardware evidence.
+
+For high-impact XR tasks, the real gate is measured headset evidence.
+
+---
+
+## External review policy
+
+External review is especially important for:
+- stack decision;
+- signature interaction;
+- product-scope proposals;
+- G-T0;
+- feature-freeze decision;
+- submission package.
+
+A review may create a **proposed task**.
+It does not silently modify accepted product decisions.
+
+---
+
+## Practices adopted
+
+| Practice | Implementation |
+|---|---|
+| JSON task contracts | `tasks/queue.json` |
+| One task / fresh session | outer loop |
+| Tests/evidence before done | gates + verifier |
+| Fresh retry after failure | new agent session |
+| Preserve failed work | `agent/failed/*` |
+| Adversarial review | verifier + reviewer + external packet |
+| Prevent grader editing | protected files + diff anti-cheat |
+| Search before build | task prompt |
+| Append-only history | `progress/PROGRESS.md` |
+| Runtime eyes for agents | XR Operator / IWSDK tooling tasks |
+| Human product decisions | protected thesis/roadmap/decisions |
+
+Durable implementation learnings are appended to the task's `progress/PROGRESS.md` entry. AGENTS.md is protected.
+
+---
+
+## Evidence hierarchy
+
+1. Real target-hardware evidence.
+2. Simulator/emulator evidence.
+3. Automated unit/integration evidence.
+4. Static analysis.
+5. Agent statement.
+
+Never invert this hierarchy.
+
+Examples:
+- a screenshot from XR Simulator does not prove Quest hand reliability;
+- a passing unit test does not prove a gesture feels good;
+- an agent saying "60 fps" without device capture is no measurement.
+
+---
 
 ## Human + external review cadence
-- Morning: `npm run tasks -- human`, unblock (`NEEDS-HUMAN` notes), approve/discard `proposed` tasks, launch the loop.
-- Evening: read the newest `review/REVIEW-*.md`, paste its external-review section into ChatGPT or Claude, turn findings into tasks.
-- Owner-only actions: accept decisions (D-xxx), change acceptance criteria, edit protected files (run with `ALLOW_PROTECTED_EDITS=1` and `npm run gates -- --allow-protected` when you intentionally change them).
 
-## Files
-| Path | Role | Agents may edit |
-|---|---|---|
-| tasks/queue.json | plan / contract | status, notes, evidence, attempts; may add `proposed` tasks |
-| progress/PROGRESS.md | append-only log | append only |
-| prompts/*.md | loop prompts | no |
-| scripts/agent-loop.mjs, scripts/gates.mjs, scripts/lib/** | loop + gates | no |
-| gates.config.json, agent-loop.config.json | configuration | no |
-| .claude/settings.json, .claude/hooks/**, .claude/agents/** | Claude enforcement | no |
-| skills/** | procedures | via tasks (then `npm run skills:sync`) |
-| review/ | packets | generated |
-| .agent/ | runtime state, logs, prompts, gate reports (gitignored) | runtime only |
+### Morning
+- human tasks;
+- blocked tasks;
+- proposed tasks;
+- decide whether loop should run.
+
+### Evening / end of run
+- read review packet;
+- inspect actual app/build if relevant;
+- send packet to external reviewer;
+- add only useful findings as proposed tasks.
+
+During the earliest stack/product period, review after **every 1–3 merged tasks**, not after an all-night chain.
+
+---
 
 ## Troubleshooting
-- "working tree is not clean": commit or stash before `npm run loop`.
-- Two tasks blocked in a row: read the review packet and `.agent/failures/*`; usually environment (Unity path, missing login) or an unclear acceptance criterion.
-- Stop hook keeps blocking in an interactive session: fix the red gate, or mark the task `blocked` with a diagnosis; after 3 blocks it lets you stop.
-- Codex has no Claude hooks: the loop's gates still enforce everything; subagents are replaced by the reviewer checklist.
-- You (the owner) want to change a protected file or a task's acceptance inside a Claude session: start it with `ALLOW_PROTECTED_EDITS=1 claude` for protected files; edit `tasks/queue.json` contracts outside agent sessions and commit, so the next session's base already contains them.
-- `claude -p` must accept the prompt on stdin (`echo "say ok" | claude -p`). If your CLI differs, set `AGENT_CMD` to a command that reads stdin.
+
+### working tree not clean
+Commit/stash. The loop needs a deterministic base.
+
+### two blocked tasks
+Stop. Assume systemic issue until disproved.
+
+### Stop hook keeps blocking
+Fix the root cause or honestly block the task.
+
+### hardware task
+Use owner `pair` / `human`; never let the agent fabricate device evidence.
+
+### governance needs change
+Do it outside autonomous implementation, with deliberate owner review and protected-edit override.
+
+### new feature idea
+Add as `proposed`, do not implement opportunistically.
+
+---
+
+## "Product before perfection" rule
+
+Automation exists to shorten the path to a playable product, not to create more architecture.
+
+After stack choice:
+- every day should end with a runnable end-to-end build when practical;
+- integrate early;
+- use ugly placeholders when they answer the right question;
+- replace the weak parts after the whole loop exists.
+
+A beautiful subsystem disconnected from the judge journey is not progress.

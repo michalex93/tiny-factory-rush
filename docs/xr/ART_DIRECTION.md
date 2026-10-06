@@ -1,77 +1,117 @@
-# XR Art Direction — v0.2
+# XR Art Direction — v1.0
 
-Visuals are the project's historical weak point (both CrazyGames rejections cited visuals) and Polish & Presentation is 25% of the score. v0.2 adds an owner, a pipeline, budgets and dates.
+Polish & Presentation is 25% of judging. Art is therefore a parallel product lane, not a final cleanup phase.
 
-## Target
-Toy / diorama / abstract industrial.
+## Visual target
+**Premium kinetic industrial desk toy**
 
-The factory should look like a premium tabletop toy the player wants to touch.
+Toy/diorama is the readability baseline.
+The identity should feel more specific:
+- precision industrial miniatures;
+- distinct machine silhouettes;
+- tactile-looking metal/plastic components;
+- restrained status lights;
+- satisfying moving mechanisms;
+- coherent "desk object" presence on the real table.
+
+Avoid:
+- generic low-poly asset-pack look;
+- mixed visual kits;
+- photorealistic dirty factory grime;
+- detail too small to survive tabletop viewing distance.
 
 ## Principles
 1. Silhouette before texture.
 2. Fewer, larger forms.
-3. Strict palette.
-4. State through motion + form + restrained color.
-5. Soft contact with the real table (contact shadows, no floating).
-6. No photorealistic factory grime.
-7. Avoid mixed asset-library styles.
+3. One coherent material language.
+4. Strict semantic palette.
+5. State through motion + shape + sound, never color alone.
+6. Strong table contact; no floating.
+7. Mechanical motion communicates function.
+8. Art must preserve performance and flow readability.
 
-## Ownership and dates
-- Owner: Michel (final say). Agents propose; the owner approves the style board.
-- Style board (6–10 references + 1 palette + 1 material sheet): **Mon Oct 26**.
-- Art lock (single asset source + palette + material set): **Tue Oct 27**.
-- EXP-XR-06 blind A/B (stills, ≥20 people, can be online): **Tue Nov 3**.
-- Art/audio pass complete: **Sat Nov 7** (feature freeze).
+## Dates / gates
+- Style-board v0: ~Oct 10.
+- Art pass on walking skeleton: ~Oct 19.
+- Blind preference + 10-second silent comprehension: ~Oct 20.
+- Art direction lock: ~Oct 21–24.
+- Refinement continues through feature freeze.
 
-## Pipeline (pick ONE source at art lock)
-1. **One coherent low-poly kit** (paid or CC0) as the base, recolored to our palette; or
-2. **Custom primitives** (rounded boxes, cylinders, bevels) generated procedurally — safest for coherence and performance; or
-3. **AI-assisted models** only if retopologized/cleaned to match the kit; otherwise replaced (asset rule below).
+These dates may compress if tooling/headset availability slips; art does not move to the end.
 
-Every external asset gets a line in `docs/xr/ASSET_LICENSES.md` (create on first use): name, source URL, license, modifications.
+## Asset strategy
+Prefer in order:
+1. custom/simple primitives shaped into a unique system;
+2. one coherent licensed kit heavily conformed to our language;
+3. AI-assisted assets only after cleanup/retopo/material normalization.
 
-## Performance budgets (Quest, busy state)
-- Active products on screen: design for ≤120, test at 150.
-- Draw calls: target ≤150 (instancing/batching for products).
-- Triangles: ≤300k visible.
-- Lights: 1 realtime directional max; baked/fake contact shadows.
-- No physics for belt motion: deterministic waypoints; physics only for spills (pooled, capped).
-Budgets are hypotheses until profiled on device (EXP-XR-07).
+External asset tracking:
+create/update `docs/xr/ASSET_LICENSES.md` with source, license and modifications.
 
-## Initial palette roles
-Use semantic roles (exact colors chosen at art lock):
+## Performance hypotheses
+Until real Quest profiling:
+- cap visible products rather than allowing unbounded WIP;
+- instance/batch repeated products;
+- deterministic belt movement rather than rigidbody simulation;
+- physics only where it creates visible value (for example a capped spill);
+- restrained real-time lights/shadows.
+
+Do not treat guessed triangle/draw-call numbers as platform requirements.
+
+## Semantic visual roles
 - neutral machine body;
-- flow/healthy;
+- healthy/flow;
 - warning/stress;
 - priority/urgent;
-- currency/reward;
-- background/ghosted.
+- reward/value;
+- ghost/placement preview.
 
-Keep total simultaneous high-salience colors low. Never encode state by color alone (Tier 1 accessibility basics, D-011).
+Exact colors are an art-lock decision.
 
 ## Scale
 Provisional:
-- machine footprint: roughly palm-sized / clearly grabbable;
-- products: large enough to read at tabletop distance;
-- snap points: visually obvious;
-- labels: secondary, not required to understand state.
+- machines clearly palm/grab sized;
+- product units readable as individual objects;
+- snap targets intentionally generous;
+- labels secondary.
 
-Exact dimensions must be validated in-headset and with `npm run xr:fov` (everything critical inside the VR Glasses cone).
+Validate in headset.
+
+## FoV
+Essential current state and the next required action should remain comfortably discoverable on the narrower VR Glasses profile.
+
+Do not compress every world object into a static 70×66° cone merely to satisfy a script.
+
+The FoV tool is a heuristic plus evidence prompt.
 
 ## Motion language
-- placement: short settle/compression;
-- production: rhythmic and readable;
-- blocked: visibly stalls/backpressure;
-- stress: subtle vibration/smoke/tempo change;
-- overflow: products pile at the bottleneck first, then spill toward the player (D-015);
-- reward: quick, crisp, non-screen-shaking celebration.
+- placement: short settle / magnetic click;
+- processing: exaggerated but readable mechanism;
+- healthy flow: consistent rhythm;
+- blocked: backpressure / halted mechanism;
+- crisis: accumulation escalates before spill;
+- recovery: line visibly resynchronizes;
+- reward: crisp, short, no camera shake.
 
 ## Audio language
-Efficient line -> coherent groove (factory rhythm).
-Congestion -> rhythm loses synchronization.
-Critical event (overflow) -> localized high-salience cue that pulls the eyes to the spill.
+A well-running factory forms a coherent groove.
 
-Avoid constant alarm loops.
+Congestion:
+- timing drifts/desynchronizes;
+- spatial cue points toward the problem.
 
-## Asset rule
-If an external or AI-generated asset cannot be made visually coherent with the system cheaply, replace it with a simpler custom primitive.
+Recovery:
+- rhythm locks back together;
+- reward cue confirms consequence.
+
+Avoid:
+- constant alarms;
+- dense machine noise;
+- high-salience sounds for unimportant events.
+
+## Art test
+EXP-XR-06 asks two different questions:
+1. Which visual direction looks more desirable?
+2. Can viewers understand the game/crisis from the image/clip?
+
+A beautiful image that obscures the system fails.

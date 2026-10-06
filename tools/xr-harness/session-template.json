@@ -1,6 +1,6 @@
 {
   "sessionId": "replace-me",
-  "date": "2026-10-05",
+  "date": "2026-10-06",
   "commit": "replace-me",
   "hardware": "replace-me",
   "build": "replace-me",
@@ -13,7 +13,8 @@
     "firstRewardSec": null,
     "firstProblemSec": null,
     "firstDecisionSec": null,
-    "firstPayoffSec": null
+    "firstPayoffSec": null,
+    "journeyCompleteSec": null
   },
   "comfort": {
     "fatigueRating5": null,
@@ -21,7 +22,10 @@
   },
   "interaction": {
     "interactionErrorsPerMin": null,
+    "falseActivationsPerMin": null,
+    "intendedActionSuccessRate": null,
     "lostHandIncidents": null,
+    "trackingRecoverySec": null,
     "handsFirstComplete": null,
     "seatedComplete": null,
     "realTableMatters": null,
@@ -34,7 +38,8 @@
     "wouldReplay": null,
     "wouldShowSomeone": null,
     "overflowSeenInFov": null,
-    "persistenceAcrossSessions": null
+    "persistenceAcrossSessions": null,
+    "completeMomentUnder10Min": null
   },
   "performance": {
     "testedOnRealHardware": null,
@@ -42,11 +47,16 @@
     "criticalErrors": null,
     "durationMin": null
   },
+  "comprehension": {
+    "silent10sFactoryRecognized": null,
+    "silent10sCrisisRecognized": null,
+    "silent10sMrReasonRecognized": null
+  },
   "observations": [],
   "evidence": {
     "video": "",
     "screenshots": [],
     "logs": []
   },
-  "device": "quest3|quest3s|simulator|emulator"
+  "device": "quest3|quest3s|vr-glasses-sim|simulator|emulator"
 }

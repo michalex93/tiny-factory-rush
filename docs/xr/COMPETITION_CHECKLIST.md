@@ -1,79 +1,108 @@
-# Meta VR Start Developer Competition 2026 — Checklist v0.2
+# Meta VR Start Developer Competition 2026 — Checklist v1.0
 
-Execution checklist built from the official rules (read 2026-10-05). It does not replace re-reading the rules within 72 h of submission: https://start-developer-competition-26.devpost.com/rules
+Execution checklist based on current official rules.
+Re-read official rules/FAQ within 72 h of submission.
 
-Every checked item must link to evidence (file path, URL or commit).
+Official rules:
+https://start-developer-competition-26.devpost.com/rules
 
-## Key facts
-- Deadline: **Wed Nov 18, 2026, 12:00 PT = 14:00 CST (Celaya)**. Internal target: Mon Nov 16, 20:00 CST.
-- Division/track: **Adapted/Significantly Updated × Gaming** (D-018).
-- One entry per individual; one prize per entry; special awards are open to both divisions.
-- Judging: Stage One pass/fail (fits theme, applies required tools/features) → Stage Two, four criteria at 25% each: Innovation & Creativity, Experience Design, Technical Implementation, Polish & Presentation. AI tools may assist judges; humans decide.
-- Judges are not required to watch video beyond 3 minutes.
+Every checked item needs evidence.
+
+## Strategic facts
+- Official deadline: Nov 18, 2026, 12:00 PT = 14:00 CST (Celaya).
+- Internal target: Nov 16, 20:00 CST.
+- Track/division: Adapted / Significantly Updated × Gaming.
+- One Entry per individual/representative.
+- **One prize per Entry.**
+- Stage Two judging: four criteria, 25% each.
+- Primary strategy: maximize main Gaming score; special awards guide design but do not justify unrelated features.
 
 ## Eligibility / administration
-- [x] Meta VR Start membership approved (welcome email 2026-10-05).
-- [ ] Devpost registration complete (screenshot in `evidence/comp/`).
-- [ ] Entrant/team details accurate (adults; residency not in an excluded region — exclusion is by residence).
-- [ ] Division and track selected: Adapted/Significantly Updated × Gaming.
-- [ ] Adaptation baseline preserved: pre-competition commits (2026-09-05 → 2026-09-23), CrazyGames submission email (2026-09-23), web screenshots.
+- [x] Meta VR Start membership approved (per owner evidence).
+- [ ] Devpost registration complete.
+- [ ] Entrant/team details accurate.
+- [ ] Track/division reviewed against final form.
+- [ ] Pre-competition baseline evidence preserved.
 
-## Adaptation evidence (Adapted division)
-- [ ] "What existed before Sep 24" summary (web game: loop, campaign, product ladder) with commit links.
-- [ ] "New during the window" summary: MR tabletop mode, hands-first interaction, gaze + pinch, new platform build.
-- [ ] Dated changelog of MR work (from `progress/PROGRESS.md`).
-- [ ] History not rewritten (no force-push over pre-competition commits).
+## Adaptation evidence
+- [ ] "Before Sep 24" summary with commit/build links.
+- [ ] "New during competition" MR/hands-first summary.
+- [ ] Dated MR changelog.
+- [ ] No rewritten baseline history.
 
-## Experience (hard requirements)
-- [ ] Fully usable with hands end-to-end; controllers optional only.
-- [ ] Seated/stationary: every interaction works within a 2 ft (0.61 m) radius — "airplane seat test".
-- [ ] FoV-aware: critical state and frequent interactables inside the VR Glasses budget (`npm run xr:fov` passes).
-- [ ] Passthrough is purposeful: the real table materially changes play.
-- [ ] No essential tiny text; no wall-of-text onboarding.
-- [ ] Interaction understandable in unfamiliar rooms/tables.
-- [ ] Pause/exit/recovery behavior is sane; hand-loss recovery handled.
+## Hands-first / experience
+- [ ] Entire primary journey completable without pairing controllers.
+- [ ] Seated play comfortable; frequent interactions within reach.
+- [ ] Passthrough/real table materially changes play.
+- [ ] Critical current state and next action are FoV-aware/discoverable across target profiles.
+- [ ] No wall-of-text onboarding.
+- [ ] Unknown rooms/tables handled gracefully.
+- [ ] Hand tracking loss/recovery handled.
+- [ ] False activations and intended-action success measured.
 
-## First five minutes (also "Best First Five Minutes" award)
-- [ ] First action ≤30 s.
-- [ ] First reward ≤60 s.
-- [ ] First visible problem by ~3 min.
-- [ ] First meaningful intervention by ~4 min.
-- [ ] Satisfying payoff by ~5 min.
+## Competition journey
+- [ ] First successful action <=15 s.
+- [ ] First product/reward <=45 s.
+- [ ] Clear problem <=120 s.
+- [ ] Meaningful intervention <=180 s.
+- [ ] Recovery payoff <=240 s.
+- [ ] Grade/next-shift invitation <=300 s.
+- [ ] Complete satisfying moment <=8 min in naive test.
 
-## Technical (Stage Two: Technical Implementation)
-- [ ] ≥60 fps (low-percentile) on Meta Quest hardware in a busy state; 20-minute thermal run recorded.
-- [ ] Hand tracking with intent buffering, multiple grab poses, tracking-loss rules.
-- [ ] Gaze + pinch interaction (ISDK v207+ if Unity) with fallback.
-- [ ] Spatial anchoring / table detection tested across rooms.
-- [ ] No critical runtime errors (log captured).
-- [ ] Build/load path documented and tested from a clean device.
+## Technical Implementation
+- [ ] Real Quest evidence exists.
+- [ ] Meets official >=60 fps minimum in representative busy state.
+- [ ] Performance shows practical headroom outside loading.
+- [ ] Core hand interaction is reliable enough for naive players.
+- [ ] Table/plane anchoring and scene behavior tested in multiple spaces.
+- [ ] Gaze/head-gaze path tested if retained.
+- [ ] No critical runtime errors.
+- [ ] Clean install/open path tested.
 
-## Reason to come back (also "Best Reason to Come Back" award)
-- [ ] Persistence across app restarts.
-- [ ] Visible cross-session progress (product ladder).
-- [ ] Best grade per contract + daily contract.
+## Reason to return
+- [ ] Best grade/profit persists.
+- [ ] Daily Shift seeded by date.
+- [ ] At least one visible cross-session growth element.
+- [ ] At least one product milestone.
+- [ ] Second-session evidence collected.
 
-## Polish (Stage Two: Polish & Presentation)
-- [ ] Coherent art direction from a single asset source (see ART_DIRECTION.md).
-- [ ] Machine silhouettes distinguishable at tabletop distance.
-- [ ] State communicated by shape/motion/audio, not color alone.
-- [ ] Spatial audio restrained and useful (factory rhythm).
-- [ ] Snap/place feedback polished.
+## Accessibility basics
+- [ ] State never relies only on color.
+- [ ] Handedness / one-hand path evaluated.
+- [ ] Critical audio cue has a visual equivalent where necessary.
+- [ ] Any accessibility stretch is authorized by owner, not auto-added.
+
+## Polish & Presentation
+- [ ] Distinct premium kinetic industrial desk-toy visual language.
+- [ ] Machine silhouettes readable at tabletop distance.
+- [ ] Flow/crisis readable without labels.
+- [ ] Factory rhythm/spatial audio supports state rather than noise.
+- [ ] Snap/place/recovery feedback polished.
 - [ ] No debug UI in submission build.
+- [ ] 10-second silent test demonstrates premise/hook.
 
-## Build distribution
-- [ ] Unity/native: APK uploaded to the Meta VR Developer Dashboard in a **new release channel named "Competition"**.
-- [ ] WebXR/IWSDK: public URL judges can open on Quest.
-- [ ] Free of charge, with sufficient access for judging until the winner announcement (~Dec 11, 2026).
-- [ ] No changes after the deadline.
+## Competitive differentiation
+- [ ] Traffix XR post-launch checkpoint complete.
+- [ ] One-sentence difference from Traffix is defensible.
+- [ ] One-sentence difference from Loop One: Done is defensible.
+- [ ] Overflow is not claimed novel merely because objects leave a table.
+- [ ] Signature interaction is a player verb, not only an effect.
+
+## Distribution
+- [ ] Unity/native: Competition release channel APK, if chosen.
+- [ ] IWSDK/WebXR: public judge-accessible URL, if chosen.
+- [ ] Build remains free/available for required judging window.
+- [ ] No post-deadline changes relied upon.
 
 ## Submission package
-- [ ] English (or English subtitles) everywhere.
-- [ ] One-line tagline that names the signature interaction.
-- [ ] Devpost write-up organized by the four criteria (one section each, concrete evidence, no fluff).
-- [ ] Video < 3 min, footage as viewed on a Meta Quest device (or XR Simulator), public on YouTube/Vimeo; opens with the strongest MR moment within the first seconds.
-- [ ] Screenshots from the actual build.
-- [ ] Target launch date (if not already on the store).
-- [ ] Licenses/attributions for every external asset.
-- [ ] Final rules re-checked within 72 h of submission.
-- [ ] Submitted before the internal deadline, not at the official last minute.
+- [ ] English materials.
+- [ ] Tagline names the actual proven interaction/fantasy.
+- [ ] Devpost write-up maps evidence to all four criteria.
+- [ ] Video <3 min, real gameplay.
+- [ ] Opening seconds show the strongest **proven** MR moment.
+- [ ] Screenshots from actual build.
+- [ ] Adapted/new-features summary.
+- [ ] Target launch date.
+- [ ] Asset/license audit.
+- [ ] Final rules/FAQ rechecked <72 h before submission.
+- [ ] Submitted before internal deadline.
