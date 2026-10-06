@@ -13,7 +13,8 @@
     "firstRewardSec": 45,
     "firstProblemSec": 120,
     "firstDecisionSec": 180,
-    "firstPayoffSec": 240
+    "firstPayoffSec": 240,
+    "journeyCompleteSec": 360
   },
   "comfort": {
     "fatigueRating5": 2,
@@ -27,14 +28,18 @@
     "realTableMatters": true,
     "airplaneRadiusOk": true,
     "fovCriticalInView": true,
-    "gazePinchWorks": true
+    "gazePinchWorks": true,
+    "falseActivationsPerMin": 0.2,
+    "intendedActionSuccessRate": 0.98,
+    "trackingRecoverySec": 0.4
   },
   "engagement": {
     "voluntaryTurns": 4,
     "wouldReplay": true,
     "wouldShowSomeone": true,
     "overflowSeenInFov": true,
-    "persistenceAcrossSessions": true
+    "persistenceAcrossSessions": true,
+    "completeMomentUnder10Min": true
   },
   "performance": {
     "testedOnRealHardware": true,
@@ -43,7 +48,8 @@
     "durationMin": 10
   },
   "observations": [
-    "Example fixture only; not real evidence."
+    "Example fixture only; not real evidence.",
+    "Values are synthetic and exist only to exercise harness schema/gates."
   ],
   "evidence": {
     "video": "",
