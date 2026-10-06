@@ -1,0 +1,177 @@
+{
+  "ok": true,
+  "data": {
+    "workspaceRoot": "C:\\Users\\miche\\OneDrive\\Documentos\\01_repos_activos\\tiny\\xr-iwsdk",
+    "operation": "browser.logs",
+    "result": [
+      {
+        "timestamp": 1791268379229,
+        "level": "info",
+        "message": "[killtest] scene ready {mode: EMULATOR_OR_QUEST, table: DEV_FALLBACK_PLANE, tunables: Object, note: Values labeled TUNABLE — not design truth}",
+        "args": [
+          "\"[killtest] scene ready\"",
+          "{\"mode\":\"EMULATOR_OR_QUEST\",\"table\":\"DEV_FALLBACK_PLANE\",\"tunables\":{\"intentHistoryWindowMs\":180,\"trackingLossGraceMs\":250,\"snapRadius\":0.18,\"moduleSize\":[0.28,0.16,0.22],\"tokenCount\":10},\"note\":\"Values labeled TUNABLE — not design truth\"}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/KillTestSystem.ts",
+        "kind": "console",
+        "lineNumber": 91,
+        "url": "https://localhost:8081/src/killtest/KillTestSystem.ts"
+      },
+      {
+        "timestamp": 1791268379557,
+        "level": "info",
+        "message": "[killtest][metric] trackingLost {state: lost}",
+        "args": [
+          "\"[killtest][metric] trackingLost\"",
+          "{\"state\":\"lost\"}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      },
+      {
+        "timestamp": 1791268435449,
+        "level": "info",
+        "message": "[killtest] scene ready {mode: EMULATOR_OR_QUEST, table: DEV_FALLBACK_PLANE, tunables: Object, note: Values labeled TUNABLE — not design truth}",
+        "args": [
+          "\"[killtest] scene ready\"",
+          "{\"mode\":\"EMULATOR_OR_QUEST\",\"table\":\"DEV_FALLBACK_PLANE\",\"tunables\":{\"intentHistoryWindowMs\":180,\"trackingLossGraceMs\":250,\"snapRadius\":0.18,\"moduleSize\":[0.28,0.16,0.22],\"tokenCount\":10},\"note\":\"Values labeled TUNABLE — not design truth\"}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/KillTestSystem.ts",
+        "kind": "console",
+        "lineNumber": 91,
+        "url": "https://localhost:8081/src/killtest/KillTestSystem.ts"
+      },
+      {
+        "timestamp": 1791268437456,
+        "level": "info",
+        "message": "[killtest][metric] trackingLost {state: lost}",
+        "args": [
+          "\"[killtest][metric] trackingLost\"",
+          "{\"state\":\"lost\"}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      },
+      {
+        "timestamp": 1791268448295,
+        "level": "info",
+        "message": "[killtest] scene ready {mode: EMULATOR_OR_QUEST, table: DEV_FALLBACK_PLANE, tunables: Object, note: Values labeled TUNABLE — not design truth}",
+        "args": [
+          "\"[killtest] scene ready\"",
+          "{\"mode\":\"EMULATOR_OR_QUEST\",\"table\":\"DEV_FALLBACK_PLANE\",\"tunables\":{\"intentHistoryWindowMs\":180,\"trackingLossGraceMs\":250,\"snapRadius\":0.18,\"moduleSize\":[0.28,0.16,0.22],\"tokenCount\":10},\"note\":\"Values labeled TUNABLE — not design truth\"}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/KillTestSystem.ts",
+        "kind": "console",
+        "lineNumber": 91,
+        "url": "https://localhost:8081/src/killtest/KillTestSystem.ts"
+      },
+      {
+        "timestamp": 1791268450223,
+        "level": "info",
+        "message": "[killtest][metric] trackingLost {state: lost}",
+        "args": [
+          "\"[killtest][metric] trackingLost\"",
+          "{\"state\":\"lost\"}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      },
+      {
+        "timestamp": 1791268459664,
+        "level": "info",
+        "message": "[killtest][metric] trackingRecovered {state: tracked}",
+        "args": [
+          "\"[killtest][metric] trackingRecovered\"",
+          "{\"state\":\"tracked\"}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      },
+      {
+        "timestamp": 1791268687111,
+        "level": "info",
+        "message": "[killtest][metric] grabAttempt {}",
+        "args": [
+          "\"[killtest][metric] grabAttempt\"",
+          "{}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      },
+      {
+        "timestamp": 1791268687113,
+        "level": "info",
+        "message": "[killtest][metric] grabSuccess {}",
+        "args": [
+          "\"[killtest][metric] grabSuccess\"",
+          "{}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      },
+      {
+        "timestamp": 1791268692502,
+        "level": "info",
+        "message": "[killtest][metric] release {}",
+        "args": [
+          "\"[killtest][metric] release\"",
+          "{}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      },
+      {
+        "timestamp": 1791268692504,
+        "level": "info",
+        "message": "[killtest][metric] interactionDuration {ms: 5392}",
+        "args": [
+          "\"[killtest][metric] interactionDuration\"",
+          "{\"ms\":5392}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      },
+      {
+        "timestamp": 1791268692504,
+        "level": "info",
+        "message": "[killtest][metric] snapSuccess {targetId: slot-right, distance: 0.13}",
+        "args": [
+          "\"[killtest][metric] snapSuccess\"",
+          "{\"targetId\":\"slot-right\",\"distance\":0.13}"
+        ],
+        "columnNumber": 12,
+        "frameUrl": "https://localhost:8081/src/killtest/metrics.ts",
+        "kind": "console",
+        "lineNumber": 11,
+        "url": "https://localhost:8081/src/killtest/metrics.ts"
+      }
+    ]
+  }
+}

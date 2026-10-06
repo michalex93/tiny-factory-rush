@@ -1,0 +1,71 @@
+{
+  "sessionId": "killtest-iwsdk-emulator-2026-10-06",
+  "date": "2026-10-06",
+  "commit": "pending-on-feat/xr-competition-build",
+  "hardware": "IWER managed browser metaQuest3 / living_room SEM",
+  "build": "xr-iwsdk @iwsdk/core@1.0.1 kill-test",
+  "participant": {
+    "id": "agent-scripted-emulator",
+    "priorVrExperience": "none"
+  },
+  "timing": {
+    "firstActionSec": null,
+    "firstRewardSec": null,
+    "firstProblemSec": null,
+    "firstDecisionSec": null,
+    "firstPayoffSec": null,
+    "journeyCompleteSec": null
+  },
+  "comfort": {
+    "fatigueRating5": null,
+    "notes": "No human participant. Scripted EMULATOR grab/snap only."
+  },
+  "interaction": {
+    "interactionErrorsPerMin": null,
+    "falseActivationsPerMin": null,
+    "intendedActionSuccessRate": null,
+    "lostHandIncidents": null,
+    "trackingRecoverySec": null,
+    "handsFirstComplete": null,
+    "seatedComplete": null,
+    "realTableMatters": null,
+    "airplaneRadiusOk": null,
+    "fovCriticalInView": null,
+    "gazePinchWorks": null
+  },
+  "engagement": {
+    "voluntaryTurns": null,
+    "wouldReplay": null,
+    "wouldShowSomeone": null,
+    "overflowSeenInFov": null,
+    "persistenceAcrossSessions": null,
+    "completeMomentUnder10Min": null
+  },
+  "performance": {
+    "testedOnRealHardware": false,
+    "fpsLowPercentile": null,
+    "criticalErrors": 0,
+    "durationMin": null
+  },
+  "comprehension": {
+    "silent10sFactoryRecognized": null,
+    "silent10sCrisisRecognized": null,
+    "silent10sMrReasonRecognized": null
+  },
+  "observations": [
+    "EMULATOR: grabAttempt/grabSuccess/release/snapSuccess(slot-right) logged via iwsdk xr squeeze flow",
+    "DEV FALLBACK table used; not a real physical table plane",
+    "Human metrics intentionally null"
+  ],
+  "evidence": {
+    "video": "",
+    "screenshots": [
+      "evidence/xr/killtest-iwsdk/EMULATOR-killtest-scene.png",
+      "evidence/xr/killtest-iwsdk/EMULATOR-after-grab-snap.png"
+    ],
+    "logs": [
+      "evidence/xr/killtest-iwsdk/EMULATOR-console-after-grab.json"
+    ]
+  },
+  "device": "emulator"
+}

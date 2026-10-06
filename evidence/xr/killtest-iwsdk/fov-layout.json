@@ -1,0 +1,33 @@
+{
+  "head": [0, 1.2, 0],
+  "lookAt": [0, 0.82, -0.95],
+  "reachOrigin": [0, 0.95, 0],
+  "elements": [
+    {
+      "id": "module",
+      "position": [0, 0.82, -0.95],
+      "critical": true,
+      "interactable": true
+    },
+    {
+      "id": "slot-left",
+      "position": [-0.35, 0.75, -0.95],
+      "interactable": true
+    },
+    {
+      "id": "slot-center",
+      "position": [0, 0.75, -0.95],
+      "interactable": true
+    },
+    {
+      "id": "slot-right",
+      "position": [0.35, 0.75, -0.95],
+      "interactable": true
+    },
+    {
+      "id": "fallback-table-center",
+      "position": [0, 0.72, -0.85],
+      "critical": true
+    }
+  ]
+}
