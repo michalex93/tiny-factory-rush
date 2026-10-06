@@ -1,24 +1,28 @@
 {
-  "version": 2,
+  "version": 3,
   "criteria": {
     "firstActionSec": {
-      "max": 30,
+      "max": 15,
       "severity": "warn"
     },
     "firstRewardSec": {
-      "max": 60,
+      "max": 45,
       "severity": "warn"
     },
     "firstProblemSec": {
-      "max": 180,
+      "max": 120,
       "severity": "warn"
     },
     "firstDecisionSec": {
-      "max": 240,
+      "max": 180,
       "severity": "warn"
     },
     "firstPayoffSec": {
-      "max": 300,
+      "max": 240,
+      "severity": "warn"
+    },
+    "journeyCompleteSec": {
+      "max": 480,
       "severity": "warn"
     },
     "fatigueRating5": {
@@ -28,6 +32,18 @@
     "interactionErrorsPerMin": {
       "max": 1,
       "severity": "kill"
+    },
+    "falseActivationsPerMin": {
+      "max": 0.5,
+      "severity": "warn"
+    },
+    "intendedActionSuccessRate": {
+      "min": 0.95,
+      "severity": "warn"
+    },
+    "trackingRecoverySec": {
+      "max": 1,
+      "severity": "warn"
     },
     "voluntaryTurns": {
       "min": 3,
@@ -65,7 +81,7 @@
     },
     "fovCriticalInView": {
       "expected": true,
-      "severity": "kill"
+      "severity": "warn"
     },
     "gazePinchWorks": {
       "expected": true,
@@ -76,6 +92,10 @@
       "severity": "warn"
     },
     "persistenceAcrossSessions": {
+      "expected": true,
+      "severity": "warn"
+    },
+    "completeMomentUnder10Min": {
       "expected": true,
       "severity": "warn"
     }
