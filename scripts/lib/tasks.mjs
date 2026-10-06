@@ -89,14 +89,18 @@ export function isEligible(task, queue, ctx = {}) {
   return { ok: true };
 }
 
-/** Next task for the loop: lowest tier, then earliest due date, then file order. */
+/** Next task for the loop: earliest due date, then tier, then file order.
+ * Due-date first prevents a late Tier-0 hardening task from starving an intentionally
+ * earlier Tier-1 multiplier (art/audio/retention). Tier-2 work remains locked by
+ * status/dependencies until the owner explicitly authorizes it.
+ */
 export function selectNext(queue, ctx = {}) {
   const candidates = queue.tasks
     .map((t, idx) => ({ t, idx }))
     .filter(({ t }) => isEligible(t, queue, ctx).ok);
   candidates.sort((a, b) =>
-    a.t.tier - b.t.tier ||
     String(a.t.due ?? '9999-12-31').localeCompare(String(b.t.due ?? '9999-12-31')) ||
+    a.t.tier - b.t.tier ||
     a.idx - b.idx);
   return candidates[0]?.t ?? null;
 }
