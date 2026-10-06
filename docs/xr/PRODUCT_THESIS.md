@@ -1,164 +1,226 @@
-# Tiny Factory Rush XR — Product Thesis v0.2
+# Tiny Factory Rush XR — Product Thesis v1.0
 
-Status: **provisional, experiment-driven**
-Date: 2026-10-05 (v0.2 adds competitive landscape, platform direction, scope tiers and reason-to-come-back)
+Status: **design freeze for implementation; change only from evidence**
+Date: 2026-10-06
 
 ## One-sentence concept
-A toy-like factory lives on the player's real table; the player physically builds and reconfigures it, observes visible flow problems, and makes strategic interventions whose consequences are immediate.
+A living miniature factory runs on the player's real table; the player physically reconfigures the line under controlled pressure, sees congestion become real spatial chaos, and feels the whole system recover when a smart decision works.
 
-## Wedge (what makes us different)
-**A 3–5 minute flow-crisis puzzle on your real table.** You read where the line jams, fix it with your hands, and feel the factory lock into rhythm.
+## Commercial-facing fantasy
+**Build it. Run the shift. Rescue the line. Grow the factory.**
 
-- The overflow is the **diagnosis**, not a physics gag: where boxes pile up and spill tells you where the bottleneck is.
-- The **real table is a constraint**: its size and edges shape the layout and the stakes.
-- The reward is **systemic**: one smart intervention makes the whole line move in sync (motion + sound).
+The game is industrial strategy, not industrial-engineering education. Real operations concepts exist in the simulation rules, but the player should understand the factory mainly by watching, touching and listening to it.
 
-If a judge could describe us as "an automation sandbox" or "a physics toy", the wedge failed.
+## Competition wedge
+**A short industrial-strategy shift that could not play the same way on a flat screen.**
+
+The real table must matter:
+- its usable space constrains layout;
+- its near edge can become part of a visible failure state;
+- the player reaches into the system and changes it directly;
+- the factory's spatial state, not a dashboard, explains what is going wrong.
+
+If the experience can be described as "automation sandbox", "idle factory", "traffic routing with boxes" or "a 2D tycoon floating in MR", the wedge failed.
 
 ## What this is
 - A videogame first.
-- Industrial strategy expressed through systems.
-- Tabletop mixed reality.
-- Short, replayable turns.
-- Direct hand manipulation, with eyes+hands (gaze + pinch) as a secondary input.
+- Tabletop mixed-reality industrial strategy.
+- Hands-first end-to-end.
+- Short shifts with clear start, crisis, intervention and result.
 - Low-text, high-legibility interaction.
-- A competition vertical slice before it becomes a full commercial product.
+- Controlled pressure, not reflex punishment.
+- A competition vertical slice designed to become a commercial product if validated.
 
 ## What this is not
-- An industrial-engineering teaching tool.
-- A professional simulator.
-- A literal VR port of the Phaser UI.
+- An educational simulator.
+- A professional factory simulator.
+- A literal port of the Phaser UI.
 - A menu-heavy tycoon.
-- A twitch hand-tracking game.
-- A full Factorio competitor.
-- An automation/programming sandbox (that is Loop One: Done's space).
-
-## Competitive landscape (researched 2026-10-05)
-Details and sources: `docs/xr/RESEARCH_2025_WINNERS.md`.
-
-| Product | What it is | Why it matters to us |
-|---|---|---|
-| Loop One: Done | MR automation game; tiny industrial world built with your hands; seated miniature mode; solo dev, 4.7★ but few reviews | Closest concept. We must not read as "automation sandbox": we are short flow crises with diagnosis and rhythm. |
-| Table Troopers | Hands-first tabletop MR tactics; units that fall off the table stay on your floor; 4.8★, Horizon+ | Proves tabletop + falling-off-table delight. Overflow alone is **not novel**; its strategic meaning is. Copy their intent-based input. |
-| Galactic Traffic Control | MR routing arcade (route ships to matching ports), Mini/Micro seated modes | Flow/routing in MR exists; REDLINE must feel like strategy, not traffic arcade. |
-| Pack Attack (2025 Start, Social HM) | MR party game about a delivery line; phones as controllers | Industrial/logistics theme is judge-friendly; their edge was social asymmetry. |
-| HandCraft XR (2025 Start, Judges' Choice) | IWSDK tabletop builder with pinch-spawn and snap | Grab & snap on a table is table stakes, not a differentiator. |
-| Little Critters (2025 Start runner-up; UploadVR Best MR Game 2025) | MR tower defense with scene-aware hand interactions | Bar for hand quality: multiple grab poses, tracking-loss rules, real-surface interactions. |
-
-## Platform direction (Meta Connect 2026)
-- Meta VR Glasses ship spring 2027: eyes + hands are the primary inputs, controllers optional, FoV ≈ 70×66° (Quest 3 ≈ 110×96°).
-- SDK v207: Interaction SDK gaze interaction (eye gaze + pinch, with HMD/raycast fallback), Meta VR Simulator with a VR Glasses profile, Meta XR Operator (agents can build/test/verify in simulator or headset).
-- Store shows hand-tracked titles first to hands-only users.
-- The 2026 competition rubric explicitly evaluates gaze interactions (ISDK v207+), FoV-aware design, seated "airplane seat test" (every interaction within ~2 ft), hands-first end-to-end and ≥60 fps on Quest.
-
-Consequence: we design for the **narrowest** device (D-012) and support **gaze + pinch** (D-013).
+- A pure idle/incremental game.
+- A full Factorio/Satisfactory competitor.
+- A relaxed city-flow puzzle.
+- A physics toy whose novelty ends after the first spill.
+- A feature showcase built to chase several special awards.
 
 ## Core player fantasy
-"I built this little factory. I can see exactly why it is failing. I can fix it with my hands. When I make a smart decision, the whole system comes alive."
+"I built this little factory. I can see exactly why it is failing. I can fix the system with my hands. When I make the right decision, the entire factory snaps back into rhythm and I make more money."
+
+## The four roles of the core experience
+Do not confuse these during implementation or playtests.
+
+### 1. Signature interaction — what the PLAYER does
+The player physically reconfigures a live production system.
+
+Candidates to test:
+- grab/snap a buffer, splitter or processing module into the live line;
+- move a large routing gate;
+- reroute a connection.
+
+The signature interaction must be understandable in seconds and remain reliable with hand tracking.
+
+### 2. Crisis / magic moment — what the WORLD does
+A visible flow failure escalates into spatial chaos.
+
+Primary hypothesis:
+products visibly pile up at the cause, reach the near table edge and spill into the player's room.
+
+Overflow is feedback and drama, **not automatically the signature interaction**.
+
+### 3. Sensory identity — how success FEELS
+A healthy line creates a coherent kinetic and audio rhythm.
+Congestion breaks that rhythm.
+Recovery restores it.
+
+"Factory rhythm" is feedback/game-feel, not a separate game mode.
+
+### 4. Strategy — why the decision MATTERS
+Interventions have opportunity costs:
+- spend money now or tolerate the jam;
+- add buffer or increase processing;
+- route urgent work or protect normal flow;
+- take the safer contract or the more profitable one.
+
+Do not add a system unless it creates a meaningful trade-off visible within the shift.
 
 ## Design pillars
-### 1. Observe, decide, intervene, feel
-The player should spend more time diagnosing and deciding than repeatedly clicking obvious actions.
 
-### 2. The system explains itself physically
-Queues, blocked machines, overflow, rhythm, smoke/stress and movement communicate state before text does.
+### 1. Observe -> decide -> intervene -> feel
+The player should spend more time understanding and choosing than repeatedly performing obvious actions.
 
-### 3. The table matters
-The real tabletop is not a background. Space, edges, reach and placement change the experience.
+### 2. The factory explains itself physically
+Queues, machine state, overflow, motion, sound and spatial arrangement communicate state before text or statistics.
 
-### 4. Strategic pressure, not reflex punishment
-Time pressure may exist, but interactions must be forgiving. REDLINE is preserved as routing strategy, not rapid repetitive pinching.
+### 3. The table materially changes play
+Passthrough is not decoration. Layout and failure use the player's physical surface.
 
-### 5. Toy-like clarity
-Large silhouettes, few colors, readable modules, strong snap feedback and restrained effects.
+### 4. Hands are interpreted by INTENT
+Do not cargo-cult a single gesture or timing value from another game. Use forgiving targets, contextual arbitration, tunable intent smoothing and tracking-loss recovery; then tune from naive-player evidence.
 
-### 6. Built for the next device
-Everything that matters sits in the central field of view, works seated within ~2 ft, and works with hands only or eyes + hands.
+### 5. Controlled pressure
+The player can feel urgency without needing millisecond hand precision. REDLINE remains an experiment, not a commitment to slow or fast play.
 
-## Provisional session architecture
-Turn length: ~3–5 minutes.
+### 6. Premium kinetic desk-toy identity
+Toy/diorama is a readability baseline, not our identity. The target is a coherent **premium kinetic industrial desk toy**: distinctive silhouettes, tactile-looking materials, purposeful lights, satisfying mechanical motion and disciplined sound.
 
-Loop:
-1. Receive a contract/goal.
-2. Build or reconfigure the line.
-3. Start production.
+### 7. Product before perfection
+From the stack decision onward, keep a runnable end-to-end build every day. Build the crude journey first, then replace weak parts instead of polishing isolated systems that have never worked together.
+
+## Competition journey
+The submission must deliver a complete satisfying moment in **6–8 minutes or less**, even if the eventual commercial run is longer.
+
+### First-five-minutes target
+- **0–15 s:** first successful physical action.
+- **<=45 s:** first product/reward.
+- **<=120 s:** first unmistakable flow problem.
+- **<=180 s:** first meaningful strategic intervention.
+- **<=240 s:** visible/audible recovery payoff.
+- **<=300 s:** grade/reward plus clear invitation to another shift.
+
+A judge must experience the whole game's promise before minute five.
+
+## Provisional commercial session architecture
+A commercial shift may later run ~3–5 minutes and a run may contain several shifts. Do not force that structure into the competition build until the 6–8 minute judge journey is excellent.
+
+Base loop:
+1. Receive a clear contract.
+2. Build/reconfigure.
+3. Start shift.
 4. Observe flow.
-5. A legible problem emerges.
-6. Intervene physically.
-7. See and hear the result.
-8. Receive grade/reward.
-9. Choose one upgrade/module from a small draft.
-10. Start another turn.
+5. Crisis becomes legible.
+6. Make one meaningful intervention.
+7. See/hear the consequence.
+8. Receive money/grade.
+9. Choose a small upgrade/draft.
+10. Continue or stop cleanly.
 
-A run can contain 4–5 turns, but the competition build may only need enough content to prove the loop.
+## Reason to come back — minimum competition implementation
+"Reason to return" must exist, but it must not become a second game.
 
-## Reason to come back (Tier 1, mandatory — D-014)
-The rubric rewards repeat usage in two criteria (Innovation: "drive repeat usage"; Experience Design: "habit-forming purpose") plus a special award.
-- **Product ladder** reused from the web game: Boxes → Toys → Smartphones → Robots → Space Tech, unlocked across sessions and visible on the table.
-- **Best grade per contract** persisted; beating it is the short-term goal.
-- **Daily contract**: one seeded contract per day, same for everyone (enables a leaderboard later, Tier 2).
+Tier-1 minimum:
+- best grade / best profit saved;
+- deterministic Daily Shift seeded by date;
+- one **visible** cross-session growth element on the table (for example a workshop shelf/trophy/product display);
+- at least one meaningful product milestone in the competition build.
+
+The full web ladder (Boxes -> Toys -> Smartphones -> Robots -> Space Tech) is a commercial roadmap, not a requirement to implement five complete product tiers before submission.
+
+No online leaderboard is required for the competition slice.
 
 ## Core resources
-Keep the visible resource model minimal:
+Keep visible resources minimal:
 - money / score;
 - physical space;
 - time / contract pressure;
-- flow capacity.
+- line capacity represented in the world.
 
-Do not introduce additional currencies without evidence.
+Do not add currencies simply to make progression look deeper.
 
-## Systems to retain from web conceptually
+## Systems retained conceptually from web
 - source -> process -> buffer -> process -> sink;
-- visible WIP;
+- visible WIP / queues;
 - bottlenecks;
 - route decisions;
-- contracts/grades;
-- upgrade trade-offs;
-- product ladder (as cross-session progression);
-- FLOW versus MARGIN as an underlying rule, not necessarily explicit vocabulary.
+- contracts and grades;
+- economic trade-offs;
+- FLOW vs MARGIN as an underlying rule, not required vocabulary.
 
-## Scope tiers (D-011 supersedes D-003)
-The owner works full-time on this until the deadline, so work that raises competition odds is in scope — **in tier order**. Tier 2 starts only after gate G-T0 passes (see ROADMAP).
+## Systems outside the competition core
+These remain backlog unless direct evidence changes the decision:
+- individual workers;
+- detailed labor safety / ergonomics;
+- detailed quality inspection;
+- separate maintenance economy;
+- accounting inventory;
+- CAPEX/OPEX dashboards;
+- OEE/SPC vocabulary;
+- UGC editor;
+- complex procurement/supply chain;
+- multiple currencies;
+- long campaign.
 
-- **Tier 0 — must ship:** hands-first core loop, signature mechanic, MR table anchoring, seated ≤2 ft, FoV-aware layout, first five minutes, ≥60 fps on Quest, English, video.
-- **Tier 1 — score multipliers:** gaze + pinch, reason to come back, art/audio polish, accessibility basics (one-handed, left/right, non-color state).
-- **Tier 2 — stretch (only after G-T0):** pass-the-headset party mode (no networking), async daily-contract leaderboard, accessibility pack, short spatial "foreman" callouts (agentic interaction experiment), colocated multiplayer only if everything above is green.
+## Optional stretch policy
+There is **no automatic Tier-2 feature window**.
 
-Still out (low odds per hour): individual workers, detailed labor safety/ergonomics, detailed quality/inspection, separate maintenance economy, accounting inventory, CAPEX/OPEX UI, OEE/SPC vocabulary, UGC editor, complex procurement/supply chain, multiple currencies, long campaign.
+After the core gate passes, the owner may authorize **at most one** stretch feature if a written score-per-hour review shows it strengthens the main 4 judging criteria or a special award without threatening polish.
 
-## Signature-mechanic candidates
-These are hypotheses to test; decision by **2026-10-18** (D-016):
-1. **Grab & Snap Modules** — direct physical reconfiguration (table stakes; must be excellent, cannot be the wedge alone).
-2. **Physical Overflow** — WIP spills over the real table edge **toward the player, inside the FoV**, and points at the bottleneck (D-015).
-3. **Large REDLINE Gates** — strategic routing under moderate pressure.
-4. **Factory Rhythm** — an efficient line creates an audible groove; congestion breaks it.
+Candidates only:
+- extra accessibility capability;
+- pass-the-headset social mode;
+- online daily leaderboard;
+- agentic/foreman experiment;
+- multiplayer.
 
-## The magic-moment hypothesis
-A line overloads, boxes visibly pile up at the bottleneck and spill off the player's real table edge in front of them; the player snaps a module/buffer into place and the jam resolves with synchronized motion and sound.
+Special awards are design signals, not a shopping list. Official rules limit an Entry to one prize.
 
-## First-five-minutes target
-- 0–30 s: first successful physical interaction.
-- <=60 s: first product/reward.
-- 2–3 min: first visible flow problem.
-- 3–4 min: first meaningful physical intervention.
-- <=5 min: obvious payoff and invitation to another turn.
+## Competitive landscape
+Closest threats / references:
+- **Table Troopers:** validates hands-first tabletop strategy and intent-aware input; its falling-off-table moment means "things fall off the table" alone is not novel.
+- **Loop One: Done:** already occupies tactile MR factory automation; we must not read as an automation sandbox.
+- **Traffix XR: Cities of Tomorrow:** launches 2026-10-15 in the tabletop flow/routing space. Our differentiation must be industrial operation, money/risk and live crisis management, not merely "tabletop + flow + hands".
+- **Tiny Golf / Little Critters / 2025 winners:** show the value of an obvious premise, one memorable physical interaction, early naive playtests and product-level polish.
 
-## Commercial split
-### Web
-Free/ad-supported candidate after visual polish and portal validation.
+Mandatory competitor checkpoint: review Traffix XR immediately after launch before signature lock.
 
-### Quest/MR
-Potential low-price premium/Horizon+ style product if the competition prototype proves demand and comfort.
+## Main award strategy
+Primary target:
+**Best Adapted / Significantly Updated Gaming Experience.**
 
-No commercial model is considered validated yet.
+Secondary design targets:
+- Best First Five Minutes;
+- Boldest Original Concept;
+- Best Reason to Come Back.
 
-## Success definition for the next phase
-The project is successful in this phase if we prove:
-- the tabletop interaction is comfortable;
-- the loop is understandable without technical vocabulary;
-- at least one MR-specific mechanic produces delight;
-- players voluntarily want another turn;
-- target hardware performance is acceptable;
-- the vertical slice can be polished before submission.
+Do not add unrelated features solely to become eligible for more categories. One Entry can receive only one prize.
 
-Winning the competition is an upside, not a valid substitute for those product signals.
+## Success definition for development
+Before feature freeze we must prove:
+- core hand interaction is reliable enough that users blame their decision, not tracking;
+- a naive player understands the basic flow without industrial vocabulary;
+- the real table materially affects the experience;
+- the 6–8 minute journey has a beginning, crisis, intervention and payoff;
+- one MR-specific moment is genuinely memorable;
+- players voluntarily continue/replay;
+- target hardware meets performance requirements with headroom;
+- art/audio read as a coherent product, not a prototype.
+
+Winning is the upside. These product signals are the controllable objective.
