@@ -2,6 +2,7 @@
 name: fov-aware-design
 description: Use when placing or reviewing XR scene layout, UI, onboarding cues or crisis effects across Quest and the narrower Meta VR Glasses profile.
 ---
+<!-- Generated from skills/fov-aware-design/SKILL.md by `npm run skills:sync`. Edit the source, not this copy. -->
 
 # Skill: FoV-Aware Design
 
