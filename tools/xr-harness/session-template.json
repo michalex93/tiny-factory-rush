@@ -24,12 +24,17 @@
     "lostHandIncidents": null,
     "handsFirstComplete": null,
     "seatedComplete": null,
-    "realTableMatters": null
+    "realTableMatters": null,
+    "airplaneRadiusOk": null,
+    "fovCriticalInView": null,
+    "gazePinchWorks": null
   },
   "engagement": {
     "voluntaryTurns": null,
     "wouldReplay": null,
-    "wouldShowSomeone": null
+    "wouldShowSomeone": null,
+    "overflowSeenInFov": null,
+    "persistenceAcrossSessions": null
   },
   "performance": {
     "testedOnRealHardware": null,
@@ -42,5 +47,6 @@
     "video": "",
     "screenshots": [],
     "logs": []
-  }
+  },
+  "device": "quest3|quest3s|simulator|emulator"
 }

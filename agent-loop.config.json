@@ -1,0 +1,32 @@
+{
+  "$comment": "Outer-loop settings (PROTECTED). Pick an agent with --agent <name>. Commands receive the prompt on stdin.",
+  "defaultAgent": "claude",
+  "agents": {
+    "claude": {
+      "command": "claude -p --permission-mode acceptEdits --output-format json --allowedTools \"Read,Edit,Write,Glob,Grep,Agent,Skill,Bash(npm run *),Bash(npm test *),Bash(npm install *),Bash(npm --prefix *),Bash(npm create *),Bash(npx tsc *),Bash(npx vitest *),Bash(npx iwsdk *),Bash(node scripts/*),Bash(node tools/*),Bash(git status *),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *)\"",
+      "notes": "Claude Code headless. acceptEdits + explicit allowlist: no push, no branch switching, no arbitrary shell. Hooks in .claude/settings.json still run (Stop gate, protected paths)."
+    },
+    "claude-auto": {
+      "command": "claude -p --permission-mode auto --permission-prompts none --output-format json",
+      "notes": "Claude Code auto mode (classifier reviews actions). Requires a recent Claude Code; use when the allowlist is too tight for scaffolding tasks."
+    },
+    "codex": {
+      "command": "codex exec --sandbox workspace-write -",
+      "notes": "OpenAI Codex CLI non-interactive; reads AGENTS.md; prompt from stdin. No Claude hooks: the loop's gates are the only enforcement. Its workspace-write sandbox may block network; tasks that run npm install need network access configured per the Codex docs."
+    },
+    "mock": {
+      "command": "node scripts/mock-agent.mjs",
+      "notes": "Test double used by npm run loop:selftest."
+    }
+  },
+  "attemptTimeoutMinutes": 45,
+  "maxAttemptsPerTask": 3,
+  "resetBeforeFinalAttempt": true,
+  "maxTasksPerRun": 8,
+  "maxConsecutiveBlocked": 2,
+  "runBudgetMinutes": 600,
+  "gateLevel": "full",
+  "pushAfterEachTask": false,
+  "remote": "origin",
+  "reviewPacket": true
+}

@@ -1,0 +1,6 @@
+{
+  "$comment": "Set by the owner when D-007 is decided (task H-005). Tasks in lane 'xr' wait until stack is 'unity' or 'iwsdk'.",
+  "stack": "undecided",
+  "targetDevices": ["quest3", "quest3s"],
+  "fovBudgetDevice": "vr-glasses"
+}

@@ -11,3 +11,6 @@ Thumbs.db
 coverage/
 *.tsbuildinfo
 .playwright-mcp/
+
+# Autonomous loop runtime state (logs, prompts, gate reports, locks)
+.agent/

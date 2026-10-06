@@ -1,26 +1,28 @@
-name: XR Foundation Check
+name: Quality gates
 
 on:
   pull_request:
   push:
     branches:
-      - feat/xr-foundation-v0
+      - master
+      - 'feat/**'
 
 permissions:
   contents: read
 
 jobs:
-  quality:
+  gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
-      - name: XR harness smoke fixture
-        run: npm run xr:harness -- tools/xr-harness/examples/smoke-pass.json --strict
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      - name: Full gates (diff anti-cheat runs inside the agent loop, not in CI)
+        run: node scripts/gates.mjs --level full --no-diff

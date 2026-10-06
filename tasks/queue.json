@@ -1,0 +1,1310 @@
+{
+  "version": 1,
+  "updated": "2026-10-05",
+  "deadline": "2026-11-18T14:00:00-06:00",
+  "tasks": [
+    {
+      "id": "A-000",
+      "title": "Plan v0.2, research and autonomous development system",
+      "phase": "P0-foundation",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "docs",
+      "due": "2026-10-05",
+      "depends_on": [],
+      "acceptance": [
+        "Docs updated with dates, tiers, decisions D-011..D-019, competitive research",
+        "Loop, gates with anti-cheat, review packet, hooks, subagents and skills in place",
+        "npm run gates and npm run loop:selftest pass"
+      ],
+      "verify": [
+        "npm run gates",
+        "npm run loop:selftest"
+      ],
+      "evidence_required": [
+        "docs/xr/**"
+      ],
+      "skills": [
+        "autonomous-task"
+      ],
+      "status": "done",
+      "attempts": 0,
+      "notes": [
+        "Created by Claude in the planning session of 2026-10-05; see PR description."
+      ],
+      "evidence": [
+        "docs/xr/AUTONOMY.md",
+        "docs/xr/ROADMAP.md",
+        "docs/xr/DECISIONS.md",
+        "docs/xr/RESEARCH_2025_WINNERS.md"
+      ]
+    },
+    {
+      "id": "H-000",
+      "title": "Run the loop selftest and a dry run on your own PC",
+      "phase": "P0-foundation",
+      "tier": 0,
+      "owner": "human",
+      "lane": "tools",
+      "due": "2026-10-06",
+      "depends_on": [],
+      "acceptance": [
+        "npm ci, npm run gates and npm run loop:selftest pass on the Windows PC",
+        "npm run loop -- --dry-run prints the next task prompt",
+        "`echo \"say ok\" | claude -p` prints a reply (the loop sends prompts on stdin); same for `codex exec -` if you use Codex",
+        "Claude Code runs hooks with Git Bash on Windows (the SessionStart orientation appears when you open `claude` in the repo)"
+      ],
+      "verify": [
+        "npm run gates",
+        "npm run loop:selftest",
+        "npm run loop -- --dry-run"
+      ],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-001",
+      "title": "Register on Devpost for Meta VR Start 2026 (Adapted/Updated x Gaming)",
+      "phase": "P0-foundation",
+      "tier": 0,
+      "owner": "human",
+      "lane": "comp",
+      "due": "2026-10-06",
+      "depends_on": [],
+      "acceptance": [
+        "Registration confirmed on start-developer-competition-26.devpost.com",
+        "Screenshot saved in evidence/comp/"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/comp/*"
+      ],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-002",
+      "title": "Get a Quest 3/3S, enable developer mode, install Meta Quest Developer Hub",
+      "phase": "P0-foundation",
+      "tier": 0,
+      "owner": "human",
+      "lane": "comp",
+      "due": "2026-10-08",
+      "depends_on": [],
+      "acceptance": [
+        "Headset in hand, developer mode on, ADB sees the device",
+        "Hand tracking enabled; passthrough works at your table"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-003",
+      "title": "Install toolchains: Unity 6000.0 LTS + Meta XR Core SDK v207 + Simulator + XR Operator; Node 22 + IWSDK CLI",
+      "phase": "P0-foundation",
+      "tier": 0,
+      "owner": "human",
+      "lane": "tools",
+      "due": "2026-10-07",
+      "depends_on": [],
+      "acceptance": [
+        "Unity 6000.0.66f2+ installed with Android build support",
+        "Meta XR Core SDK v207+, OpenXR Plugin 1.17+, Meta XR Simulator installed; Meta XR Operator enabled",
+        "UNITY_PATH environment variable points to Unity.exe",
+        "Node 22 and `npx iwsdk` available"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-002",
+      "title": "Create xr/sim-core: deterministic flow simulation for the XR slice (TypeScript, no Phaser)",
+      "phase": "P1-killtest",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "sim",
+      "due": "2026-10-08",
+      "depends_on": [],
+      "acceptance": [
+        "xr/sim-core models source, machines (rate, capacity), buffers (WIP limit), routing gates, sink, overflow events with location, contract timer and grade",
+        "Deterministic: fixed timestep + seeded RNG; same seed => identical event log",
+        ">= 25 unit tests covering flow, bottleneck detection, overflow, routing and grading",
+        "Golden vectors for 5 scenarios exported to xr/sim-core/golden/*.json by a script, for cross-engine parity (C# port must reproduce them)",
+        "tsconfig and vitest include xr/**; existing web game tests and build still pass",
+        "xr/sim-core/README.md documents the rules in plain language (no industrial jargon in player-facing names)"
+      ],
+      "verify": [
+        "npm run typecheck",
+        "npm test",
+        "npm run build"
+      ],
+      "evidence_required": [
+        "xr/sim-core/golden/*.json",
+        "xr/sim-core/README.md"
+      ],
+      "skills": [
+        "autonomous-task",
+        "xr-product-guardian"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-003",
+      "title": "Table layout model: compute module positions from real table size so the FoV and reach checks pass",
+      "phase": "P1-killtest",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "sim",
+      "due": "2026-10-09",
+      "depends_on": [
+        "A-002"
+      ],
+      "acceptance": [
+        "Function in xr/sim-core/layout computes positions for source, machines, buffers, sink, overflow edge (facing the player), timer and draft area from table width/depth and seated head pose",
+        "Exports layout JSON in the format of tools/xr-harness/examples/layout-example.json",
+        "Tests: for tables 0.6x0.4, 0.9x0.6 and 1.2x0.8 m the exported layout passes `npm run xr:fov -- <file> --device vr-glasses` (assert via the lib) and every interactable is within 0.61 m",
+        "If a table is too small, the function returns a reduced layout and a reason instead of overlapping modules"
+      ],
+      "verify": [
+        "npm test"
+      ],
+      "evidence_required": [
+        "evidence/xr/layout/*.json"
+      ],
+      "skills": [
+        "autonomous-task",
+        "fov-aware-design"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-004",
+      "title": "IWSDK kill-test scaffold in xr-iwsdk/ (table placement, grab+snap, 10 products, gaze highlight)",
+      "phase": "P1-killtest",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr-iwsdk",
+      "due": "2026-10-10",
+      "depends_on": [
+        "A-002",
+        "A-003"
+      ],
+      "acceptance": [
+        "xr-iwsdk/ created with the official IWSDK CLI/template; npm scripts build and test exist",
+        "Places the factory on a detected table/plane (hit-test) or a fixed fallback in the emulator",
+        "One grabbable module with snap grid, intent buffering (pose ~0.5 s before release) and keep-on-tracking-loss",
+        "A belt with 10 products driven by xr/sim-core (no duplicated simulation logic)",
+        "Gaze/hover highlight on machines with pinch to select (fallback ray)",
+        "Automated smoke test in IWSDK agent (headless) mode saves a screenshot to evidence/xr/killtest-iwsdk/",
+        "README: run in the IWER emulator and on Quest over Wi-Fi"
+      ],
+      "verify": [
+        "npm --prefix xr-iwsdk run build",
+        "npm --prefix xr-iwsdk test"
+      ],
+      "evidence_required": [
+        "evidence/xr/killtest-iwsdk/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "xr-interaction-review",
+        "performance-quest"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-005",
+      "title": "Unity kill-test scaffold in xr-unity/ (MRUK table, ISDK grab+snap, gaze building block, C# sim parity)",
+      "phase": "P1-killtest",
+      "tier": 0,
+      "owner": "pair",
+      "lane": "xr-unity",
+      "due": "2026-10-10",
+      "depends_on": [
+        "A-002",
+        "A-003",
+        "H-003"
+      ],
+      "acceptance": [
+        "Unity 6 project in xr-unity/ with Meta XR Core SDK v207, MRUK table detection, ISDK hand grab + snap with intent buffering",
+        "Eye Gaze Interaction building block with raycast/head-gaze fallback selects a machine",
+        "C# port of xr/sim-core reproduces every golden vector in EditMode tests",
+        "Belt with 10 products; Meta XR Operator configured; an agent-captured Simulator screenshot saved to evidence/xr/killtest-unity/",
+        "README with batchmode test command and Simulator/Quest run steps"
+      ],
+      "verify": [
+        "\"$UNITY_PATH\" -runTests -batchmode -projectPath xr-unity -testPlatform EditMode -testResults .agent/unity-editmode.xml"
+      ],
+      "evidence_required": [
+        "evidence/xr/killtest-unity/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "xr-interaction-review",
+        "performance-quest"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-004",
+      "title": "Kill-test device session: both builds on Quest (EXP-XR-01 short, EXP-XR-07 perf)",
+      "phase": "P1-killtest",
+      "tier": 0,
+      "owner": "human",
+      "lane": "playtest",
+      "due": "2026-10-11",
+      "depends_on": [
+        "A-004",
+        "A-005",
+        "H-002"
+      ],
+      "acceptance": [
+        "Each available build run on Quest at a real table by the owner + 2 people",
+        "Session JSONs recorded in evidence/xr/EXP-XR-01/ and perf records in evidence/perf/"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/EXP-XR-01/*"
+      ],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-006",
+      "title": "Kill-test evidence report and D-007 recommendation",
+      "phase": "P1-killtest",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "docs",
+      "due": "2026-10-12",
+      "depends_on": [
+        "H-004"
+      ],
+      "acceptance": [
+        "evidence/xr/killtest/REPORT.md scores both stacks with the D-007 weights using measured data only (null when missing)",
+        "Lists setup friction, agent-tooling success (Operator vs iwsdk MCP), fps, interaction errors, risks",
+        "Clear recommendation with the conditions that would flip it"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/killtest/REPORT.md"
+      ],
+      "skills": [
+        "autonomous-task",
+        "verification-before-completion"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-005",
+      "title": "Decide D-007 (stack) and set xr.config.json stack to unity or iwsdk",
+      "phase": "P1-killtest",
+      "tier": 0,
+      "owner": "human",
+      "lane": "docs",
+      "due": "2026-10-12",
+      "depends_on": [
+        "A-006"
+      ],
+      "acceptance": [
+        "D-007 set to ACCEPTED with the chosen stack and reason",
+        "xr.config.json stack updated; tasks of the other stack set to skipped"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-010",
+      "title": "Core flow in the chosen stack: source, belt, machines, buffer, sink, visible queue, one bottleneck",
+      "phase": "P2-core",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-15",
+      "depends_on": [
+        "H-005",
+        "A-003"
+      ],
+      "acceptance": [
+        "Products visibly flow source -> machine -> buffer -> machine -> sink on the real table, driven by xr/sim-core",
+        "Queues are physical piles, the bottleneck is visible without text",
+        "Layout comes from the A-003 table model; FoV check passes on the exported layout",
+        "Emulator/simulator screenshot + short capture saved"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/core/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "xr-interaction-review",
+        "fov-aware-design"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-011",
+      "title": "Overflow graybox: WIP piles at the bottleneck and spills over the table edge facing the player, with a localized cue",
+      "phase": "P2-core",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-16",
+      "depends_on": [
+        "A-010"
+      ],
+      "acceptance": [
+        "Products accumulate at the bottleneck before spilling (diagnostic, D-015)",
+        "Spill happens at the near edge inside the VR Glasses FoV; spatial audio cue",
+        "Pooled objects, capped count, no per-frame allocations",
+        "Toggle to place the spill edge for EXP-XR-02/08 A/B"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/overflow/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "fov-aware-design",
+        "performance-quest"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-012",
+      "title": "Grab and snap modules with the winners' hand rules (intent buffer, grab poses, tracking loss, ray arbitration)",
+      "phase": "P2-core",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-16",
+      "depends_on": [
+        "A-010"
+      ],
+      "acceptance": [
+        "Modules can be grabbed with pinch, claw or fist; release uses the pose from ~0.5 s earlier",
+        "Carried modules survive tracking loss < 1 s",
+        "Ray disabled near grabbables; invalid placement is legible; A/B toggles for EXP-XR-11",
+        "Interaction test scene or automated check documents each rule"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/hands/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "xr-interaction-review"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-013",
+      "title": "REDLINE gate variants A/B/C for EXP-XR-03 (pinch toggle, large physical gate, pre-plan route)",
+      "phase": "P2-core",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-16",
+      "depends_on": [
+        "A-010"
+      ],
+      "acceptance": [
+        "Three switchable variants of routing through the same contract",
+        "Each variant logs errors/min and time-to-correct-route to a session JSON"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/redline/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "gameplay-experiment"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-014",
+      "title": "Factory rhythm audio prototype: efficient line grooves, congestion desyncs",
+      "phase": "P2-core",
+      "tier": 1,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-16",
+      "depends_on": [
+        "A-010"
+      ],
+      "acceptance": [
+        "Machine sounds quantized to a shared tempo when flow is balanced",
+        "Congestion audibly breaks the groove; one master toggle"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/audio/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "art-direction"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-010",
+      "title": "Graybox signature playtest (Sat Oct 17): EXP-XR-02, 03, 08, 11 with 3-5 naive players",
+      "phase": "P2-core",
+      "tier": 0,
+      "owner": "human",
+      "lane": "playtest",
+      "due": "2026-10-17",
+      "depends_on": [
+        "A-011",
+        "A-012",
+        "A-013"
+      ],
+      "acceptance": [
+        "Sessions recorded per docs/xr/PLAYTEST_PLAN.md into evidence/xr/EXP-XR-0*/"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/*"
+      ],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-011",
+      "title": "Decide D-016 signature mechanic from playtest evidence",
+      "phase": "P2-core",
+      "tier": 0,
+      "owner": "human",
+      "lane": "docs",
+      "due": "2026-10-18",
+      "depends_on": [
+        "H-010"
+      ],
+      "acceptance": [
+        "D-016 ACCEPTED with the chosen mechanic and evidence links"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-015",
+      "title": "Contracts, grade and 1-of-3 draft between turns (3-5 minute turns)",
+      "phase": "P2-core",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-22",
+      "depends_on": [
+        "A-010",
+        "H-011"
+      ],
+      "acceptance": [
+        "A turn = contract -> build -> run -> problem -> intervene -> grade",
+        "Grade computed by xr/sim-core and shown diegetically",
+        "Draft of 3 modules/upgrades between turns, picked by hand"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/loop/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "xr-product-guardian"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-016",
+      "title": "Gaze + pinch inspect/select/upgrade with fallback (D-013)",
+      "phase": "P2-core",
+      "tier": 1,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-24",
+      "depends_on": [
+        "A-015"
+      ],
+      "acceptance": [
+        "Look at a machine + pinch opens its inspect/upgrade affordance",
+        "Eye gaze when available (Unity: ISDK v207 Gaze Interaction), else ray/head gaze",
+        "False selections measured and logged for EXP-XR-09"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/gaze/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "xr-interaction-review"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-017",
+      "title": "Signature mechanic polish v1 (per D-016)",
+      "phase": "P2-core",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-24",
+      "depends_on": [
+        "H-011",
+        "A-015"
+      ],
+      "acceptance": [
+        "The chosen mechanic reads in under 3 seconds of video",
+        "Feedback (motion + sound) on the moment of failure and the moment of fix",
+        "Capture saved for the trailer"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/signature/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "art-direction"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-020",
+      "title": "Diegetic onboarding: first action <=30 s, reward <=60 s, problem ~3 min, intervention ~4 min, payoff <=5 min",
+      "phase": "P3-first5",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-29",
+      "depends_on": [
+        "A-015",
+        "A-017"
+      ],
+      "acceptance": [
+        "No wall of text; cues are spatial/audio",
+        "Instrumented timestamps for each milestone written to a session JSON",
+        "Emulator run shows all milestones in order"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/first5/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "fov-aware-design"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-021",
+      "title": "Reason to come back: persistence, product ladder, best grade per contract, daily seeded contract (D-014)",
+      "phase": "P3-first5",
+      "tier": 1,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-30",
+      "depends_on": [
+        "A-015"
+      ],
+      "acceptance": [
+        "Progress persists across app restarts",
+        "Product ladder Boxes -> Toys -> Smartphones -> Robots -> Space Tech unlocks visibly on the table",
+        "Best grade per contract saved; daily contract seeded by date"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/progression/*"
+      ],
+      "skills": [
+        "autonomous-task"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-022",
+      "title": "FoV and reach pass on the full build layout (VR Glasses budget)",
+      "phase": "P3-first5",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-30",
+      "depends_on": [
+        "A-020"
+      ],
+      "acceptance": [
+        "Build exports its runtime layout JSON",
+        "`npm run xr:fov -- <export> --device vr-glasses` passes",
+        "Screenshot with the VR Glasses profile saved"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/fov/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "fov-aware-design"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-023",
+      "title": "Accessibility basics: non-color state, left/right swap, core loop playable one-handed",
+      "phase": "P3-first5",
+      "tier": 1,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-10-31",
+      "depends_on": [
+        "A-015"
+      ],
+      "acceptance": [
+        "Every state has a shape/motion/sound cue besides color",
+        "Handedness setting mirrors interactions",
+        "Core loop completable with one hand"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/a11y/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "xr-interaction-review"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-020",
+      "title": "First-five-minutes playtest with >=5 naive players (Sat Oct 31)",
+      "phase": "P3-first5",
+      "tier": 0,
+      "owner": "human",
+      "lane": "playtest",
+      "due": "2026-10-31",
+      "depends_on": [
+        "A-020",
+        "A-021"
+      ],
+      "acceptance": [
+        "EXP-XR-05 and EXP-XR-04 sessions recorded in evidence/xr/"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/*"
+      ],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-021",
+      "title": "Second-session test 24 h later (EXP-XR-10)",
+      "phase": "P3-first5",
+      "tier": 1,
+      "owner": "human",
+      "lane": "playtest",
+      "due": "2026-11-02",
+      "depends_on": [
+        "H-020"
+      ],
+      "acceptance": [
+        "Acceptance rate and session-2 turns recorded"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-050",
+      "title": "G-T0 gate report: is the Tier 0 core proven?",
+      "phase": "P3-first5",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "docs",
+      "due": "2026-11-01",
+      "depends_on": [
+        "H-020",
+        "A-022",
+        "H-004"
+      ],
+      "acceptance": [
+        "evidence/xr/G-T0.md lists each G-T0 criterion from ROADMAP with PASS/FAIL and evidence links",
+        "If any criterion fails, the task is blocked with the list of failures (Tier 2 stays locked)"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/G-T0.md"
+      ],
+      "skills": [
+        "verification-before-completion"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-030",
+      "title": "Style board (Oct 26) and art lock (Oct 27): single asset source, palette, materials",
+      "phase": "P4-feel",
+      "tier": 0,
+      "owner": "human",
+      "lane": "docs",
+      "due": "2026-10-27",
+      "depends_on": [],
+      "acceptance": [
+        "Style board and the chosen asset source recorded in docs/xr/ART_DIRECTION.md",
+        "docs/xr/ASSET_LICENSES.md created"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-030",
+      "title": "Art pass v1 with the locked source: silhouettes, materials, lighting, contact shadows; stills for A/B",
+      "phase": "P4-feel",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-11-04",
+      "depends_on": [
+        "H-030",
+        "A-017"
+      ],
+      "acceptance": [
+        "Machines distinguishable at tabletop distance",
+        "Performance budgets respected (ART_DIRECTION)",
+        "4 stills (old vs new) exported for EXP-XR-06"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/art/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "art-direction",
+        "performance-quest"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-031",
+      "title": "Audio pass: factory rhythm final, congestion desync, localized overflow cue, reward stinger",
+      "phase": "P4-feel",
+      "tier": 1,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-11-04",
+      "depends_on": [
+        "A-014",
+        "A-017"
+      ],
+      "acceptance": [
+        "Mix balanced; no constant alarms",
+        "Overflow cue pulls attention to the spill location"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/audio/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "art-direction"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-031",
+      "title": "Art A/B with >=20 people (stills, remote ok) — EXP-XR-06",
+      "phase": "P4-feel",
+      "tier": 1,
+      "owner": "human",
+      "lane": "playtest",
+      "due": "2026-11-03",
+      "depends_on": [
+        "A-030"
+      ],
+      "acceptance": [
+        "Preference result recorded in evidence/art/"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-040",
+      "title": "Replayability slice: 2-3 contract variants, draft pool, 4-5 turn run",
+      "phase": "P5-replay",
+      "tier": 1,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-11-06",
+      "depends_on": [
+        "A-015",
+        "A-021"
+      ],
+      "acceptance": [
+        "Three contract variants with different bottleneck puzzles",
+        "Draft pool of >= 6 options",
+        "A run of 4-5 turns ends with a summary"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/replay/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "gameplay-experiment"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-051",
+      "title": "Pass-the-headset party mode (turns per player, no networking)",
+      "phase": "T2-stretch",
+      "tier": 2,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-11-05",
+      "depends_on": [
+        "A-050"
+      ],
+      "acceptance": [
+        "2-4 player names, alternating turns, shared scoreboard on the table"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/party/*"
+      ],
+      "skills": [
+        "autonomous-task"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-052",
+      "title": "Accessibility pack: one-handed mode toggle, high-contrast palette, captions for audio cues",
+      "phase": "T2-stretch",
+      "tier": 2,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-11-06",
+      "depends_on": [
+        "A-050",
+        "A-023"
+      ],
+      "acceptance": [
+        "All three options available from a hand menu inside the FoV"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/a11y/*"
+      ],
+      "skills": [
+        "autonomous-task"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-053",
+      "title": "Async daily-contract leaderboard",
+      "phase": "T2-stretch",
+      "tier": 2,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-11-07",
+      "depends_on": [
+        "A-050",
+        "A-021"
+      ],
+      "acceptance": [
+        "Daily contract scores submitted and top 10 shown; works offline gracefully"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/leaderboard/*"
+      ],
+      "skills": [
+        "autonomous-task"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-054",
+      "title": "Spatial foreman callouts experiment (agentic interaction): short diegetic hints that point at the jam",
+      "phase": "T2-stretch",
+      "tier": 2,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-11-07",
+      "depends_on": [
+        "A-050"
+      ],
+      "acceptance": [
+        "Callouts are <= 6 words, anchored to the problem, toggleable",
+        "A/B shows no increase in wall-of-text complaints"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/xr/foreman/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "gameplay-experiment"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-060",
+      "title": "Performance hardening: >=60 fps 1% low in a busy state on Quest; 20-minute thermal run",
+      "phase": "P6-hardening",
+      "tier": 0,
+      "owner": "pair",
+      "lane": "xr",
+      "due": "2026-11-11",
+      "depends_on": [
+        "A-030"
+      ],
+      "acceptance": [
+        "Device perf record in evidence/perf/ meets the target",
+        "Pooling and instancing confirmed in a profiler capture"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/perf/*"
+      ],
+      "skills": [
+        "performance-quest"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-060",
+      "title": "Hardening session: different rooms/tables, seated, left/right-handed, hand loss (Wed Nov 11)",
+      "phase": "P6-hardening",
+      "tier": 0,
+      "owner": "human",
+      "lane": "playtest",
+      "due": "2026-11-11",
+      "depends_on": [
+        "A-060"
+      ],
+      "acceptance": [
+        "Issues found turned into tasks the same day"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-061",
+      "title": "Error sweep: zero critical runtime errors; logs captured from a full run",
+      "phase": "P6-hardening",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "xr",
+      "due": "2026-11-12",
+      "depends_on": [
+        "A-060"
+      ],
+      "acceptance": [
+        "Full-run log in evidence/logs/ shows no errors/exceptions",
+        "Any warning that remains is listed with a reason"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/logs/*"
+      ],
+      "skills": [
+        "autonomous-task",
+        "systematic-debugging"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-070",
+      "title": "Record gameplay capture on Quest (Nov 13)",
+      "phase": "P7-submission",
+      "tier": 0,
+      "owner": "human",
+      "lane": "comp",
+      "due": "2026-11-13",
+      "depends_on": [
+        "A-061"
+      ],
+      "acceptance": [
+        "Raw captures of the magic moment, hands-only play, seated, gaze + pinch, grade/progress"
+      ],
+      "verify": [],
+      "evidence_required": [],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-070",
+      "title": "Video edit plan and shot list (<3 min, magic moment first)",
+      "phase": "P7-submission",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "docs",
+      "due": "2026-11-12",
+      "depends_on": [
+        "A-017"
+      ],
+      "acceptance": [
+        "Shot list with timestamps mapped to the four criteria",
+        "Opening 10 seconds show the overflow at the real table edge and the fix"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/comp/video-plan.md"
+      ],
+      "skills": [
+        "submission-evidence"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-071",
+      "title": "Devpost write-up organized by criteria + tagline + adapted summary + screenshot list",
+      "phase": "P7-submission",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "docs",
+      "due": "2026-11-14",
+      "depends_on": [
+        "A-060"
+      ],
+      "acceptance": [
+        "One section per criterion with concrete evidence",
+        "\"New during the window\" vs \"existed before Sep 24\" with commit links",
+        "English, no invented numbers"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/comp/devpost-writeup.md"
+      ],
+      "skills": [
+        "submission-evidence",
+        "verification-before-completion"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-072",
+      "title": "Build distribution: APK in release channel 'Competition' (or public WebXR URL); clean-device install test",
+      "phase": "P7-submission",
+      "tier": 0,
+      "owner": "pair",
+      "lane": "xr",
+      "due": "2026-11-14",
+      "depends_on": [
+        "A-061"
+      ],
+      "acceptance": [
+        "Judges can install/open the build for free",
+        "Clean-device install verified and documented"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/comp/*"
+      ],
+      "skills": [
+        "submission-evidence"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "A-073",
+      "title": "Checklist audit: every COMPETITION_CHECKLIST item linked to evidence",
+      "phase": "P7-submission",
+      "tier": 0,
+      "owner": "agent",
+      "lane": "docs",
+      "due": "2026-11-15",
+      "depends_on": [
+        "A-071",
+        "A-072",
+        "H-070"
+      ],
+      "acceptance": [
+        "All items checked with links or listed as gaps with owners"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "docs/xr/COMPETITION_CHECKLIST.md"
+      ],
+      "skills": [
+        "submission-evidence"
+      ],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    },
+    {
+      "id": "H-071",
+      "title": "Final rules re-check (<72 h) and submit (target Mon Nov 16, 20:00 CST)",
+      "phase": "P7-submission",
+      "tier": 0,
+      "owner": "human",
+      "lane": "comp",
+      "due": "2026-11-16",
+      "depends_on": [
+        "A-073"
+      ],
+      "acceptance": [
+        "Submission confirmation saved in evidence/comp/"
+      ],
+      "verify": [],
+      "evidence_required": [
+        "evidence/comp/*"
+      ],
+      "skills": [],
+      "status": "todo",
+      "attempts": 0,
+      "notes": [],
+      "evidence": []
+    }
+  ]
+}

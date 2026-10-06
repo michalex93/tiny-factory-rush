@@ -4,7 +4,10 @@
   "commit": "example",
   "hardware": "example-headset",
   "build": "example",
-  "participant": { "id": "example", "priorVrExperience": "low" },
+  "participant": {
+    "id": "example",
+    "priorVrExperience": "low"
+  },
   "timing": {
     "firstActionSec": 12,
     "firstRewardSec": 45,
@@ -12,18 +15,26 @@
     "firstDecisionSec": 180,
     "firstPayoffSec": 240
   },
-  "comfort": { "fatigueRating5": 2, "notes": "smoke fixture" },
+  "comfort": {
+    "fatigueRating5": 2,
+    "notes": "smoke fixture"
+  },
   "interaction": {
     "interactionErrorsPerMin": 0.5,
     "lostHandIncidents": 0,
     "handsFirstComplete": true,
     "seatedComplete": true,
-    "realTableMatters": true
+    "realTableMatters": true,
+    "airplaneRadiusOk": true,
+    "fovCriticalInView": true,
+    "gazePinchWorks": true
   },
   "engagement": {
     "voluntaryTurns": 4,
     "wouldReplay": true,
-    "wouldShowSomeone": true
+    "wouldShowSomeone": true,
+    "overflowSeenInFov": true,
+    "persistenceAcrossSessions": true
   },
   "performance": {
     "testedOnRealHardware": true,
@@ -31,6 +42,12 @@
     "criticalErrors": 0,
     "durationMin": 10
   },
-  "observations": ["Example fixture only; not real evidence."],
-  "evidence": { "video": "", "screenshots": [], "logs": [] }
+  "observations": [
+    "Example fixture only; not real evidence."
+  ],
+  "evidence": {
+    "video": "",
+    "screenshots": [],
+    "logs": []
+  }
 }

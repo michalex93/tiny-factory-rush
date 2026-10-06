@@ -34,7 +34,12 @@ const title = slug
   .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
   .join(' ');
 
-const template = `# Skill: ${title}
+const template = `---
+name: ${slug}
+description: What this skill does and WHEN to use it (key triggers first).
+---
+
+# Skill: ${title}
 
 ## Use when
 Describe the trigger conditions.
