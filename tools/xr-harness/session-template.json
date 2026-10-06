@@ -1,0 +1,46 @@
+{
+  "sessionId": "replace-me",
+  "date": "2026-10-05",
+  "commit": "replace-me",
+  "hardware": "replace-me",
+  "build": "replace-me",
+  "participant": {
+    "id": "anonymous-id",
+    "priorVrExperience": "none|low|medium|high"
+  },
+  "timing": {
+    "firstActionSec": null,
+    "firstRewardSec": null,
+    "firstProblemSec": null,
+    "firstDecisionSec": null,
+    "firstPayoffSec": null
+  },
+  "comfort": {
+    "fatigueRating5": null,
+    "notes": ""
+  },
+  "interaction": {
+    "interactionErrorsPerMin": null,
+    "lostHandIncidents": null,
+    "handsFirstComplete": null,
+    "seatedComplete": null,
+    "realTableMatters": null
+  },
+  "engagement": {
+    "voluntaryTurns": null,
+    "wouldReplay": null,
+    "wouldShowSomeone": null
+  },
+  "performance": {
+    "testedOnRealHardware": null,
+    "fpsLowPercentile": null,
+    "criticalErrors": null,
+    "durationMin": null
+  },
+  "observations": [],
+  "evidence": {
+    "video": "",
+    "screenshots": [],
+    "logs": []
+  }
+}

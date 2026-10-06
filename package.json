@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "skill:new": "node scripts/create-skill.mjs",
+    "xr:harness": "node tools/xr-harness/evaluate.mjs"
   },
   "dependencies": {
     "phaser": "^4.2.1"
