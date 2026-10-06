@@ -3,7 +3,7 @@
   "defaultAgent": "claude",
   "agents": {
     "claude": {
-      "command": "claude -p --permission-mode acceptEdits --output-format json --allowedTools \"Read,Edit,Write,Glob,Grep,Agent,Skill,Bash(npm run gates*),Bash(npm test *),Bash(npm --prefix *),Bash(npx tsc *),Bash(npx vitest *),Bash(npx iwsdk *),Bash(node scripts/tasks.mjs *),Bash(node tools/xr-harness/*),Bash(git status *),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *)\"",
+      "command": "claude -p --permission-mode acceptEdits --output-format json --allowedTools \"Read,Edit,Write,Glob,Grep,Agent,Skill,Bash(npm run gates*),Bash(npm test *),Bash(npm --prefix *),Bash(npm create @iwsdk@latest *),Bash(npx iwsdk *),Bash(npx tsc *),Bash(npx vitest *),Bash(node scripts/tasks.mjs *),Bash(node tools/xr-harness/*),Bash(git status *),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *)\"",
       "notes": "Conservative unattended mode. Root package/tooling and governance are protected; dependency/toolchain changes belong to human/pair tasks. No push/branch switching. Widen maxTasks only after real-agent Windows selftests."
     },
     "claude-auto": {
