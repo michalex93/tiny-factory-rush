@@ -724,7 +724,7 @@
       "tier": 1,
       "owner": "agent",
       "lane": "xr",
-      "due": "2026-10-27",
+      "due": "2026-10-24",
       "depends_on": [
         "A-015"
       ],
