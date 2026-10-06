@@ -12,7 +12,15 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "skill:new": "node scripts/create-skill.mjs",
-    "xr:harness": "node tools/xr-harness/evaluate.mjs"
+    "xr:harness": "node tools/xr-harness/evaluate.mjs",
+    "gates": "node scripts/gates.mjs",
+    "gates:quick": "node scripts/gates.mjs --level quick",
+    "loop": "node scripts/agent-loop.mjs",
+    "loop:selftest": "node scripts/loop-selftest.mjs",
+    "tasks": "node scripts/tasks.mjs",
+    "review:packet": "node scripts/review-packet.mjs",
+    "skills:sync": "node scripts/sync-skills.mjs",
+    "xr:fov": "node tools/xr-harness/fov-check.mjs"
   },
   "dependencies": {
     "phaser": "^4.2.1"

@@ -1,21 +1,83 @@
 {
-  "version": 1,
+  "version": 2,
   "criteria": {
-    "firstActionSec": { "max": 30, "severity": "warn" },
-    "firstRewardSec": { "max": 60, "severity": "warn" },
-    "firstProblemSec": { "max": 180, "severity": "warn" },
-    "firstDecisionSec": { "max": 240, "severity": "warn" },
-    "firstPayoffSec": { "max": 300, "severity": "warn" },
-    "fatigueRating5": { "max": 2, "severity": "kill" },
-    "interactionErrorsPerMin": { "max": 1, "severity": "kill" },
-    "voluntaryTurns": { "min": 3, "severity": "warn" },
-    "fpsLowPercentile": { "min": 60, "severity": "kill" },
-    "criticalErrors": { "max": 0, "severity": "kill" }
+    "firstActionSec": {
+      "max": 30,
+      "severity": "warn"
+    },
+    "firstRewardSec": {
+      "max": 60,
+      "severity": "warn"
+    },
+    "firstProblemSec": {
+      "max": 180,
+      "severity": "warn"
+    },
+    "firstDecisionSec": {
+      "max": 240,
+      "severity": "warn"
+    },
+    "firstPayoffSec": {
+      "max": 300,
+      "severity": "warn"
+    },
+    "fatigueRating5": {
+      "max": 2,
+      "severity": "kill"
+    },
+    "interactionErrorsPerMin": {
+      "max": 1,
+      "severity": "kill"
+    },
+    "voluntaryTurns": {
+      "min": 3,
+      "severity": "warn"
+    },
+    "fpsLowPercentile": {
+      "min": 60,
+      "severity": "kill"
+    },
+    "criticalErrors": {
+      "max": 0,
+      "severity": "kill"
+    }
   },
   "booleans": {
-    "handsFirstComplete": { "expected": true, "severity": "kill" },
-    "seatedComplete": { "expected": true, "severity": "kill" },
-    "realTableMatters": { "expected": true, "severity": "warn" },
-    "testedOnRealHardware": { "expected": true, "severity": "kill" }
+    "handsFirstComplete": {
+      "expected": true,
+      "severity": "kill"
+    },
+    "seatedComplete": {
+      "expected": true,
+      "severity": "kill"
+    },
+    "realTableMatters": {
+      "expected": true,
+      "severity": "warn"
+    },
+    "testedOnRealHardware": {
+      "expected": true,
+      "severity": "kill"
+    },
+    "airplaneRadiusOk": {
+      "expected": true,
+      "severity": "kill"
+    },
+    "fovCriticalInView": {
+      "expected": true,
+      "severity": "kill"
+    },
+    "gazePinchWorks": {
+      "expected": true,
+      "severity": "warn"
+    },
+    "overflowSeenInFov": {
+      "expected": true,
+      "severity": "warn"
+    },
+    "persistenceAcrossSessions": {
+      "expected": true,
+      "severity": "warn"
+    }
   }
 }

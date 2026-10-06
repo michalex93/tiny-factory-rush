@@ -1,0 +1,114 @@
+{
+  "$comment": "Deterministic quality gates. Agents may not edit this file (protected). Steps call tools directly (not npm scripts) so package.json script edits cannot weaken them.",
+  "levels": {
+    "quick": [
+      "tasks:validate",
+      "skills:sync-check",
+      "static:no-only",
+      "diff:anticheat",
+      "typecheck",
+      "unit"
+    ],
+    "full": [
+      "tasks:validate",
+      "skills:sync-check",
+      "static:no-only",
+      "typecheck",
+      "unit",
+      "build",
+      "harness:fixture",
+      "fov:example",
+      "diff:anticheat",
+      "task:evidence",
+      "progress:entry",
+      "lane:extra"
+    ],
+    "selftest": [
+      "tasks:validate",
+      "static:no-only",
+      "unit:scripts",
+      "diff:anticheat",
+      "task:evidence",
+      "progress:entry"
+    ]
+  },
+  "steps": {
+    "tasks:validate": {
+      "cmd": "node scripts/tasks.mjs validate"
+    },
+    "skills:sync-check": {
+      "cmd": "node scripts/sync-skills.mjs --check"
+    },
+    "static:no-only": {
+      "builtin": "no-only"
+    },
+    "typecheck": {
+      "cmd": "npx tsc --noEmit"
+    },
+    "unit": {
+      "cmd": "npx vitest run"
+    },
+    "unit:scripts": {
+      "cmd": "npx vitest run scripts tools"
+    },
+    "build": {
+      "cmd": "npx tsc --noEmit && npx vite build"
+    },
+    "harness:fixture": {
+      "cmd": "node tools/xr-harness/evaluate.mjs tools/xr-harness/examples/smoke-pass.json --strict"
+    },
+    "fov:example": {
+      "cmd": "node tools/xr-harness/fov-check.mjs tools/xr-harness/examples/layout-example.json --device vr-glasses"
+    },
+    "diff:anticheat": {
+      "builtin": "diff-anticheat"
+    },
+    "task:evidence": {
+      "builtin": "task-evidence"
+    },
+    "progress:entry": {
+      "builtin": "progress-entry"
+    },
+    "lane:extra": {
+      "builtin": "lane-extra"
+    }
+  },
+  "laneSteps": [
+    {
+      "name": "iwsdk:build",
+      "cmd": "npm --prefix xr-iwsdk run build",
+      "when": "exists:xr-iwsdk/package.json"
+    },
+    {
+      "name": "iwsdk:test",
+      "cmd": "npm --prefix xr-iwsdk test",
+      "when": "exists:xr-iwsdk/package.json"
+    },
+    {
+      "name": "unity:editmode",
+      "cmd": "\"$UNITY_PATH\" -runTests -batchmode -projectPath xr-unity -testPlatform EditMode -testResults .agent/unity-editmode.xml -logFile .agent/unity-editmode.log",
+      "when": "env:UNITY_PATH,exists:xr-unity/ProjectSettings"
+    }
+  ],
+  "protected": [
+    "gates.config.json",
+    "agent-loop.config.json",
+    "scripts/gates.mjs",
+    "scripts/agent-loop.mjs",
+    "scripts/lib/**",
+    "scripts/mock-agent.mjs",
+    "scripts/loop-selftest.mjs",
+    ".claude/settings.json",
+    ".claude/hooks/**",
+    ".claude/agents/**",
+    ".github/workflows/**",
+    "tools/xr-harness/criteria.json",
+    "tools/xr-harness/evaluate.mjs",
+    "tools/xr-harness/lib/**",
+    "tools/xr-harness/fov-check.mjs",
+    "prompts/**",
+    "vite.config.ts",
+    "tsconfig.json"
+  ],
+  "stepTimeoutMinutes": 20
+}

@@ -1,7 +1,9 @@
-# Skill: Gameplay Experiment
+---
+name: gameplay-experiment
+description: Template and rules for running a gameplay/UX experiment with GO/KILL criteria defined before observing. Use when a design claim is uncertain, when preparing a playtest, or when recording EXP-XR-* results.
+---
 
-## Use when
-A design claim is uncertain.
+# Skill: Gameplay Experiment
 
 ## Template
 Hypothesis:
@@ -18,10 +20,11 @@ Evidence path:
 1. Test one uncertainty at a time.
 2. Build the cheapest believable prototype.
 3. Define GO/KILL before observing results.
-4. Avoid explaining the intended answer to participants.
-5. Record failures.
-6. Do not reinterpret a failed metric into success after the fact.
-7. Update docs/xr/EXPERIMENTS.md and DECISIONS.md only after evidence exists.
+4. Avoid explaining the intended answer to participants (docs/xr/PLAYTEST_PLAN.md script).
+5. Record every session with `tools/xr-harness/session-template.json` → `evidence/xr/EXP-XR-XX/session-PNN.json`; run `npm run xr:harness -- <file>`.
+6. Record failures.
+7. Do not reinterpret a failed metric into success after the fact.
+8. Update docs/xr/EXPERIMENTS.md and propose the DECISIONS.md change only after evidence exists (the owner accepts decisions).
 
 ## Preferred measures
 Behavior before opinion:

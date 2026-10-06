@@ -1,108 +1,91 @@
 # AGENTS.md — Tiny Factory Rush / XR Competition
 
 ## Mission
-Build a commercially credible industrial-strategy game and a deliberately smaller MR vertical slice for Meta VR Start 2026.
+Build a commercially credible industrial-strategy game and a deliberately smaller MR vertical slice for the Meta VR Start Developer Competition 2026 (Adapted/Updated × Gaming; deadline **Wed Nov 18, 2026, 14:00 CST**).
 
 The XR product thesis is:
 > A toy-like factory lives on the player's real table. The player observes flow problems, physically reconfigures the system, and sees the consequences immediately.
 
 The project is a **game first**. Industrial engineering lives in the rules, not in academic vocabulary.
 
+## What to do next
+`tasks/queue.json` is the plan. Get your task with `node scripts/tasks.mjs next` (or the loop gives it to you) and execute it with **skills/autonomous-task/SKILL.md**. One task per session.
+
+## Commands
+| Command | Purpose |
+|---|---|
+| `npm run gates:quick` | typecheck + unit tests + queue/skills checks (fast; the Claude Stop hook runs this) |
+| `npm run gates` | full gates: + build, harness fixture, FoV example, anti-cheat diff, evidence and progress checks |
+| `npm test` / `npm run typecheck` / `npm run build` | individual checks |
+| `node scripts/tasks.mjs next / show <id> / set <id> <status> --evidence <path> --note "..."` | task queue |
+| `npm run xr:fov -- <layout.json> --device vr-glasses` | FoV + 2 ft reach check (D-012) |
+| `npm run xr:harness -- <session.json>` | playtest session gates |
+| `npm run review:packet` | review packet for the owner / external reviewer |
+| `npm run loop -- --agent claude` | outer autonomous loop (owner runs it; agents never start it) |
+
 ## Non-negotiable principles
 1. **Decisions over chores.** Every interaction must create a meaningful decision, improve legibility, or improve feel.
 2. **Visible consequences.** Prefer physical queues, congestion, overflow, sound, and motion over dashboards.
-3. **Hands-first MR.** Do not port mouse UI into XR.
-4. **Tabletop comfort.** Frequent interactions stay near the tabletop and within comfortable reach.
+3. **Hands-first MR, eyes + hands ready.** Do not port mouse UI into XR; gaze + pinch is a secondary input (D-013).
+4. **Tabletop comfort.** Seated, everything within 0.61 m, critical state inside the VR Glasses FoV (D-012).
 5. **One mechanic, finished.** Competition work prioritizes a tight vertical slice over breadth.
-6. **No scope creep by prestige.** Do not add workers, safety, detailed quality, detailed maintenance, multiplayer, AI assistants, or complex supply-chain systems unless a recorded experiment proves they are necessary.
-7. **Evidence before opinion.** Important design changes require either user-test evidence, profiler evidence, competition requirements, or a clearly marked hypothesis.
-8. **Preserve history.** Do not rewrite or squash away evidence that the web game existed before the competition window.
+6. **Tier order.** Tier 0 → Tier 1 → Tier 2; Tier 2 only after G-T0 passes (D-011). No workers, detailed safety/quality/maintenance accounting, OEE/SPC vocabulary, UGC or complex supply chain.
+7. **Evidence before opinion.** Design changes need user-test evidence, profiler evidence, competition requirements, or a clearly marked hypothesis.
+8. **Preserve history.** Never rewrite or squash away evidence that the web game existed before Sep 24, 2026.
+
+## Definition of done (every task)
+- Each acceptance criterion has proof: a test that asserts it, an evidence file, or a command output.
+- `npm run gates` green on the final commit.
+- Progress entry appended to `progress/PROGRESS.md` with heading `— <ID> —`.
+- `node scripts/tasks.mjs set <ID> done --evidence ...` with evidence matching `evidence_required`.
+- Committed as `<ID>: <summary>`; tree clean; nothing pushed.
+
+## Anti-cheat rules (the gates enforce them)
+- Never delete, skip, `.only` or weaken tests; never loosen assertions to pass.
+- Never edit protected files (gates.config.json → "protected": gates, loop, hooks, harness criteria, CI, prompts).
+- Never change an existing task's acceptance, verify, tier, owner, lane, dependencies or due date. New work → new task with `"status": "proposed"`.
+- Never invent results; unknown measurements are `null`. Say "verified in emulator/simulator" vs "verified on Quest".
+- Stay on your branch; do not push, rebase, reset or switch branches.
+
+## When stuck
+After two failed approaches: write the diagnosis and `node scripts/tasks.mjs set <ID> blocked --note "..."`; use `NEEDS-HUMAN:` when a person must act (hardware, accounts, decisions). Then progress entry, commit, stop.
 
 ## Product split
 ### Web
-- Casual industrial strategy / management.
-- Longer progression is acceptable.
-- Mouse/touch.
-- CrazyGames/Poki style distribution.
-- Can preserve deeper economy and campaign systems.
+- Casual industrial strategy / management; longer progression; mouse/touch; CrazyGames/Poki style distribution.
 
 ### XR
-- Tabletop industrial strategy.
-- Short turns, physical manipulation, low text.
-- Shared simulation concepts where practical, but **not shared UI**.
-- Target experience: satisfying within minutes.
+- Tabletop industrial strategy; short 3–5 min turns; physical manipulation; low text.
+- Shared simulation concepts where practical (`xr/sim-core`), but **not shared UI**.
 
 ## XR provisional loop
 Contract -> Build/Reconfigure -> Start -> Observe -> Problem -> Intervene -> Result -> Grade -> Reward/Draft -> Next turn.
 
-## Current XR hypotheses
-These are NOT facts:
-- Tabletop manipulation will be comfortable enough for repeated 3–5 minute turns.
-- Physical overflow over the real table edge can create a memorable MR-specific moment.
-- Large routing gates can preserve REDLINE's strategic tension without twitch pinching.
-- Draft/meta-progression can create "one more turn" behavior at low content cost.
-
-All must be tested.
-
 ## Hard competition gates
-Before claiming the XR build is submission-ready:
-- entire experience completable hands-first;
-- seated play works;
-- first-use tutorial does not require a wall of text;
-- critical interactions are large and forgiving;
+Before claiming the XR build is submission-ready (details in docs/xr/COMPETITION_CHECKLIST.md):
+- entire experience completable hands-first; seated within 2 ft;
+- critical state inside the VR Glasses FoV;
+- first-use tutorial without a wall of text;
 - real-room/table context materially matters;
-- build is profiled on real target hardware;
-- stable target framerate is demonstrated;
+- profiled on real target hardware, stable ≥60 fps;
 - no critical console/runtime errors;
 - gameplay video is real gameplay.
-
-See `docs/xr/COMPETITION_CHECKLIST.md`.
-
-## Working protocol for agents
-Before editing:
-1. Read this file.
-2. Read `docs/xr/PRODUCT_THESIS.md`.
-3. Read `docs/xr/ROADMAP.md`.
-4. Read `docs/xr/DECISIONS.md`.
-5. Read the relevant skill under `skills/`.
-6. State the milestone and acceptance criteria internally before coding.
-
-After editing:
-1. Run the narrowest relevant tests.
-2. Run typecheck/build if the touched code affects production.
-3. Record evidence, not claims.
-4. Update roadmap/decision/experiment docs only when state actually changed.
-5. Do not silently change scope.
-
-## Change classification
-Every meaningful change should be one of:
-- PRODUCT — player-facing loop or scope.
-- XR — interaction, anchoring, comfort, scene behavior.
-- SIM — simulation/rules.
-- ART — visual language/legibility.
-- AUDIO — feedback/spatial sound.
-- HARNESS — measurement/testing.
-- COMP — competition compliance/submission.
-- INFRA — agent/dev infrastructure.
-
-## Kill-switch rule
-If a critical experiment hits its KILL criterion, stop polishing that hypothesis. Record the result and pivot.
 
 ## Source of truth
 Priority:
 1. Runtime behavior and measured evidence.
 2. Competition rules / official platform requirements.
-3. `docs/xr/DECISIONS.md`.
+3. `docs/xr/DECISIONS.md` (only the owner accepts decisions).
 4. `docs/xr/PRODUCT_THESIS.md`.
-5. Roadmap.
+5. `tasks/queue.json` and `docs/xr/ROADMAP.md`.
 6. Agent suggestions.
 
-## Forbidden agent behavior
-- Do not invent test results.
-- Do not say "verified" without running the check.
-- Do not add dependencies for convenience without justification.
-- Do not rebuild the whole web game to make XR easier.
-- Do not turn the game into educational software.
-- Do not optimize for code volume.
-- Do not introduce a second currency without a written decision.
-- Do not add another gameplay system while a core interaction is still unproven.
+## Skills (canonical in skills/, mirrored to .claude/skills/ by `npm run skills:sync`)
+autonomous-task · systematic-debugging · verification-before-completion · fov-aware-design · xr-interaction-review · xr-product-guardian · gameplay-experiment · art-direction · performance-quest · submission-evidence · next-task · review-diff · handoff
+
+## Change classification
+PRODUCT · XR · SIM · ART · AUDIO · HARNESS · COMP · INFRA (mention it in the progress entry).
+
+## Learnings
+Agents append durable gotchas here (≤2 lines each, newest last).
+- Run the loop only from a clean integration branch; `.agent/` is runtime state (gitignored).

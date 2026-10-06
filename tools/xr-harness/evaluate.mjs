@@ -29,7 +29,12 @@ const flat = {
   handsFirstComplete: session.interaction?.handsFirstComplete,
   seatedComplete: session.interaction?.seatedComplete,
   realTableMatters: session.interaction?.realTableMatters,
-  testedOnRealHardware: session.performance?.testedOnRealHardware
+  testedOnRealHardware: session.performance?.testedOnRealHardware,
+  airplaneRadiusOk: session.interaction?.airplaneRadiusOk,
+  fovCriticalInView: session.interaction?.fovCriticalInView,
+  gazePinchWorks: session.interaction?.gazePinchWorks,
+  overflowSeenInFov: session.engagement?.overflowSeenInFov,
+  persistenceAcrossSessions: session.engagement?.persistenceAcrossSessions
 };
 
 const results = [];

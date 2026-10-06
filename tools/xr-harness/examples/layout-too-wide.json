@@ -1,0 +1,98 @@
+{
+  "$comment": "Counter-example: same scene with a 0.6 m wide line and a high timer. Passes on Quest 3 but FAILS the VR Glasses budget (why D-012 exists). Example fixture, not measured data.",
+  "head": [
+    0,
+    1.2,
+    0
+  ],
+  "lookAt": [
+    0,
+    0.76,
+    -0.45
+  ],
+  "elements": [
+    {
+      "id": "source",
+      "position": [
+        -0.3,
+        0.8,
+        -0.45
+      ],
+      "radius": 0.05,
+      "interactable": true
+    },
+    {
+      "id": "machine-1",
+      "position": [
+        -0.15,
+        0.8,
+        -0.45
+      ],
+      "radius": 0.05,
+      "interactable": true,
+      "critical": true
+    },
+    {
+      "id": "buffer",
+      "position": [
+        0.0,
+        0.79,
+        -0.45
+      ],
+      "radius": 0.04,
+      "interactable": true,
+      "critical": true
+    },
+    {
+      "id": "machine-2",
+      "position": [
+        0.15,
+        0.8,
+        -0.45
+      ],
+      "radius": 0.05,
+      "interactable": true,
+      "critical": true
+    },
+    {
+      "id": "sink",
+      "position": [
+        0.3,
+        0.8,
+        -0.45
+      ],
+      "radius": 0.05
+    },
+    {
+      "id": "overflow-edge",
+      "position": [
+        0.1,
+        0.77,
+        -0.22
+      ],
+      "radius": 0.06,
+      "critical": true
+    },
+    {
+      "id": "contract-timer",
+      "position": [
+        0.0,
+        0.95,
+        -0.65
+      ],
+      "radius": 0.06,
+      "critical": true
+    },
+    {
+      "id": "draft-cards",
+      "position": [
+        0.0,
+        0.82,
+        -0.3
+      ],
+      "radius": 0.08,
+      "interactable": true,
+      "critical": true
+    }
+  ]
+}
