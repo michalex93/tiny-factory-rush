@@ -3,8 +3,8 @@
   "defaultAgent": "claude",
   "agents": {
     "claude": {
-      "command": "claude -p --permission-mode acceptEdits --output-format json --allowedTools \"Read,Edit,Write,Glob,Grep,Agent,Skill,Bash(npm run *),Bash(npm test *),Bash(npm install *),Bash(npm --prefix *),Bash(npm create *),Bash(npx tsc *),Bash(npx vitest *),Bash(npx iwsdk *),Bash(node scripts/*),Bash(node tools/*),Bash(git status *),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *)\"",
-      "notes": "Claude Code headless. acceptEdits + explicit allowlist: no push, no branch switching, no arbitrary shell. Hooks in .claude/settings.json still run (Stop gate, protected paths)."
+      "command": "claude -p --permission-mode acceptEdits --output-format json --allowedTools \"Read,Edit,Write,Glob,Grep,Agent,Skill,Bash(npm run gates*),Bash(npm test *),Bash(npm --prefix *),Bash(npx tsc *),Bash(npx vitest *),Bash(npx iwsdk *),Bash(node scripts/tasks.mjs *),Bash(node tools/xr-harness/*),Bash(git status *),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *)\"",
+      "notes": "Conservative unattended mode. Root package/tooling and governance are protected; dependency/toolchain changes belong to human/pair tasks. No push/branch switching. Widen maxTasks only after real-agent Windows selftests."
     },
     "claude-auto": {
       "command": "claude -p --permission-mode auto --permission-prompts none --output-format json",
@@ -22,9 +22,9 @@
   "attemptTimeoutMinutes": 45,
   "maxAttemptsPerTask": 3,
   "resetBeforeFinalAttempt": true,
-  "maxTasksPerRun": 8,
+  "maxTasksPerRun": 3,
   "maxConsecutiveBlocked": 2,
-  "runBudgetMinutes": 600,
+  "runBudgetMinutes": 240,
   "gateLevel": "full",
   "pushAfterEachTask": false,
   "remote": "origin",
