@@ -1,0 +1,36 @@
+{
+  "sessionId": "smoke-pass",
+  "date": "2026-10-05",
+  "commit": "example",
+  "hardware": "example-headset",
+  "build": "example",
+  "participant": { "id": "example", "priorVrExperience": "low" },
+  "timing": {
+    "firstActionSec": 12,
+    "firstRewardSec": 45,
+    "firstProblemSec": 120,
+    "firstDecisionSec": 180,
+    "firstPayoffSec": 240
+  },
+  "comfort": { "fatigueRating5": 2, "notes": "smoke fixture" },
+  "interaction": {
+    "interactionErrorsPerMin": 0.5,
+    "lostHandIncidents": 0,
+    "handsFirstComplete": true,
+    "seatedComplete": true,
+    "realTableMatters": true
+  },
+  "engagement": {
+    "voluntaryTurns": 4,
+    "wouldReplay": true,
+    "wouldShowSomeone": true
+  },
+  "performance": {
+    "testedOnRealHardware": true,
+    "fpsLowPercentile": 72,
+    "criticalErrors": 0,
+    "durationMin": 10
+  },
+  "observations": ["Example fixture only; not real evidence."],
+  "evidence": { "video": "", "screenshots": [], "logs": [] }
+}
