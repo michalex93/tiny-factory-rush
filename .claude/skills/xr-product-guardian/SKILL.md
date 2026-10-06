@@ -2,6 +2,7 @@
 name: xr-product-guardian
 description: Use when proposing features, changing scope, reviewing tasks or deciding whether work improves the competition product.
 ---
+<!-- Generated from skills/xr-product-guardian/SKILL.md by `npm run skills:sync`. Edit the source, not this copy. -->
 
 # Skill: XR Product Guardian
 
