@@ -1,0 +1,20 @@
+{
+  "name": "TinyFactory.KillTest.Logic",
+  "rootNamespace": "TinyFactory.KillTest",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.meta.xr.sdk.interaction",
+      "expression": "",
+      "define": "META_XR_INTERACTION"
+    }
+  ],
+  "noEngineReferences": false
+}
