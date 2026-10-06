@@ -1,0 +1,216 @@
+{
+  "ok": true,
+  "data": {
+    "workspaceRoot": "C:\\Users\\miche\\OneDrive\\Documentos\\01_repos_activos\\tiny\\xr-iwsdk",
+    "operation": "ecs.query",
+    "result": {
+      "entityIndex": 16,
+      "active": true,
+      "name": "killtest-module",
+      "components": [
+        {
+          "componentId": "Transform",
+          "description": "Component for 3D transformation (position, rotation, scale)",
+          "values": {
+            "position": [
+              -0.3499999940395355,
+              0.8299999833106995,
+              -0.949999988079071
+            ],
+            "orientation": [
+              0.1537032574415207,
+              0.9074752330780029,
+              -0.17351029813289642,
+              0.35036858916282654
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ],
+            "parent": {
+              "entityIndex": 12,
+              "name": "LevelRoot"
+            }
+          }
+        },
+        {
+          "componentId": "Visibility",
+          "description": "Component to control if an entity object is visible",
+          "values": {
+            "isVisible": true
+          }
+        },
+        {
+          "componentId": "LevelTag",
+          "description": "Marker component for level membership",
+          "values": {
+            "id": "/scenes/main.iwsdk.scene.json"
+          }
+        },
+        {
+          "componentId": "RayInteractable",
+          "description": "Marks an entity as eligible for ray-based pointer interaction.",
+          "values": {}
+        },
+        {
+          "componentId": "OneHandGrabbable",
+          "description": "Component for single-hand object grabbing and manipulation",
+          "values": {
+            "rotate": true,
+            "rotateMax": [
+              null,
+              null,
+              null
+            ],
+            "rotateMin": [
+              null,
+              null,
+              null
+            ],
+            "translate": true,
+            "translateMax": [
+              null,
+              null,
+              null
+            ],
+            "translateMin": [
+              null,
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "componentId": "Handle",
+          "description": "Internal component storing an active interaction handle instance",
+          "values": {
+            "instance": {
+              "target": "<Object3D:killtest-module>",
+              "getOptions": "<function>",
+              "outputState": {
+                "cancel": "<function>",
+                "previous": {
+                  "pointerAmount": 1,
+                  "position": "<object>",
+                  "quaternion": "<object>",
+                  "rotation": "<object>",
+                  "scale": "<object>",
+                  "time": 0.016700000000186264
+                },
+                "event": {
+                  "nativeEvent": "<object>",
+                  "NONE": 0,
+                  "CAPTURING_PHASE": 1,
+                  "AT_TARGET": 2,
+                  "BUBBLING_PHASE": 3,
+                  "relatedTarget": null,
+                  "type": "pointerup",
+                  "bubbles": true,
+                  "internalPointer": "<object>",
+                  "intersection": "<object>",
+                  "camera": "<object>",
+                  "currentObject": "<circular>",
+                  "object": "<circular>",
+                  "propagationState": "<object>",
+                  "_intersections": "<object>"
+                },
+                "initial": {
+                  "pointerAmount": 1,
+                  "time": 100475.79999999872,
+                  "position": "<object>",
+                  "quaternion": "<object>",
+                  "rotation": "<object>",
+                  "scale": "<object>"
+                },
+                "current": {
+                  "pointerAmount": 1,
+                  "position": "<object>",
+                  "quaternion": "<object>",
+                  "rotation": "<object>",
+                  "scale": "<object>",
+                  "time": 0.017
+                },
+                "first": false,
+                "last": true
+              },
+              "latestMoveEvent": {
+                "nativeEvent": {
+                  "timeStamp": 330433.1000000112
+                },
+                "NONE": 0,
+                "CAPTURING_PHASE": 1,
+                "AT_TARGET": 2,
+                "BUBBLING_PHASE": 3,
+                "relatedTarget": null,
+                "type": "pointermove",
+                "bubbles": true,
+                "internalPointer": "<circular>",
+                "intersection": "<circular>",
+                "camera": "<circular>",
+                "currentObject": "<circular>",
+                "object": "<circular>",
+                "propagationState": {
+                  "stopped": true,
+                  "stoppedImmediate": false
+                },
+                "_intersections": []
+              },
+              "inputState": {},
+              "capturedObjects": {},
+              "initialTargetPosition": {
+                "x": 0,
+                "y": 0.8299999833106995,
+                "z": -0.949999988079071
+              },
+              "initialTargetQuaternion": {
+                "isQuaternion": true,
+                "_x": 0,
+                "_y": 0,
+                "_z": 0,
+                "_w": 1
+              },
+              "initialTargetRotation": {
+                "isEuler": true,
+                "_x": 0,
+                "_y": 0,
+                "_z": 0,
+                "_order": "XYZ"
+              },
+              "initialTargetScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "initialTargetParentWorldMatrix": {
+                "elements": [
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              },
+              "handlers": {
+                "onPointerDown": "<function>",
+                "onPointerMove": "<function>",
+                "onPointerEnd": "<function>"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

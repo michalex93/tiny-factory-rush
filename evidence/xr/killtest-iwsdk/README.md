@@ -37,6 +37,10 @@ npx iwsdk dev down
 |---|---|---|
 | `EMULATOR-killtest-scene.png` | EMULATOR | XR session with fallback table, module, snap pads, tokens, IWER living_room mesh, controllers |
 | `EMULATOR-after-grab-snap.png` | EMULATOR | After scripted squeeze→move→release toward right pad |
+| `EMULATOR-during-rotate.png` | EMULATOR | Module held (yellow) with visible non-identity orientation while squeeze held |
+| `EMULATOR-after-rotate-release.png` | EMULATOR | Module released still tilted; snapRejected out-of-range after rotate path |
+| `EMULATOR-module-transform-after-rotate.json` | EMULATOR | ECS Transform.orientation quaternion ≠ identity after grab→rotate→release |
+| `EMULATOR-console-rotate.json` | EMULATOR | Metrics: grabAttempt/Success, release, interactionDuration, snapRejected |
 | `EMULATOR-console-killtest.json` | EMULATOR | Console including scene-ready + tracking events |
 | `EMULATOR-console-after-grab.json` | EMULATOR | Metrics: grabAttempt/Success, release, snapSuccess→`slot-right`, interactionDuration |
 | `build-log.txt` | BUILD | Production vite build result |
@@ -49,6 +53,7 @@ npx iwsdk dev down
 - Unit tests (snap + intent/tracking machines): PASS (11)
 - Managed runtime + XR enter: PASS
 - Scripted controller grab → move → release: PASS
+- **Rotate: PASS — EMULATOR** (`scripts/emulator-rotate-flow.mjs`; screenshots + ECS orientation `[0.154, 0.907, -0.174, 0.350]` ≠ identity)
 - Snap success to `slot-right` at distance ≈0.13 m (inside 0.18 m radius): PASS
 - Tracking lost/recovered metrics fired (heuristic + emulator device connect): observed
 - Gaze eye-tracking: not claimed on Quest 3; head/ray `Hovered` highlight path present
