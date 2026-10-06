@@ -1,229 +1,331 @@
-# XR Experiment Register
+# XR Experiment Register v1.0
 
-No hypothesis becomes a permanent system merely because it sounds good.
+No hypothesis becomes a permanent system because it sounds clever or because a winner used it.
 
-## EXP-XR-01 — Tabletop comfort and hand reliability
+For each experiment:
+- define GO/KILL before observing results;
+- prefer behavior over self-report;
+- preserve failed sessions;
+- never manufacture missing measurements.
+
+## EXP-XR-01 — Tabletop comfort and basic hand reliability
 Hypothesis:
-A player can manipulate the core modules on a table for 10 minutes without significant fatigue or repeated tracking errors.
+A player can manipulate the core tabletop objects for 10 minutes without significant fatigue or repeated tracking failure.
 
 Prototype:
-Graybox table, 3–5 modules, grab/rotate/snap loop.
-
-Sample:
-Minimum 3 people for first kill test; expand if promising.
+Graybox table + 3–5 large interactables.
 
 Measure:
-- fatigue rating 1–5 after 5 and 10 min;
-- interaction errors/min;
-- lost-hand incidents;
-- task completion time;
-- qualitative frustration.
+- fatigue 1–5 at 5 and 10 min;
+- material interaction errors/min;
+- tracking-loss incidents;
+- recovery time;
+- task completion.
 
 GO:
-- fatigue median <= 2;
+- median fatigue <=2;
 - <1 material interaction error/min after onboarding;
-- no repeated blocker across participants.
+- no repeated blocker shared by participants.
 
 KILL/PIVOT:
-- fatigue median >=3;
-- repeated oclusion/precision failure prevents normal play;
-- basic snap task remains frustrating after tuning.
+- median fatigue >=3;
+- normal play repeatedly fails due to precision/occlusion;
+- errors remain >2/min after one focused tuning pass.
 
 ---
 
-## EXP-XR-02 — Overflow magic moment
+## EXP-XR-02 — Diagnostic overflow / magic moment
 Hypothesis:
-Visible products spilling beyond the real table edge creates an MR-specific memorable moment and clearly communicates congestion.
+Visible WIP accumulation followed by a spill near the real table edge communicates the line problem and creates a memorable MR-specific crisis.
 
 Prototype:
-10–15 second clip or working graybox.
+Working graybox or honest gameplay clip.
 
 Measure:
-- comprehension: "what went wrong?";
+- "what went wrong?" comprehension;
+- whether participant identifies the correct cause before explanation;
 - delight rating;
-- share/show intent;
-- spontaneous comments.
+- would-show-someone behavior/response;
+- whether the spill reads as intentional versus a bug.
 
 GO:
-At least 70% correctly identify the congestion problem **and point at the bottleneck** without explanation, at least 40% say they would show/share the moment, and ≥80% saw the spill happen (it occurred inside their field of view — see EXP-XR-08).
+- >=70% identify the congestion/cause without explanation;
+- >=40% say they would show/share the moment;
+- no dominant "bug" interpretation.
 
-KILL:
-<50% understand the state change, the effect reads primarily as a bug, or most participants missed the spill because it happened outside their view.
+KILL/PIVOT:
+- <50% understand what the spill means;
+- effect is memorable but not diagnostic;
+- effect requires looking away from the normal play area to notice.
 
 ---
 
-## EXP-XR-03 — REDLINE interaction
+## EXP-XR-03 — Signature routing/reconfiguration interaction
 Hypothesis:
-Large physical routing gates preserve tension while avoiding twitch hand-tracking failure.
+At least one physical intervention delivers strategic pressure without input frustration.
 
-Variants:
-A. rapid pinch toggle;
-B. large physical gate;
-C. pre-plan route before release.
+Variants can include:
+A. large physical routing gate;
+B. deliberate grab/snap buffer or splitter;
+C. swipe/flick routing gesture;
+D. pre-plan route before release.
+
+Do not force all variants if early evidence makes one obviously unsuitable.
 
 Measure:
-- errors/min;
+- intended-action success rate;
+- false activations/min;
+- time to correct a problem;
 - fatigue;
 - perceived control;
-- fun;
-- time-to-correct route.
+- fun/preference;
+- whether player understands strategic consequence.
 
 GO:
-One variant clearly dominates on control + fun without high fatigue.
+One variant is clearly reliable and fun enough to become the signature interaction.
 
 KILL:
-All real-time variants produce repeated input frustration -> remove live REDLINE from competition build.
+All live variants create repeated input frustration -> simplify the intervention or make routing pre-planned.
 
 ---
 
-## EXP-XR-04 — One more turn
+## EXP-XR-04 — "One more shift"
 Hypothesis:
-Short turns plus a 1-of-3 draft produce voluntary replay.
+A short result + meaningful choice creates voluntary continuation.
 
 Protocol:
-20 minutes free play after tutorial. Do not ask the player to continue.
+After tutorial, allow free play without asking the participant to continue.
 
 Measure:
-Number of turns voluntarily started.
+- shifts voluntarily started;
+- time between result and next start;
+- stop reason.
 
 GO:
-Median >=3 turns.
+Median >=3 voluntarily started shifts in the allotted session.
 
 KILL:
-Median =1 and exit reason is lack of interest rather than usability/bug.
+Median =1 and exit interviews indicate lack of interest rather than usability/bug.
 
 ---
 
-## EXP-XR-05 — Tutorial without wall of text
+## EXP-XR-05 — First-five-minutes comprehension
 Hypothesis:
-A naive player can complete the first production and understand the first jam through spatial cues.
+A naive player experiences the complete promise without industrial terminology.
+
+Target milestones:
+- first successful action <=15 s;
+- first product/reward <=45 s;
+- unmistakable problem <=120 s;
+- meaningful intervention <=180 s;
+- recovery payoff <=240 s;
+- grade/next-shift invitation <=300 s.
 
 Measure:
-- time to first successful delivery;
-- number of verbal interventions by facilitator;
-- incorrect repeated actions.
+- timestamps;
+- facilitator interventions;
+- repeated wrong actions;
+- "what happened?" explanation afterward.
 
 GO:
-Median first delivery <60 s and zero facilitator explanation of industrial terminology.
+Median meets the targets and no participant needs an engineering explanation.
 
-KILL:
-Median >120 s or participants need explicit conceptual explanation.
+KILL/PIVOT:
+- median first product >90 s;
+- median payoff >300 s;
+- users cannot explain the cause/effect chain.
 
 ---
 
 ## EXP-XR-06 — Art-direction gate
 Hypothesis:
-A coherent toy/diorama visual system materially improves appeal over current prototype visuals.
+The premium kinetic industrial desk-toy direction materially improves appeal and clarity over prototype/generic low-poly visuals.
 
 Method:
-Blind A/B still/thumbnail comparison with >=20 people.
+Blind A/B still or 10-second capture with >=20 people.
+
+Measure:
+- preference;
+- "what kind of game is this?" clarity;
+- perceived product quality.
 
 GO:
->=75% preference for new direction.
+>=70% prefer the new direction and the majority identify factory/industrial strategy without prompting.
 
-KILL:
-<50% preference -> art direction is not solving the entry problem.
+KILL/PIVOT:
+<50% preference or visual language reduces state readability.
 
 ---
 
-## EXP-XR-07 — Target hardware performance
+## EXP-XR-07 — Target-hardware performance
 Hypothesis:
-The competition vertical slice can meet the chosen performance target on real target hardware.
+The competition journey meets the platform minimum with useful headroom on real target hardware.
 
 Measure:
-- frame timing;
-- low-percentile FPS;
-- draw calls;
+- frame timing / low-percentile FPS;
 - active product count;
-- thermal degradation over a representative session.
+- draw calls/material count where available;
+- GC/allocation spikes;
+- thermal degradation over representative session;
+- critical runtime errors.
 
 GO:
-Meets competition/platform threshold with headroom in representative play.
+Meets official competition minimum on Quest in a representative busy state and shows headroom outside transient loading.
 
 KILL/PIVOT:
-Core mechanic cannot meet target without removing its defining visual behavior.
+Defining visual behavior cannot meet minimum performance after one focused optimization pass.
 
-## EXP-XR-08 — FoV visibility of critical state (VR Glasses budget)
+---
+
+## EXP-XR-08 — FoV / discoverability
 Hypothesis:
-All critical state (bottleneck, overflow, contract timer, grade) and all frequent interactables fit inside a 70×66° view cone (minus a 5° margin) from the seated pose, so players on the narrowest device never miss the magic moment.
-
-Prototype:
-Exported layout JSON from the running build (`tools/xr-harness/examples/layout-example.json` shows the format) + simulator run with the VR Glasses profile.
+The player can keep the critical current state and next required interaction comfortably discoverable on the narrower VR Glasses FoV without compressing the world into an unreadable cluster.
 
 Measure:
-- `npm run xr:fov -- <layout.json> --device vr-glasses` result;
-- % of participants who saw the overflow happen (EXP-XR-02);
-- head-turn count needed to complete one turn.
+- VR Glasses simulator profile;
+- FoV heuristic report;
+- head-turn count / missed critical events;
+- overflow noticed rate;
+- user comfort.
 
 GO:
-FoV check passes for all critical elements and ≥80% of participants saw the spill.
+Critical current state is not routinely missed; essential UI avoids extreme edges; deliberate head movement does not interrupt flow.
 
 KILL/PIVOT:
-Critical elements require head turns > 30° or the spill is missed by >30% → shrink/move the play area, move the spill edge, add spatial audio cue.
+Players repeatedly miss the required next action/event or must maintain uncomfortable head/arm posture.
+
+Note:
+The static FoV checker is a heuristic. It is not proof that every world object must fit simultaneously inside one cone.
 
 ---
 
 ## EXP-XR-09 — Gaze + pinch utility
 Hypothesis:
-Look-and-pinch to inspect/upgrade a machine is faster and less tiring than reaching for it, without false selections.
+Gaze/head-gaze + pinch is useful for inspection/secondary selection without causing false actions.
 
 Variants:
-A. direct reach + pinch;
-B. gaze (eye or head fallback) + pinch;
+A. direct reach;
+B. gaze/head-gaze + pinch;
 C. both available.
 
 Measure:
-- time to inspect/upgrade target machine;
-- false selections/min;
-- preference.
+- selection time;
+- false activations/min;
+- intended-action success;
+- preference;
+- comfort.
 
 GO:
-B or C is faster with ≤0.5 false selections/min and no comfort penalty.
+B or C improves speed/reach with <=0.5 false selections/min and no comfort penalty.
 
 KILL:
-False selections >1/min after tuning → keep gaze for hover/highlight only.
+False selections remain >1/min after tuning -> restrict gaze to highlight/inspection or remove from core flow.
 
 ---
 
 ## EXP-XR-10 — Reason to come back
 Hypothesis:
-Visible cross-session progress (product ladder + best grade + daily contract) makes players want a second session.
+Daily Shift + saved best result + visible cross-session growth is enough to motivate a second session without implementing a full campaign.
 
 Protocol:
-Session 1 ends after a 4–5 turn run; ask nothing. 24 h later, offer an optional second session.
+Session 1 ends normally. Offer an optional second session about 24 h later.
 
 Measure:
-- % who accept a second session;
-- self-reported "I want to unlock the next product" (after, not before);
-- turns played in session 2.
+- second-session acceptance;
+- voluntary shifts in session 2;
+- what visible progression the participant remembers.
 
 GO:
-≥50% accept the second session or median ≥3 voluntary turns in session 2.
+>=50% accept the optional second session OR median >=3 voluntary shifts among returners.
 
 KILL:
-<25% accept and exit interviews show no interest in the ladder → rethink progression reward.
+<25% accept and interviews show no interest in improving/unlocking.
 
 ---
 
 ## EXP-XR-11 — Hand intent robustness
 Hypothesis:
-Intent buffering (use the pose from ~0.5 s before release), accepting multiple grab poses (pinch, claw, fist) and keeping carried items through brief tracking loss cut interaction errors below 1/min for naive players.
+Contextual intent handling can make the core action reliable enough for naive players.
+
+Important:
+Do not hard-code another game's timing or grab vocabulary.
+
+Parameters to test:
+- intent-history window;
+- target size/snap magnetism;
+- tracking-loss grace period;
+- ray/direct-grab arbitration.
+
+Observe which natural grab poses participants actually attempt before implementing additional gesture families.
 
 Measure:
-- errors/min with and without each rule (A/B toggles);
-- dropped-item incidents during tracking loss;
-- unintended releases.
+- intendedActionSuccessRate;
+- falseActivationsPerMin;
+- unintended releases;
+- lost-hand incidents;
+- trackingRecoverySec;
+- material interaction errors/min.
 
 GO:
-<1 material error/min for naive players and zero item drops on short (<1 s) tracking loss.
+- intended-action success >=95% for the core action after onboarding;
+- false activations <=0.5/min;
+- no dropped item on brief recoverable tracking loss in test scenario.
 
-KILL:
-Errors stay >2/min after tuning → simplify the interaction (bigger targets, fewer simultaneous grabbables).
+KILL/PIVOT:
+Reliability remains poor after simplifying the mechanic and enlarging tolerance.
+
+---
+
+## EXP-XR-12 — 10-second silent marketing / comprehension test
+Hypothesis:
+A person can understand the premise and identify the MR-specific hook from a 10-second clip with no narration.
+
+Method:
+Show clip once, muted, to >=10 people who have not seen the project.
+
+Ask:
+1. What do you think the game is?
+2. What happened?
+3. What would you do next?
+4. Would you want to try it?
+
+GO:
+- >=70% identify factory/production plus the crisis/fix concept;
+- >=40% express clear desire to try/show it.
+
+KILL/PIVOT:
+Most describe it as generic automation, traffic routing, or cannot identify why MR matters.
+
+---
+
+## EXP-XR-13 — Complete judge journey
+Hypothesis:
+A judge can have a complete satisfying arc in <=8 minutes without needing a long run.
+
+Measure:
+- cold start to first action;
+- journey completion time;
+- whether participant reports a beginning, crisis, decision and result;
+- clean pause/exit.
+
+GO:
+Median complete journey <=8 min and all four story beats are understood.
+
+KILL/PIVOT:
+Median >10 min or participants finish without understanding what their decision changed.
 
 ---
 
 ## Participant recruitment
-See `docs/xr/PLAYTEST_PLAN.md` (who, when, consent, scripts, how evidence is recorded).
+See `docs/xr/PLAYTEST_PLAN.md`.
 
-## Experiment discipline
-For every run, store a JSON record based on `tools/xr-harness/session-template.json` and run the harness.
+## Evidence discipline
+For every real run:
+1. copy/fill `tools/xr-harness/session-template.json`;
+2. store it under the experiment evidence directory;
+3. keep null for data not measured;
+4. run the harness;
+5. store captures/logs referenced by the session;
+6. record build/commit/hardware.
+
+Failed evidence is still evidence.
