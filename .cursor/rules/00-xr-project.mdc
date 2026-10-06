@@ -1,0 +1,21 @@
+---
+description: Tiny Factory Rush XR project operating rules
+alwaysApply: true
+---
+
+Read AGENTS.md before modifying the project.
+
+For XR work, also read:
+- docs/xr/PRODUCT_THESIS.md
+- docs/xr/ROADMAP.md
+- docs/xr/DECISIONS.md
+
+Rules:
+- game first, industrial engineering invisible;
+- tabletop MR, hands-first;
+- visible consequences over numerical dashboards;
+- one polished mechanic over broad scope;
+- do not add workers, detailed safety, detailed quality, detailed maintenance, multiplayer, AI assistant, or complex supply-chain features without an accepted experiment/decision;
+- preserve the pre-competition Git history;
+- never claim a test passed unless it was actually run;
+- update docs only when evidence or project state changed.
