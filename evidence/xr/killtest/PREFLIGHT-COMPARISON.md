@@ -1,79 +1,52 @@
-# Stack kill-test comparison (Prompt 01) — observed facts only
+# Stack kill-test comparison (Prompt 01B) — observations only
 
 Date: 2026-10-06  
 Branch: `feat/xr-competition-build`  
-D-007 status: remains **OPEN** (owner decides; no ACCEPTED change made)
+D-007: **OPEN** (no Quest evidence; owner decides later)
+
+Desktop FPS is **not** used as a Quest predictor (Intel UHD / ~12 GB RAM host).
 
 ## Completeness
 
-| Candidate | Runnable today? | Evidence class |
+| Candidate | Runnable interaction evidence today | Class |
 |---|---|---|
-| A IWSDK | YES | EMULATOR (IWER) + unit tests + production build |
-| B Unity | NO | NEEDS-HUMAN toolchain blocker only |
+| IWSDK | YES — grab, rotate, snap, tracking metrics | **EMULATOR** |
+| Unity | Scaffold + Hub/Editor install started; Simulator interaction **not yet observed** | **NEEDS-HUMAN** for Simulator/Operator |
 
-Because Unity could not run, this document is a **partial comparison**. It must not close D-007.
+## Comparison table
 
-## Observed dimensions
+| Criterion | IWSDK | Unity | Evidence | Confidence |
+|---|---|---|---|---|
+| Time to working interaction | Same-day EMULATOR grab/snap after official scaffold | Hub installed; Editor download/install; project scaffolded; Simulator path unfinished | preflight + killtest READMEs | High for IWSDK; High that Unity unfinished |
+| Grab | PASS | NOT OBSERVED in Simulator | IWSDK console + screenshots | High / None |
+| Rotate | **PASS — EMULATOR** (screenshots + ECS quaternion ≠ identity) | NOT OBSERVED | `EMULATOR-during-rotate.png`, `EMULATOR-module-transform-after-rotate.json` | High / None |
+| Snap | PASS (`slot-right`, ~0.13 m) | Logic + EditMode tests authored; runtime NOT OBSERVED | IWSDK metrics; Unity `SnapLogicTests` | High / Low (logic only) |
+| Tracking recovery | Metrics observed (emulator heuristic) | Logic + tests authored; runtime NOT OBSERVED | IWSDK console; Unity `IntentLogicTests` | Medium / Low |
+| Gaze / head-gaze | Ray/`Hovered` highlight; gazeTracking optional | Camera-forward hover fallback coded; ISDK/gaze BB not Simulator-proven | IWSDK runtime; Unity source | Medium / Low |
+| Table placement | DEV FALLBACK + SEM living_room | DEV FALLBACK coded; MRUK not Simulator-proven | labeled fallback both | Medium / Low |
+| Agent runtime tooling | Strong (`iwsdk` browser/xr/ecs/screenshot) | XR Operator **not configured** yet | IWSDK CLI logs; Unity NEEDS-HUMAN | High / None |
+| Build friction | Low (npm create + vite) | Higher (Hub login, Android modules, Meta packages, Simulator) | session notes | High |
+| Debugging friction | Console metrics + ECS query worked | Unknown until Editor opens | — | Medium / Unknown |
+| Desktop runtime | EMULATOR works on this PC | Unknown (UHD may struggle with Editor+Simulator) | — | High / Unknown |
+| Quest evidence | NO | NO | — | N/A |
+| Major blockers | Quest + Claude Code for unattended loop | Android modules, Simulator, Operator, UNITY_PATH, Simulator captures | NEEDS-HUMAN.md | High |
 
-### Interaction reliability
+## Desktop preflight posture (not a final engine choice)
 
-- **IWSDK (EMULATOR):** Scripted controller squeeze grab → move → release produced `grabAttempt`, `grabSuccess`, `release`, `snapSuccess` (`slot-right`, distance 0.13 m). Hover/selection coloring via `Hovered` present. Tracking-loss metric path observed (emulator connect/disconnect heuristic).  
-- **Unity:** NOT OBSERVED.
+**IWSDK LEADS IN DESKTOP PREFLIGHT** — only because it has completed EMULATOR interaction proof (including rotate) while Unity Simulator interaction remains blocked on unfinished local Meta/Unity setup.
 
-### Implementation friction
+This is **not** `FINAL STACK = IWSDK`.
 
-- **IWSDK:** Official scaffold completed in one non-interactive command; kill-test scene in TypeScript/ECS same day; agent CLI (`iwsdk browser` / `iwsdk xr`) usable for runtime eyes. PowerShell JSON quoting is awkward; node spawn to CLI binary works.  
-- **Unity:** Zero friction measured — environment absent.
+## Missing before D-007 can close
 
-### Time to first running XR interaction
+1. Unity Simulator: grab + rotate + snap + invalid feedback + tokens + gaze/head-gaze evidence labeled **SIMULATOR**
+2. XR Operator evidence or exact blocker
+3. Same core tasks on **real Quest** for both candidates (H-004)
+4. Owner decision on D-007
 
-- **IWSDK:** Scaffold + scene + EMULATOR XR enter + grab/snap metrics: same session (~hours including installs/docs).  
-- **Unity:** Blocked before project creation.
+## Explicit non-scores
 
-### Agent / runtime tooling
-
-- **IWSDK:** Strong — managed headless browser, screenshot, XR device mutation, console logs, MCP adapters shipped in scaffold.  
-- **Unity:** Meta XR Operator exists in docs for v207+, but not installable here today.
-
-### Table / scene support
-
-- **IWSDK:** AR mode + scene understanding + environment raycast enabled; kill-test uses labeled **DEV FALLBACK** table in emulator living_room SEM. Real plane anchoring untested.  
-- **Unity:** NOT OBSERVED (MRUK/table path not available).
-
-### Gaze / head-gaze
-
-- **IWSDK:** `gazeTracking` enabled optional path; ray/`Hovered` highlight demonstrated. Eye-gaze on Quest not tested.  
-- **Unity:** NOT OBSERVED.
-
-### Performance evidence
-
-- **IWSDK:** No Quest FPS. EMULATOR only; no human fatigue metrics.  
-- **Unity:** NONE.
-
-### Debugging experience
-
-- **IWSDK:** Console metrics + CLI screenshot/logs sufficient for this tiny scene.  
-- **Unity:** N/A.
-
-### Distribution friction
-
-- Not evaluated (kill-test only). Competition accepts hosted IWSDK URL per research notes; Unity store/app path not compared.
-
-### Major risks
-
-- Closing D-007 from EMULATOR-only IWSDK evidence would ignore Unity’s unknown interaction reliability and Operator workflow.
-- Host GPU is Intel UHD / 12 GB RAM — fine for IWSDK emulator; Unity Editor + Simulator may be constrained once installed.
-- No Quest on this machine yet → H-004 still required.
-
-### Missing evidence
-
-- Unity Simulator / XR Operator / EditMode tests
-- Real Quest interaction + performance for either stack
-- Naive-player false-activation / fatigue numbers (correctly left null)
-
-## Recommendation posture
-
-**UNITY BLOCKED** for candidate B completion.  
-IWSDK candidate is ready for continued EMULATOR iteration and for real-Quest comparison once hardware + Unity toolchain are available.
-
-Do **not** treat “more 2025 winners used Unity” as a score. Do **not** accept D-007 from this file alone.
+- Winner engine popularity
+- Language preference
+- Personal familiarity
+- Desktop FPS as Quest forecast

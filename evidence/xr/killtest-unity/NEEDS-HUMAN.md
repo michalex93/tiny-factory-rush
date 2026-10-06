@@ -1,53 +1,90 @@
-# UNITY BLOCKER — NEEDS-HUMAN
+# UNITY KILL-TEST — STATUS / NEEDS-HUMAN
 
 Date: 2026-10-06  
-Branch: `feat/xr-competition-build`  
-Status: **candidate B not executable on this machine today**
+Branch: `feat/xr-competition-build`
 
-## Exact missing prerequisites
+## Done automatically this session
 
-From current official Meta Unity docs (checked 2026-10-06):
-
-1. **Unity Editor 6000.0.66f2 or higher** with modules:
-   - Android Build Support
-   - OpenJDK
-   - Android SDK & NDK Tools
-2. **Meta XR Core SDK v207+**
-3. **Unity OpenXR Plugin 1.17.0+** (required for Meta XR Operator)
-4. **Meta XR Simulator** (standalone Windows OpenXR runtime) — for desktop interaction evidence
-5. **Meta XR Operator** (optional but required by task A-005 evidence path)
-6. **ADB / Android platform tools** for Quest deploy later
-7. Environment variable **`UNITY_PATH`** pointing at the Editor executable (gates lane `unity:editmode`)
-
-Discovered on this host:
-- `UNITY_PATH` empty
-- No Unity Hub Editor installs under standard `C:\Program Files\Unity*`
-- No Meta XR Simulator / Operator installs found
-- `adb` not on PATH
-
-## Why we did not fake a Unity candidate
-
-Creating a non-runnable `xr-unity/` stub or claiming Simulator screenshots without the toolchain would falsify the kill-test comparison. Per Prompt 01: do not choose IWSDK because Unity setup is annoying; leave D-007 OPEN.
-
-## Likely human setup time
-
-| Step | Estimate |
+| Item | Status |
 |---|---|
-| Install Unity Hub + Unity 6000.0.66f2+ with Android modules | 45–90 min (download-bound) |
-| Create/import project + Meta XR Core SDK v207 | 30–60 min |
-| Install/configure Meta XR Simulator | 15–30 min |
-| Enable XR Operator + OpenXR 1.17+ | 15–30 min |
-| Rebuild kill-test scene parity | 2–4 h once tools work |
+| Unity Hub 3.22.2 via `winget install Unity.UnityHub` | INSTALLED (MSIX AppX) |
+| Unity Editor 6000.6.4f1 via `winget install Unity.Unity.6000` | DOWNLOAD/INSTALL IN PROGRESS or pending verification |
+| `xr-unity/` kill-test project scaffold | CREATED (scene + snap/intent logic + EditMode tests + OpenXR 1.17.1 + Meta All-in-One 207.0.0 manifest) |
+| Android modules (SDK/NDK/OpenJDK) | **NOT YET** — requires Hub module install |
+| Standalone Meta XR Simulator v207 | **NOT INSTALLED** |
+| Meta XR Operator configured | **NOT DONE** |
+| Simulator grab/rotate/snap screenshots | **NOT CAPTURED** |
+| `UNITY_PATH` | **NOT SET** until Editor install finishes |
 
-**Total wall-clock if downloads are ready:** roughly half a day to one day for a first runnable Simulator grab/snap.
+## Exact next UI / CLI steps for Michel
 
-## Exact next human action (Michel)
+### A. Finish Editor + Android modules
 
-1. Install Unity Hub → Unity **6000.0.66f2+** with Android Build Support + OpenJDK + SDK/NDK.
-2. Install **Meta XR Simulator** (Windows) from Meta developer downloads.
-3. Create project under `xr-unity/` using Meta XR Core SDK **v207+** + OpenXR Plugin **≥1.17.0**.
-4. Set machine env `UNITY_PATH` to the Editor `.exe`.
-5. Re-run Prompt 01 candidate B acceptance (same tabletop grab/rotate/snap + 10 tokens).
-6. Capture Simulator evidence into `evidence/xr/killtest-unity/` labeled **SIMULATOR**.
+1. Open **Unity Hub** (Start menu → Unity Hub).
+2. Sign in with your Unity ID.
+3. **Installs** → confirm **6000.6.4f1** (or install **6000.0.66f2+** LTS if Hub prefers LTS).
+4. Gear on that install → **Add modules**:
+   - Android Build Support
+   - Android SDK & NDK Tools
+   - OpenJDK
+5. After install, set user/machine env:
 
-Do **not** accept D-007 until both candidates have honest interaction evidence and preferably real Quest comparison (H-004).
+```powershell
+# Example — adjust to the real path Hub shows:
+[System.Environment]::SetEnvironmentVariable(
+  'UNITY_PATH',
+  'C:\Program Files\Unity\Hub\Editor\6000.6.4f1\Editor\Unity.exe',
+  'User')
+```
+
+Verify:
+
+```powershell
+echo $env:UNITY_PATH
+& $env:UNITY_PATH -version
+```
+
+### B. Meta XR Simulator (standalone)
+
+1. Download **Meta XR Simulator — Windows** from Meta Developer Center (v207 / current standalone; **do not** add deprecated `com.meta.xr.simulator` UPM package).
+2. Install and launch once; leave available for OpenXR activation from Unity:  
+   `Window → Meta → Meta XR Simulator → Activate`.
+
+### C. Open kill-test project
+
+1. Hub → **Open** → select repo folder `xr-unity/`.
+2. Wait for Package Manager to resolve:
+   - `com.meta.xr.sdk.all@207.0.0` (scoped registry already in `Packages/manifest.json`)
+   - `com.unity.xr.openxr@1.17.1`
+3. Open scene `Assets/Scenes/KillTest.unity`.
+4. Project Settings → XR Plug-in Management → enable **OpenXR** for **Windows** and **Android**.
+5. Activate Meta XR Simulator → **Play**.
+6. Verify: grab, rotate (hold + twist), snap, invalid reject flash, 10 tokens moving.
+7. Save screenshots to `evidence/xr/killtest-unity/` with prefix `SIMULATOR-`.
+
+### D. XR Operator
+
+1. Confirm Core SDK ≥207 pulled in by All-in-One.
+2. Follow current Meta docs: enable Operator API layer; connect agent MCP.
+3. Attempt scene screenshot + module state read; if it fails, paste exact error into `evidence/xr/killtest-unity/OPERATOR-BLOCKER.md`.
+
+### E. EditMode tests
+
+```powershell
+& $env:UNITY_PATH -batchmode -nographics `
+  -projectPath "$PWD\xr-unity" `
+  -runTests -testPlatform EditMode `
+  -testResults "$PWD\evidence\xr\killtest-unity\EditMode-TestResults.xml" `
+  -logFile "$PWD\evidence\xr\killtest-unity\EditMode-unity.log"
+```
+
+## Official docs used
+
+- Unity requirements: Editor ≥6000.0.66f2 + Android modules
+- Meta XR All-in-One UPM / npm.developer.oculus.com v207
+- Meta XR Simulator standalone getting started (deprecated Unity package)
+- Meta XR Operator: Unity 6000.0.x+, Core v207+, OpenXR ≥1.17
+
+## Why Simulator evidence is still missing
+
+Editor install was started via winget but Android modules, Simulator, and Operator require signed-in Hub GUI + Meta downloads that cannot be completed headlessly in this Cursor session without the finished Editor path.

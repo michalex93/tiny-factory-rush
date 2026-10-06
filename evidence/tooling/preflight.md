@@ -1,8 +1,7 @@
-# Toolchain Preflight — Prompt 01
+# Toolchain Preflight — Prompt 01 / 01B
 
 Date: 2026-10-06  
 Branch: `feat/xr-competition-build`  
-Base planning commit: `44cc09ffa42511b9fd579131e8af9ee5452f7261`  
 Machine: Windows desktop (Celaya owner PC)
 
 ## Host
@@ -19,13 +18,13 @@ Machine: Windows desktop (Celaya owner PC)
 
 | Item | Value |
 |---|---|
-| Node | v22.22.0 (meets Node 22 baseline; also satisfies IWSDK `>=22.12`) |
+| Node | v22.22.0 |
 | npm | 11.6.2 |
 | Git | 2.46.2.windows.1 |
-| `npm ci` | PASS |
-| `npm run gates` | see session report (unit flake fixed via 30s timeout on heavy sim diagnostic) |
+| `npm ci` | PASS (Prompt 01) |
+| `npm run gates` | PASS (Prompt 01; re-check after 01B) |
 | `npm run loop:selftest` | PASS |
-| `npm run loop -- --dry-run` | PASS (`no-eligible-task` on clean tree; expected) |
+| `npm run loop -- --dry-run` | PASS |
 
 ## Agent tooling
 
@@ -33,53 +32,47 @@ Machine: Windows desktop (Celaya owner PC)
 |---|---|
 | Claude Code CLI (`claude`) | NOT INSTALLED on PATH |
 | Codex CLI (`codex`) | NOT INSTALLED on PATH |
-| Loop hooks / selftest mock agent | PASS via `npm run loop:selftest` |
-| Unattended loop | NOT STARTED (supervised bootstrap only) |
+| Loop selftest mock agent | PASS |
+| Unattended loop | NOT STARTED |
 
 ## Candidate A — IWSDK / WebXR
 
 | Item | Value |
 |---|---|
-| Official scaffold | `npm create @iwsdk@latest` (`@iwsdk/create@1.0.1`) |
-| Project path | `xr-iwsdk/` |
-| Target | AR/MR + grabbing + scene understanding + environment raycast |
+| Scaffold | `npm create @iwsdk@latest` (`@iwsdk/create@1.0.1`) |
 | `@iwsdk/core` | 1.0.1 |
-| `@iwsdk/cli` | 1.0.1 |
-| Emulator | IWER managed browser + `metaQuest3` / `living_room` (SEM) |
-| Reference warmup | FAILED once (timeout 120s); optional; not blocking build |
+| Build / tests | PASS |
+| Runtime | IWER EMULATOR |
+| Grab / snap / rotate | PASS — EMULATOR (rotate closed in Prompt 01B) |
+| Quest | NOT TESTED |
 
 ## Candidate B — Unity + Meta XR
 
 | Item | Value |
 |---|---|
-| `UNITY_PATH` | unset / empty |
-| Unity Hub Editors | NOT FOUND under standard Program Files paths |
-| Meta XR Core SDK v207 | NOT FOUND |
-| Meta XR Simulator | NOT FOUND |
-| Meta XR Operator | NOT FOUND |
-| Android / ADB | `adb` NOT on PATH |
+| Unity Hub | **3.22.2.65535** installed via `winget install Unity.UnityHub` (MSIX) |
+| Unity Editor | **6000.6.4f1** install via `winget install Unity.Unity.6000` — download/install long-running; verify path after Hub shows install |
+| Android modules | NOT YET (Hub UI/CLI modules required) |
+| Meta XR All-in-One | Declared in `xr-unity/Packages/manifest.json` as `com.meta.xr.sdk.all@207.0.0` (scoped registry) — not resolved until Editor opens project |
+| OpenXR | Declared `com.unity.xr.openxr@1.17.1` |
+| Meta XR Simulator standalone | NOT INSTALLED |
+| Meta XR Operator | NOT CONFIGURED |
+| `UNITY_PATH` | NOT SET |
+| ADB | NOT on PATH |
 | Quest Developer Hub | NOT FOUND |
-| Status | **NEEDS-HUMAN** — see `evidence/xr/killtest-unity/NEEDS-HUMAN.md` |
 
-Official Meta docs consulted (2026):
-- Unity requirements: Editor **6000.0.66f2+**, Android Build Support + OpenJDK + SDK/NDK
-- Meta XR Operator: Unity 6000.0.x+, Core SDK **v207+**, OpenXR Plugin **1.17.0+**
-- Meta XR Simulator: standalone OpenXR runtime (Windows 10+ 64-bit)
+Official baselines consulted: Unity ≥6000.0.66f2; Meta XR v207; OpenXR ≥1.17; standalone Simulator (deprecated UPM simulator package avoided).
 
 ## Quest hardware
 
 | Item | Value |
 |---|---|
-| Quest connected | NO (no ADB; no headset detected this session) |
+| Quest connected | NO |
 | Real-hardware kill test | NOT RUN |
 
-## Blocking components
+## Blocking for full parity
 
-1. Unity 6 LTS + Android modules + Meta XR Core SDK v207 (+ Simulator / Operator) — required for candidate B.
-2. Claude Code / Codex CLI — required before starting the unattended agent loop (not required for this supervised Prompt 01 kill-test work).
-3. Quest + ADB — required before D-007 can close.
-
-## Non-blocking / optional
-
-- IWSDK reference asset warmup cache
-- Quest Developer Hub
+1. Finish Unity Editor install + Android modules → set `UNITY_PATH`
+2. Install standalone Meta XR Simulator
+3. Open `xr-unity/`, resolve packages, capture **SIMULATOR** grab/rotate/snap evidence + Operator attempt
+4. Quest + ADB for H-004 before D-007
