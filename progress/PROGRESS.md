@@ -24,3 +24,9 @@ pm --prefix xr-iwsdk test 17 PASS;
 pm --prefix xr-iwsdk run build PASS; browser LOOP-*.png (BROWSER / DEV_FALLBACK_KEY labeled).
 - Gates: quick PASS; full PASS with UNITY_PATH cleared for this run (unity:editmode skipped � Editor held project / MCP disconnected).
 - Learnings: vite-plugin-dev runtime ownership blocks vitest while dev:runtime is up; Playwright needs system Chrome channel or browser install + ignoreHTTPSErrors for IWSDK TLS; do not let Unity setup consume the shipping day.
+
+## 2026-10-08 13:25 — CHK-01 — done
+- What changed: Clarifies prior CHK-01 progress encoding: IWSDK walking skeleton shipped (line/jam/BOOST/cash/grade); Unity timeboxed stop; checkpoint package ready; no public deploy; D-007 OPEN.
+- Evidence: commits ee12e50 + d6b7cf1; evidence/comp/checkpoint-01/; evidence/xr/factory-checkpoint/; SPRINT02-UNITY-STOP.md.
+- Gates: quick PASS; full PASS (unity:editmode skipped by clearing UNITY_PATH for the run).
+- Learnings: Prefer ASCII in PowerShell-appended progress lines on Windows.

@@ -1,9 +1,5 @@
 using UnityEngine;
 
-#if META_XR_INTERACTION
-using Oculus.Interaction;
-#endif
-
 namespace TinyFactory.KillTest
 {
     /// <summary>
@@ -21,7 +17,7 @@ namespace TinyFactory.KillTest
         private Renderer _renderer;
         private Color _idle = new Color(0.29f, 0.44f, 0.65f);
         private Color _hover = new Color(0.49f, 0.78f, 0.89f);
-        private Color _grabbed = new Color(0.94f, 0.78f, 0.37f);
+        private Color _grab = new Color(0.94f, 0.78f, 0.37f);
         private Color _snapOk = new Color(0.36f, 0.72f, 0.36f);
         private Color _snapBad = new Color(0.85f, 0.33f, 0.31f);
         private bool _grabbed;
@@ -137,7 +133,7 @@ namespace TinyFactory.KillTest
         private void UpdateColor(float nowMs)
         {
             if (nowMs < _rejectFlashUntil) SetColor(_snapBad);
-            else if (_grabbed) SetColor(_grabbed);
+            else if (_grabbed) SetColor(_grab);
             else if (_hovered) SetColor(_hover);
             else if (_bootstrap.OccupiedSlotId != null) SetColor(_snapOk);
             else SetColor(_idle);
@@ -152,9 +148,9 @@ namespace TinyFactory.KillTest
 #if META_XR_INTERACTION
         private void EnsureInteractionSdkHooks()
         {
-            // Wire Pointable/Grabbable events when Interaction SDK is present.
-            // Concrete component types vary by ISDK sample wiring; bootstrap logs if missing.
-            var grabbable = GetComponent<Grabbable>();
+            // Reflection avoids a hard asmdef dependency while Meta packages finish compiling.
+            var grabbableType = System.Type.GetType("Oculus.Interaction.Grabbable, Oculus.Interaction");
+            var grabbable = grabbableType != null ? GetComponent(grabbableType) : null;
             if (grabbable == null)
             {
                 Debug.LogWarning(
