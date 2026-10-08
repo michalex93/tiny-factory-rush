@@ -1,12 +1,15 @@
 # Build info — Checkpoint 01
 
 - Branch: `feat/xr-competition-build`
-- Commit: `b66c78a` (includes `ee12e50` skeleton + `d6b7cf1` evidence)
+- Public URL: https://michalex93.github.io/tiny-factory-rush/
+- Hosting: GitHub Pages (`gh-pages` / `/`)
 - App path: `xr-iwsdk/`
 - Stack: `@iwsdk/core` 1.0.1 (provisional — D-007 OPEN)
+- Vite `base`: `./` (subpath-safe)
 - Commands:
-  - `npm --prefix xr-iwsdk test` → 17 passed
-  - `npm --prefix xr-iwsdk run build` → PASS (`xr-iwsdk/dist`)
-- Runtime evidence: `evidence/xr/factory-checkpoint/`
-- Intervention automation path for browser capture: DEV FALLBACK key `B` (not Quest hand evidence)
-- Hand grab/snap previously proven on IWSDK kill-test (emulator)
+  - `npm --prefix xr-iwsdk test`
+  - `npm --prefix xr-iwsdk run build`
+  - IWER hand loop: `node xr-iwsdk/scripts/emulator-factory-loop.mjs`
+- Hands evidence: `evidence/xr/factory-checkpoint/EMULATOR-HAND-LOOP.json` (`inputSource: xr`)
+- Downloadable zip: `artifacts/tiny-factory-rush-xr-checkpoint-01.zip`
+- Shift length: 60s (checkpoint demo, not final balance)

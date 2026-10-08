@@ -1,3 +1,5 @@
-PUBLIC URL: NONE — not deployed this sprint
-LOCAL DEV: https://127.0.0.1:5173/  (npm --prefix xr-iwsdk run dev:runtime)
-LOCAL PREVIEW: https://127.0.0.1:4173/  (npm --prefix xr-iwsdk run preview)
+https://michalex93.github.io/tiny-factory-rush/
+
+Hosting: GitHub Pages (branch gh-pages, path /)
+Verified HTTP 200 on 2026-10-08 (public, no auth)
+Label: DEVELOPMENT CHECKPOINT — NOT FINAL COMPETITION SUBMISSION

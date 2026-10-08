@@ -1,53 +1,49 @@
-# Tiny Factory Rush XR
+# Tiny Factory Rush XR — Checkpoint 01
 
-**Tagline:** A living toy factory on your table. Fix the line with your hands before the shift collapses.
+## What it demonstrates
 
-## Status
+- miniature tabletop factory
+- visible production flow
+- visible jam
+- hands-first physical intervention (IWER hand pinch → grab → snap)
+- immediate recovery
+- money/result
+- shift grade
 
-prototype / competition **development checkpoint**
+## Runtime
 
-> DEVELOPMENT CHECKPOINT — NOT FINAL COMPETITION SUBMISSION  
-> D-007 engine decision remains **OPEN**. Quest **not verified**.
+IWSDK/WebXR
 
-## Platform
+## Evidence level
 
-IWSDK / WebXR — browser runtime + deterministic sim tested  
-(Emulator/headset hand grab proven earlier on kill-test; this checkpoint also used DEV FALLBACK keyboard `B` for automation evidence.)
+EMULATOR
 
-## Current features
+## Public URL
 
-- hands-first module manipulation (kill-test path + BOOST pad snap)
-- miniature production line (source → procA → buffer → procB → sink)
-- visible bottleneck / JAM
-- physical (or DEV FALLBACK) intervention that changes simulation
-- recovery / BOOST ON flow
-- money (CASH) + shift grade (S/A/B/C) + next shift (`R`)
+https://michalex93.github.io/tiny-factory-rush/
 
-## Not yet verified
+## Not yet proven
 
-- Quest hardware
-- final performance
+- Quest performance
+- Quest hand reliability
 - final engine
+- final signature interaction
 - final art
-- final signature interaction (overflow is PLACEHOLDER)
+- final balance
 
-## Run locally
+## Build commit
 
-```bash
-npm --prefix xr-iwsdk ci
-npm --prefix xr-iwsdk test
-npm --prefix xr-iwsdk run build
-npm --prefix xr-iwsdk run preview -- --host 127.0.0.1 --port 4173
-# IWER-injected:
-npm --prefix xr-iwsdk run dev:runtime -- --host 127.0.0.1 --port 5173
-```
+See `build-info.md` (updated when packaging). Source branch: `feat/xr-competition-build`.
 
-Controls: grab BOOST cube → snap to pad; DEV FALLBACK: `B` apply boost, `R` next shift.
+## Controls
 
-## Package contents
+- Enter XR → use hands (or IWER hand mode)
+- Grab BOOST cube → snap onto glowing pad
+- After grade: press `R` for next shift
+- DEV ONLY (`?dev=1`): keyboard `B` boost — not hero evidence
 
-- `screenshots/` — browser runtime frames + SIM VISUALIZATION SVGs
-- `short-video/` — see note inside (recording not completed in-agent)
-- `build-url.txt` — public URL status
-- `build-info.md` — build provenance
-- `known-limitations.md`
+## Honest labels
+
+- Screenshots/video: **IWSDK EMULATOR — DEVELOPMENT CHECKPOINT**
+- Intervention validation: `inputSource: xr` (not `dev-keyboard`)
+- D-007 engine decision: **OPEN**

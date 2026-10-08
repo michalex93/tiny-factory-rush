@@ -30,3 +30,9 @@ pm --prefix xr-iwsdk run build PASS; browser LOOP-*.png (BROWSER / DEV_FALLBACK_
 - Evidence: commits ee12e50 + d6b7cf1; evidence/comp/checkpoint-01/; evidence/xr/factory-checkpoint/; SPRINT02-UNITY-STOP.md.
 - Gates: quick PASS; full PASS (unity:editmode skipped by clearing UNITY_PATH for the run).
 - Learnings: Prefer ASCII in PowerShell-appended progress lines on Windows.
+
+## 2026-10-08 15:00 — CHK-01B — done
+- What changed: Prompt 03 shippable checkpoint — IWER hand loop (inputSource xr), 60s shift + world grade board, GitHub Pages URL, HERO screenshots, checkpoint zip; Unity still blocked; D-007 OPEN.
+- Evidence: evidence/xr/factory-checkpoint/EMULATOR-HAND-LOOP.json; evidence/comp/checkpoint-01/screenshots/HERO-*.png; https://michalex93.github.io/tiny-factory-rush/; artifacts/tiny-factory-rush-xr-checkpoint-01.zip.
+- Gates: re-run after commit.
+- Learnings: IWER CLI screenshots are slow (~7s); reset shift with R before intervention so snap lands while phase=running.
