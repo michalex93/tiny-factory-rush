@@ -15,7 +15,8 @@ Fallback: local runnable build (instructions below).
 
 ### Commit
 
-See git history on `feat/xr-competition-build` after checkpoint commits land (`feat(xr): …` / `docs(comp): …`).
+HEAD at packaging time: `b66c78a` on `feat/xr-competition-build`  
+Key commits: `ee12e50` (walking skeleton), `d6b7cf1` (checkpoint evidence), `b66c78a` (Unity package/OpenXR assets).
 
 ### Build command
 
