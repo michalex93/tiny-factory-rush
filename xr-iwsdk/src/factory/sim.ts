@@ -28,18 +28,19 @@ export type SimConfig = {
 };
 
 export const DEFAULT_SIM_CONFIG: SimConfig = {
-  shiftDurationSec: 90,
-  sourcePeriodSec: 0.85,
-  procAPeriodSec: 0.7,
-  procBPeriodSec: 2.4,
-  bufferCapacity: 3,
-  moveDurationSec: 0.35,
+  /** Checkpoint timing (45–75s). Not final competition balance. */
+  shiftDurationSec: 60,
+  sourcePeriodSec: 0.55,
+  procAPeriodSec: 0.45,
+  procBPeriodSec: 2.6,
+  bufferCapacity: 2,
+  moveDurationSec: 0.3,
   maxProducts: 24,
   payoutPerDelivery: 4,
   boostCost: 18,
   boostProcBMultiplier: 2.8,
   startingCash: 40,
-  jamBufferThreshold: 3,
+  jamBufferThreshold: 2,
   spillCap: 4,
 };
 

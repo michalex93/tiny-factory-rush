@@ -65,11 +65,12 @@ export class FactoryHud {
     const time = Math.ceil(snap.remaining);
     const jam = snap.jamActive ? ' · JAM' : '';
     const boost = snap.boosted ? ' · BOOST ON' : '';
-    this.statusEl.textContent = `SHIFT ${time}s · OUT ${snap.delivered}${jam}${boost}`;
     if (snap.phase === 'ended' && snap.grade) {
+      this.statusEl.textContent = `SHIFT COMPLETE · OUT ${snap.delivered}${boost}`;
       this.gradeEl.textContent = `GRADE ${snap.grade}`;
-      this.hintEl.textContent = 'Press R — next shift';
+      this.hintEl.textContent = 'Result locked — press R for next shift';
     } else {
+      this.statusEl.textContent = `SHIFT ${time}s · OUT ${snap.delivered}${jam}${boost}`;
       this.gradeEl.textContent = '';
       this.hintEl.textContent = hint;
     }

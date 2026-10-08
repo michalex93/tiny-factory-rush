@@ -12,10 +12,13 @@ import {
 } from '@iwsdk/core';
 import {
   BoxGeometry,
+  CanvasTexture,
   Color,
   CylinderGeometry,
   Mesh,
+  MeshBasicMaterial,
   MeshStandardMaterial,
+  PlaneGeometry,
   SphereGeometry,
   type Object3D,
 } from 'three';
@@ -28,7 +31,11 @@ import {
   TABLE,
 } from './config.js';
 import { FactoryHud } from './hud.js';
-import { FactoryMetrics } from './metrics.js';
+import {
+  FactoryMetrics,
+  isDevFallbackEnabled,
+  type FactoryInputSource,
+} from './metrics.js';
 import { FactorySim, type ProductState, type StationId } from './sim.js';
 
 const C = {
@@ -73,21 +80,35 @@ export class FactorySystem extends createSystem({
   private jamPulse = 0;
   private keyHandler: ((e: KeyboardEvent) => void) | null = null;
   private unsubSim: (() => void) | null = null;
+  private lastInterventionSource: FactoryInputSource | null = null;
+  private activeGrabSource: FactoryInputSource | null = null;
+  private resultBoard: Mesh | null = null;
+  private resultTexture: CanvasTexture | null = null;
+  private lastShownGrade: string | null = null;
 
   init(): void {
     const host =
       document.getElementById('scene-container') ?? document.body;
     this.hud = new FactoryHud(host);
+    const devFallback = isDevFallbackEnabled();
 
     this.unsubSim = this.sim.on((e) => {
       if (e.type === 'shiftStart') this.metrics.log('shiftStart');
       else if (e.type === 'firstProduct') this.metrics.log('firstProduct');
       else if (e.type === 'jamStart') this.metrics.log('jamStart');
       else if (e.type === 'interventionStart')
-        this.metrics.log('interventionStart');
+        this.metrics.log('interventionStart', {
+          inputSource: this.lastInterventionSource,
+        });
       else if (e.type === 'interventionSuccess')
-        this.metrics.log('interventionSuccess', { kind: e.kind });
-      else if (e.type === 'flowRecovered') this.metrics.log('flowRecovered');
+        this.metrics.log('interventionSuccess', {
+          kind: e.kind,
+          inputSource: this.lastInterventionSource,
+        });
+      else if (e.type === 'flowRecovered')
+        this.metrics.log('flowRecovered', {
+          inputSource: this.lastInterventionSource,
+        });
       else if (e.type === 'productDelivered')
         this.metrics.log('productDelivered', { total: e.total });
       else if (e.type === 'spill')
@@ -106,24 +127,34 @@ export class FactorySystem extends createSystem({
     this.queries.moduleGrabbed.subscribe('disqualify', () => this.onGrabEnd());
 
     this.keyHandler = (ev: KeyboardEvent) => {
+      // Restart is always available (result screen).
       if (ev.key === 'r' || ev.key === 'R') {
         this.sim.reset();
         this.occupiedSlot = null;
+        this.lastInterventionSource = null;
         this.resetModuleHome();
       }
-      // DEV FALLBACK — keyboard intervention when IWER hands unavailable.
-      // Not Quest evidence. Prefer grab+snap on emulator/headset.
-      if (ev.key === 'b' || ev.key === 'B') {
-        this.devApplyBoostAtPad();
+      // DEV ONLY (?dev=1): keyboard boost — not hero / not Quest evidence.
+      if (devFallback && (ev.key === 'b' || ev.key === 'B')) {
+        this.devApplyBoostAtPad('dev-keyboard');
       }
     };
-    (window as unknown as { __factoryApplyBoost?: () => void }).__factoryApplyBoost =
-      () => this.devApplyBoostAtPad();
     window.addEventListener('keydown', this.keyHandler);
+    if (devFallback) {
+      (
+        window as unknown as {
+          __factoryApplyBoost?: () => void;
+        }
+      ).__factoryApplyBoost = () => this.devApplyBoostAtPad('automation');
+    }
     this.cleanupFuncs.push(() => {
       if (this.keyHandler) window.removeEventListener('keydown', this.keyHandler);
       this.unsubSim?.();
       this.hud?.dispose();
+      if (devFallback) {
+        delete (window as unknown as { __factoryApplyBoost?: () => void })
+          .__factoryApplyBoost;
+      }
     });
 
     this.buildScene();
@@ -133,6 +164,7 @@ export class FactorySystem extends createSystem({
       mode: 'EMULATOR_OR_QUEST',
       table: 'DEV_FALLBACK_PLANE',
       note: 'PROVISIONAL CHECKPOINT — D-007 OPEN',
+      devFallback,
     });
   }
 
@@ -149,6 +181,7 @@ export class FactorySystem extends createSystem({
         ? 'JAM at slow machine — grab BOOST cube → snap onto glowing pad'
         : 'Orders flowing — watch the slow machine';
     this.hud?.update(snap, hint);
+    this.syncResultBoard(snap);
   }
 
   private buildScene(): void {
@@ -259,7 +292,61 @@ export class FactorySystem extends createSystem({
       this.productMeshes.push(mesh);
     }
 
+    // World-space result board (DOM HUD is invisible inside immersive XR).
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 256;
+    this.resultTexture = new CanvasTexture(canvas);
+    this.resultBoard = new Mesh(
+      new PlaneGeometry(0.55, 0.28),
+      new MeshBasicMaterial({
+        map: this.resultTexture,
+        transparent: true,
+        depthWrite: false,
+      }),
+    );
+    this.resultBoard.position.set(0, 1.05, -0.7);
+    this.resultBoard.visible = false;
+    this.resultBoard.name = 'factory-result-board';
+    this.world.createTransformEntity(this.resultBoard);
+
     this.built = true;
+  }
+
+  private syncResultBoard(snap: ReturnType<FactorySim['snapshot']>): void {
+    if (!this.resultBoard || !this.resultTexture) return;
+    if (snap.phase !== 'ended' || !snap.grade) {
+      this.resultBoard.visible = false;
+      this.lastShownGrade = null;
+      return;
+    }
+    this.resultBoard.visible = true;
+    const key = `${snap.grade}:${snap.cash}:${snap.delivered}`;
+    if (key === this.lastShownGrade) return;
+    this.lastShownGrade = key;
+    const canvas = this.resultTexture.image as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'rgba(20,24,28,0.88)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#f0c75e';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
+    ctx.fillStyle = '#f4f1ea';
+    ctx.font = 'bold 36px Segoe UI, sans-serif';
+    ctx.fillText('SHIFT COMPLETE', 36, 70);
+    ctx.fillStyle = '#f0c75e';
+    ctx.font = 'bold 96px Segoe UI, sans-serif';
+    ctx.fillText(`GRADE ${snap.grade}`, 36, 170);
+    ctx.fillStyle = '#c8d0d8';
+    ctx.font = '28px Segoe UI, sans-serif';
+    ctx.fillText(
+      `CASH ${Math.floor(snap.cash)}   OUT ${snap.delivered}`,
+      36,
+      220,
+    );
+    this.resultTexture.needsUpdate = true;
   }
 
   private syncProducts(states: ProductState[]): void {
@@ -349,8 +436,10 @@ export class FactorySystem extends createSystem({
   }
 
   private onGrabStart(): void {
-    this.metrics.log('grabAttempt');
-    this.metrics.log('grabSuccess');
+    // ECS Grabbed tag = XR GrabSystem path (IWER hand/controller), not keyboard.
+    this.activeGrabSource = 'xr';
+    this.metrics.log('grabAttempt', { inputSource: 'xr' });
+    this.metrics.log('grabSuccess', { inputSource: 'xr' });
     this.wasGrabbed = true;
     this.occupiedSlot = null;
   }
@@ -359,7 +448,8 @@ export class FactorySystem extends createSystem({
     if (!this.moduleObject || !this.wasGrabbed) return;
     const now =
       typeof performance !== 'undefined' ? performance.now() : Date.now();
-    this.metrics.log('release');
+    const inputSource: FactoryInputSource = this.activeGrabSource ?? 'xr';
+    this.metrics.log('release', { inputSource });
     const pos = this.moduleObject.position;
     const decision = selectSnapTarget(
       [pos.x, pos.y, pos.z],
@@ -380,20 +470,32 @@ export class FactorySystem extends createSystem({
         decision.position[2],
       );
       this.occupiedSlot = decision.targetId;
-      this.metrics.log('snapSuccess', { targetId: decision.targetId });
+      this.lastInterventionSource = inputSource;
+      this.metrics.log('snapSuccess', {
+        targetId: decision.targetId,
+        inputSource,
+      });
       const result = this.sim.tryApplyBoost();
       if (!result.ok) {
         this.rejectUntil = now + 450;
-        this.metrics.log('snapRejected', { reason: result.reason });
+        this.metrics.log('snapRejected', {
+          reason: result.reason,
+          inputSource,
+        });
         this.resetModuleHome();
         this.occupiedSlot = null;
+        this.lastInterventionSource = null;
       }
     } else {
       this.rejectUntil = now + 450;
-      this.metrics.log('snapRejected', { reason: decision.reason });
+      this.metrics.log('snapRejected', {
+        reason: decision.reason,
+        inputSource,
+      });
       this.resetModuleHome();
     }
     this.wasGrabbed = false;
+    this.activeGrabSource = null;
   }
 
   private resetModuleHome(): void {
@@ -405,11 +507,16 @@ export class FactorySystem extends createSystem({
     );
   }
 
-  /** DEV FALLBACK keyboard / automation path — not physical-hand evidence. */
-  private devApplyBoostAtPad(): void {
+  /**
+   * DEV ONLY (?dev=1): keyboard / automation boost.
+   * Not hero evidence. Not Quest evidence. Normal XR flow must not need this.
+   */
+  private devApplyBoostAtPad(inputSource: 'dev-keyboard' | 'automation'): void {
     if (!this.moduleObject) return;
-    this.metrics.log('grabAttempt');
-    this.metrics.log('grabSuccess');
+    if (!isDevFallbackEnabled()) return;
+    this.lastInterventionSource = inputSource;
+    this.metrics.log('grabAttempt', { inputSource, path: 'DEV_ONLY' });
+    this.metrics.log('grabSuccess', { inputSource, path: 'DEV_ONLY' });
     this.moduleObject.position.set(
       BOOST_SLOT.position[0],
       BOOST_SLOT.position[1] + MODULE_SIZE[1] / 2,
@@ -418,13 +525,18 @@ export class FactorySystem extends createSystem({
     this.occupiedSlot = BOOST_SLOT.id;
     this.metrics.log('snapSuccess', {
       targetId: BOOST_SLOT.id,
-      path: 'DEV_FALLBACK_KEY',
+      inputSource,
+      path: 'DEV_ONLY',
     });
     const result = this.sim.tryApplyBoost();
     if (!result.ok) {
-      this.metrics.log('snapRejected', { reason: result.reason });
+      this.metrics.log('snapRejected', {
+        reason: result.reason,
+        inputSource,
+      });
       this.resetModuleHome();
       this.occupiedSlot = null;
+      this.lastInterventionSource = null;
     }
   }
 }

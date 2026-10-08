@@ -96,4 +96,10 @@ describe('FactorySim', () => {
     expect(snap.phase).toBe('ended');
     expect(snap.grade).toMatch(/^[SABC]$/);
   });
+
+  it('checkpoint default shift is short demo length', () => {
+    const sim = new FactorySim();
+    expect(sim.config.shiftDurationSec).toBeGreaterThanOrEqual(45);
+    expect(sim.config.shiftDurationSec).toBeLessThanOrEqual(75);
+  });
 });
