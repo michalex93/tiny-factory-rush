@@ -1,6 +1,6 @@
 # Toolchain Preflight — Prompt 01 / 01B
 
-Date: 2026-10-06  
+Date: 2026-10-08  
 Branch: `feat/xr-competition-build`  
 Machine: Windows desktop (Celaya owner PC)
 
@@ -22,7 +22,7 @@ Machine: Windows desktop (Celaya owner PC)
 | npm | 11.6.2 |
 | Git | 2.46.2.windows.1 |
 | `npm ci` | PASS (Prompt 01) |
-| `npm run gates` | PASS (Prompt 01; re-check after 01B) |
+| `npm run gates` | FAIL 2026-10-08 — only `lane:extra` / `unity:editmode` (Editor has project open); root typecheck/unit/build PASS |
 | `npm run loop:selftest` | PASS |
 | `npm run loop -- --dry-run` | PASS |
 
@@ -32,6 +32,8 @@ Machine: Windows desktop (Celaya owner PC)
 |---|---|
 | Claude Code CLI (`claude`) | NOT INSTALLED on PATH |
 | Codex CLI (`codex`) | NOT INSTALLED on PATH |
+| Unity CLI | INSTALLED (`Unity.CLI` ~1.0.0-beta.12) at `%LOCALAPPDATA%\Unity\bin\unity.exe` |
+| Unity MCP (Pipeline) | Configured in `~/.cursor\mcp.json`; connected when Editor ready; timed out after Meta import |
 | Loop selftest mock agent | PASS |
 | Unattended loop | NOT STARTED |
 
@@ -51,17 +53,17 @@ Machine: Windows desktop (Celaya owner PC)
 | Item | Value |
 |---|---|
 | Unity Hub | **3.22.2.65535** installed via `winget install Unity.UnityHub` (MSIX) |
-| Unity Editor | **6000.6.4f1** install via `winget install Unity.Unity.6000` — download/install long-running; verify path after Hub shows install |
-| Android modules | NOT YET (Hub UI/CLI modules required) |
-| Meta XR All-in-One | Declared in `xr-unity/Packages/manifest.json` as `com.meta.xr.sdk.all@207.0.0` (scoped registry) — not resolved until Editor opens project |
-| OpenXR | Declared `com.unity.xr.openxr@1.17.1` |
-| Meta XR Simulator standalone | NOT INSTALLED |
-| Meta XR Operator | NOT CONFIGURED |
-| `UNITY_PATH` | NOT SET |
+| Unity Editor | **6000.6.4f1** (winget and/or Hub path) |
+| Android modules | NOT YET |
+| Meta XR packages | **207.0.0** Core + Interaction + Interaction.OVR + MRUK via `npm.developer.oculus.com` (All-in-One `com.meta.xr.sdk.all` **404** on registry) |
+| OpenXR | `com.unity.xr.openxr@1.18.0` installed; XR Management loaders **not enabled** yet |
+| Meta XR Simulator standalone | **INSTALLED v207.0** via `metavr tools install xrsim` → `%APPDATA%\metavr\tools\xrsim\MetaXRSimulator.exe` (not Program Files; no admin) |
+| Meta XR Operator | Package Editor tooling present in Core 207; **NOT CONFIGURED** |
+| `UNITY_PATH` | NOT SET (Editor at `C:\Program Files\Unity 6000.6.4f1\Editor\Unity.exe` and/or Hub `...\Hub\Editor\6000.6.4f1\...`) |
 | ADB | NOT on PATH |
 | Quest Developer Hub | NOT FOUND |
 
-Official baselines consulted: Unity ≥6000.0.66f2; Meta XR v207; OpenXR ≥1.17; standalone Simulator (deprecated UPM simulator package avoided).
+Official baselines consulted: Unity ≥6000.0.66f2; Meta XR v207; OpenXR ≥1.17; standalone Simulator (deprecated Unity package avoided).
 
 ## Quest hardware
 
@@ -72,7 +74,8 @@ Official baselines consulted: Unity ≥6000.0.66f2; Meta XR v207; OpenXR ≥1.17
 
 ## Blocking for full parity
 
-1. Finish Unity Editor install + Android modules → set `UNITY_PATH`
-2. Install standalone Meta XR Simulator
-3. Open `xr-unity/`, resolve packages, capture **SIMULATOR** grab/rotate/snap evidence + Operator attempt
-4. Quest + ADB for H-004 before D-007
+1. Restart Unity if Pipeline hung; finish compile; enable OpenXR Windows+Android
+2. Install standalone Meta XR Simulator; capture **SIMULATOR** evidence
+3. Optional URP 17.6.0 for MRUK shaders
+4. XR Operator setup or exact blocker doc
+5. Android modules + ADB + Quest for H-004 before D-007

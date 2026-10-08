@@ -1,0 +1,199 @@
+{
+  "label": "DEVELOPMENT CHECKPOINT — NOT FINAL COMPETITION SUBMISSION",
+  "mode": "DETERMINISTIC_SIM_HEADLESS",
+  "device": "NONE — not Quest, not Simulator visual",
+  "branch": "feat/xr-competition-build",
+  "timingsSec": {
+    "firstProduct": 0.4,
+    "jamStart": 2.400000000000001,
+    "intervention": 3.900000000000002,
+    "flowRecovered": 4.000000000000002,
+    "shiftEnd": 40.0000000000003
+  },
+  "result": {
+    "delivered": 51,
+    "cash": 226,
+    "grade": "S",
+    "phase": "ended",
+    "jamSec": 1.6000000000000003
+  },
+  "eventTypes": [
+    "shiftStart",
+    "firstProduct",
+    "jamStart",
+    "spill",
+    "interventionStart",
+    "interventionSuccess",
+    "flowRecovered",
+    "productDelivered",
+    "shiftEnd"
+  ],
+  "events": [
+    {
+      "t": 0,
+      "type": "shiftStart",
+      "detail": {
+        "type": "shiftStart"
+      }
+    },
+    {
+      "t": 0.4,
+      "type": "firstProduct",
+      "detail": {
+        "type": "firstProduct"
+      }
+    },
+    {
+      "t": 2.4,
+      "type": "jamStart",
+      "detail": {
+        "type": "jamStart"
+      }
+    },
+    {
+      "t": 2.8,
+      "type": "spill",
+      "detail": {
+        "type": "spill",
+        "count": 1
+      }
+    },
+    {
+      "t": 3.4,
+      "type": "spill",
+      "detail": {
+        "type": "spill",
+        "count": 2
+      }
+    },
+    {
+      "t": 3.9,
+      "type": "interventionStart",
+      "detail": {
+        "type": "interventionStart"
+      }
+    },
+    {
+      "t": 3.9,
+      "type": "interventionSuccess",
+      "detail": {
+        "type": "interventionSuccess",
+        "kind": "boost"
+      }
+    },
+    {
+      "t": 3.9,
+      "type": "flowRecovered",
+      "detail": {
+        "type": "flowRecovered"
+      }
+    },
+    {
+      "t": 4,
+      "type": "spill",
+      "detail": {
+        "type": "spill",
+        "count": 3
+      }
+    },
+    {
+      "t": 5.8,
+      "type": "spill",
+      "detail": {
+        "type": "spill",
+        "count": 4
+      }
+    },
+    {
+      "t": 7.3,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 5
+      }
+    },
+    {
+      "t": 11.5,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 10
+      }
+    },
+    {
+      "t": 14.3,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 15
+      }
+    },
+    {
+      "t": 18.5,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 20
+      }
+    },
+    {
+      "t": 21.3,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 25
+      }
+    },
+    {
+      "t": 25.5,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 30
+      }
+    },
+    {
+      "t": 28.3,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 35
+      }
+    },
+    {
+      "t": 32.5,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 40
+      }
+    },
+    {
+      "t": 35.3,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 45
+      }
+    },
+    {
+      "t": 39.5,
+      "type": "productDelivered",
+      "detail": {
+        "type": "productDelivered",
+        "total": 50
+      }
+    },
+    {
+      "t": 40,
+      "type": "shiftEnd",
+      "detail": {
+        "type": "shiftEnd",
+        "grade": "S",
+        "cash": 226,
+        "delivered": 51,
+        "jamSec": 1.6000000000000003
+      }
+    }
+  ]
+}

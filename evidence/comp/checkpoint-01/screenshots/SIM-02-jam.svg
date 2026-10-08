@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <rect width="900" height="420" fill="#1a1f24"/>
+  <text x="24" y="36" fill="#f4f1ea" font-family="Segoe UI,sans-serif" font-size="18" font-weight="700">Jam at slow processor</text>
+  <text x="24" y="58" fill="#9aa3ad" font-family="Segoe UI,sans-serif" font-size="12">SIM VISUALIZATION — not Quest / not camera footage · SIM-02-jam.svg</text>
+  <rect x="60" y="140" width="780" height="120" rx="8" fill="#6e5843"/>
+  
+    <rect x="84" y="160" width="72" height="72" rx="6" fill="#3d7ea6"/>
+    <text x="120" y="255" text-anchor="middle" fill="#f4f1ea" font-family="Segoe UI,sans-serif" font-size="11">SOURCE</text>
+  
+    <rect x="244" y="160" width="72" height="72" rx="6" fill="#4a5568"/>
+    <text x="280" y="255" text-anchor="middle" fill="#f4f1ea" font-family="Segoe UI,sans-serif" font-size="11">PROC A</text>
+  
+    <rect x="404" y="160" width="72" height="72" rx="6" fill="#c4a35a"/>
+    <text x="440" y="255" text-anchor="middle" fill="#f4f1ea" font-family="Segoe UI,sans-serif" font-size="11">BUFFER</text>
+  
+    <rect x="564" y="160" width="72" height="72" rx="6" fill="#d9534f"/>
+    <text x="600" y="255" text-anchor="middle" fill="#f4f1ea" font-family="Segoe UI,sans-serif" font-size="11">PROC B</text>
+  
+    <rect x="724" y="160" width="72" height="72" rx="6" fill="#3f8f6b"/>
+    <text x="760" y="255" text-anchor="middle" fill="#f4f1ea" font-family="Segoe UI,sans-serif" font-size="11">SINK</text>
+  
+  <circle cx="600" cy="200" r="8" fill="#e8a838"/>
+<circle cx="440" cy="198" r="8" fill="#e8a838"/>
+<circle cx="440" cy="196" r="8" fill="#e8a838"/>
+<circle cx="280" cy="194" r="8" fill="#e8a838"/>
+<circle cx="120" cy="192" r="8" fill="#e8a838"/>
+  <text x="24" y="360" fill="#f4f1ea" font-family="Segoe UI,sans-serif" font-size="16">CASH 40 · OUT 0 · JAM · t=2.4s</text>
+  <text x="24" y="390" fill="#f0c75e" font-family="Segoe UI,sans-serif" font-size="22" font-weight="800"></text>
+</svg>

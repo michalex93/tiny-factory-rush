@@ -1,74 +1,83 @@
 # UNITY KILL-TEST — STATUS / NEEDS-HUMAN
 
-Date: 2026-10-06  
-Branch: `feat/xr-competition-build`
+Date: 2026-10-08  
+Branch: `feat/xr-competition-build`  
+See also: `MCP-SESSION-01B.md`
 
-## Done automatically this session
+## Done this session (agent + Unity MCP / CLI)
 
 | Item | Status |
 |---|---|
-| Unity Hub 3.22.2 via `winget install Unity.UnityHub` | INSTALLED (MSIX AppX) |
-| Unity Editor 6000.6.4f1 via `winget install Unity.Unity.6000` | DOWNLOAD/INSTALL IN PROGRESS or pending verification |
-| `xr-unity/` kill-test project scaffold | CREATED (scene + snap/intent logic + EditMode tests + OpenXR 1.17.1 + Meta All-in-One 207.0.0 manifest) |
-| Android modules (SDK/NDK/OpenJDK) | **NOT YET** — requires Hub module install |
-| Standalone Meta XR Simulator v207 | **NOT INSTALLED** |
-| Meta XR Operator configured | **NOT DONE** |
-| Simulator grab/rotate/snap screenshots | **NOT CAPTURED** |
-| `UNITY_PATH` | **NOT SET** until Editor install finishes |
+| Unity Editor 6000.6.4f1 open + Pipeline MCP connected | YES (later hung on main thread) |
+| Meta XR Core / Interaction / Interaction.OVR / MRUK **207.0.0** via npm scoped registry | INSTALLED in PackageCache |
+| OpenXR package | 1.18.0 present |
+| KillTest scene + runtime bootstrap assets | PRESENT (`Assets/Scenes/KillTest.unity`) |
+| CS0102 `_grabbed` fix | DONE earlier |
+| KillTest ISDK hook softened (reflection) | DONE |
+| Built-in modules ai / assetbundle / particlesystem / … | ADDED to manifest |
+| SIMULATOR / EDITOR Play Mode evidence | **NOT CAPTURED** |
+| OpenXR enabled in XR Plug-in Management | **NOT DONE** (settings empty) |
+| Standalone Meta XR Simulator | **INSTALLED v207.0** (`metavr tools install xrsim` → `%APPDATA%\metavr\tools\xrsim`) |
+| XR Operator configured | **NOT DONE** |
+| Android modules | **NOT YET** |
+| `UNITY_PATH` user env | optional; Editor known at winget or Hub path |
 
-## Exact next UI / CLI steps for Michel
+## Exact remaining human / GUI actions
 
-### A. Finish Editor + Android modules
+### 0. Recover Editor (required now)
 
-1. Open **Unity Hub** (Start menu → Unity Hub).
-2. Sign in with your Unity ID.
-3. **Installs** → confirm **6000.6.4f1** (or install **6000.0.66f2+** LTS if Hub prefers LTS).
-4. Gear on that install → **Add modules**:
-   - Android Build Support
-   - Android SDK & NDK Tools
-   - OpenJDK
-5. After install, set user/machine env:
+NEEDS-HUMAN:
+1. If Unity is frozen / MCP times out: **save if prompted → close Unity Editor fully**.
+2. Re-open `xr-unity` in Unity 6000.6.4f1.
+3. Wait until Console is clean of CS errors (Package Manager finish importing Meta 207).
+4. Confirm Cursor MCP `unity` reconnects (`unity status` shows `ready`).
 
-```powershell
-# Example — adjust to the real path Hub shows:
-[System.Environment]::SetEnvironmentVariable(
-  'UNITY_PATH',
-  'C:\Program Files\Unity\Hub\Editor\6000.6.4f1\Editor\Unity.exe',
-  'User')
-```
+### A. URP (for MRUK shaders)
 
-Verify:
+NEEDS-HUMAN:
+- Package Manager → install **Universal RP 17.6.0** (matches this Editor’s built-in URP), **or** accept Built-in RP for kill-test only (Standard shader fallback already in Bootstrap).
 
-```powershell
-echo $env:UNITY_PATH
-& $env:UNITY_PATH -version
-```
+### B. OpenXR + Project Setup
 
-### B. Meta XR Simulator (standalone)
+NEEDS-HUMAN (or agent after Editor recovers):
+1. `Edit → Project Settings → XR Plug-in Management` → enable **OpenXR** for **Windows** and **Android**.
+2. `Meta → Tools → Project Setup Tool` → fix relevant OpenXR / Quest issues only.
+3. Optional: `Meta → Tools → AI Tools Setup` for Operator proxy notes.
 
-1. Download **Meta XR Simulator — Windows** from Meta Developer Center (v207 / current standalone; **do not** add deprecated `com.meta.xr.simulator` UPM package).
-2. Install and launch once; leave available for OpenXR activation from Unity:  
-   `Window → Meta → Meta XR Simulator → Activate`.
+### C. Meta XR Simulator (standalone — already installed)
 
-### C. Open kill-test project
+Installed path: `C:\Users\miche\AppData\Roaming\metavr\tools\xrsim\MetaXRSimulator.exe` (v207.0).
 
-1. Hub → **Open** → select repo folder `xr-unity/`.
-2. Wait for Package Manager to resolve:
-   - `com.meta.xr.sdk.all@207.0.0` (scoped registry already in `Packages/manifest.json`)
-   - `com.unity.xr.openxr@1.17.1`
-3. Open scene `Assets/Scenes/KillTest.unity`.
-4. Project Settings → XR Plug-in Management → enable **OpenXR** for **Windows** and **Android**.
-5. Activate Meta XR Simulator → **Play**.
-6. Verify: grab, rotate (hold + twist), snap, invalid reject flash, 10 tokens moving.
-7. Save screenshots to `evidence/xr/killtest-unity/` with prefix `SIMULATOR-`.
+NEEDS-HUMAN (activation / Play evidence):
+1. Launch: `metavr tools launch xrsim` **or** run `MetaXRSimulator.exe`.
+2. Activate OpenXR runtime (slider in Simulator UI, or `metavr xrsim runtime activate` — may need admin for HKLM).
+3. In Unity (after Editor recovery): `Window → Meta → Meta XR Simulator → Activate` → open KillTest → Play.
+4. Save screenshots to `evidence/xr/killtest-unity/` with prefix `SIMULATOR-`.
+5. **Do not** add deprecated `com.meta.xr.simulator` UPM package.
 
 ### D. XR Operator
 
-1. Confirm Core SDK ≥207 pulled in by All-in-One.
-2. Follow current Meta docs: enable Operator API layer; connect agent MCP.
-3. Attempt scene screenshot + module state read; if it fails, paste exact error into `evidence/xr/killtest-unity/OPERATOR-BLOCKER.md`.
+NEEDS-HUMAN:
+1. With Core 207 present: follow Meta AI Tools / Operator docs (ADB forward port **8720** for headset path).
+2. For desktop Simulator path: enable Operator per current Meta docs if supported.
+3. If blocked, write exact error to `evidence/xr/killtest-unity/OPERATOR-BLOCKER.md`.
 
-### E. EditMode tests
+### E. Android modules + UNITY_PATH
+
+NEEDS-HUMAN:
+1. Unity Hub → Installs → 6000.6.4f1 → Add modules: Android Build Support, SDK & NDK, OpenJDK.
+2. Optional env:
+
+```powershell
+[System.Environment]::SetEnvironmentVariable(
+  'UNITY_PATH',
+  'C:\Program Files\Unity 6000.6.4f1\Editor\Unity.exe',
+  'User')
+```
+
+(Also Hub path may exist: `C:\Program Files\Unity\Hub\Editor\6000.6.4f1\Editor\Unity.exe`.)
+
+### F. EditMode tests (close Editor first OR run in-Editor Test Runner)
 
 ```powershell
 & $env:UNITY_PATH -batchmode -nographics `
@@ -78,13 +87,12 @@ echo $env:UNITY_PATH
   -logFile "$PWD\evidence\xr\killtest-unity\EditMode-unity.log"
 ```
 
-## Official docs used
+Note: `npm run gates` → `unity:editmode` **fails while this Editor has the project open**.
 
-- Unity requirements: Editor ≥6000.0.66f2 + Android modules
-- Meta XR All-in-One UPM / npm.developer.oculus.com v207
-- Meta XR Simulator standalone getting started (deprecated Unity package)
-- Meta XR Operator: Unity 6000.0.x+, Core v207+, OpenXR ≥1.17
+## Why All-in-One was not used
 
-## Why Simulator evidence is still missing
+`https://npm.developer.oculus.com/com.meta.xr.sdk.all` returns **404**. Direct `com.meta.xr.sdk.all@207` in manifest is invalid on this registry. Use individual packages (Core, Interaction, MRUK, …) or Asset Store My Assets install of All-in-One if you specifically need the wrapper.
 
-Editor install was started via winget but Android modules, Simulator, and Operator require signed-in Hub GUI + Meta downloads that cannot be completed headlessly in this Cursor session without the finished Editor path.
+## D-007
+
+**OPEN**

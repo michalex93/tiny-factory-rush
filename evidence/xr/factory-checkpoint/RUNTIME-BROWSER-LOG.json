@@ -1,0 +1,107 @@
+{
+  "label": "BROWSER runtime — not Quest",
+  "interventionPath": "DEV_FALLBACK_KEY (b)",
+  "hud": "TINY FACTORY RUSH XR\nCASH 78\nSHIFT 73s · OUT 14 · BOOST ON\nLine accelerating — keep shipping",
+  "factoryLogs": [
+    {
+      "t": 1791487007508,
+      "text": "[factory] shiftStart {}"
+    },
+    {
+      "t": 1791487007511,
+      "text": "[factory] walking skeleton ready {mode: EMULATOR_OR_QUEST, table: DEV_FALLBACK_PLANE, note: PROVISIONAL CHECKPOINT — D-007 OPEN}"
+    },
+    {
+      "t": 1791487010782,
+      "text": "[factory] firstProduct {}"
+    },
+    {
+      "t": 1791487015324,
+      "text": "[factory] productDelivered {total: 1}"
+    },
+    {
+      "t": 1791487016539,
+      "text": "[factory] jamStart {}"
+    },
+    {
+      "t": 1791487016925,
+      "text": "[factory] grabAttempt {}"
+    },
+    {
+      "t": 1791487016925,
+      "text": "[factory] grabSuccess {}"
+    },
+    {
+      "t": 1791487016925,
+      "text": "[factory] snapSuccess {targetId: boost-slot, path: DEV_FALLBACK_KEY}"
+    },
+    {
+      "t": 1791487016927,
+      "text": "[factory] interventionStart {}"
+    },
+    {
+      "t": 1791487016928,
+      "text": "[factory] interventionSuccess {kind: boost}"
+    },
+    {
+      "t": 1791487016928,
+      "text": "[factory] flowRecovered {}"
+    },
+    {
+      "t": 1791487017252,
+      "text": "[factory] spill {count: 1}"
+    },
+    {
+      "t": 1791487018093,
+      "text": "[factory] productDelivered {total: 2}"
+    },
+    {
+      "t": 1791487018094,
+      "text": "[factory] productDelivered {total: 3}"
+    },
+    {
+      "t": 1791487019340,
+      "text": "[factory] productDelivered {total: 4}"
+    },
+    {
+      "t": 1791487019341,
+      "text": "[factory] productDelivered {total: 5}"
+    },
+    {
+      "t": 1791487020205,
+      "text": "[factory] productDelivered {total: 6}"
+    },
+    {
+      "t": 1791487021434,
+      "text": "[factory] productDelivered {total: 7}"
+    },
+    {
+      "t": 1791487021435,
+      "text": "[factory] productDelivered {total: 8}"
+    },
+    {
+      "t": 1791487022316,
+      "text": "[factory] productDelivered {total: 9}"
+    },
+    {
+      "t": 1791487023546,
+      "text": "[factory] productDelivered {total: 10}"
+    },
+    {
+      "t": 1791487023547,
+      "text": "[factory] productDelivered {total: 11}"
+    },
+    {
+      "t": 1791487024793,
+      "text": "[factory] productDelivered {total: 12}"
+    },
+    {
+      "t": 1791487024796,
+      "text": "[factory] productDelivered {total: 13}"
+    },
+    {
+      "t": 1791487026048,
+      "text": "[factory] productDelivered {total: 14}"
+    }
+  ]
+}

@@ -16,3 +16,11 @@ Format:
 - Evidence: docs/xr/AUTONOMY.md, docs/xr/RESEARCH_2025_WINNERS.md, `npm run gates` (full) PASS, `npm run loop:selftest` PASS.
 - Gates: quick PASS, full PASS
 - Learnings: run the loop from a clean integration branch; `.agent/` holds runtime state and is gitignored.
+
+## 2026-10-08 13:20 — CHK-01 — done
+- What changed: Provisional IWSDK walking skeleton (source?procA?buffer?procB?sink, jam, BOOST snap/DEV FALLBACK, cash/grade, next shift). Unity parity timeboxed and stopped; D-007 remains OPEN. Checkpoint-01 package + Devpost draft prepared; no public deploy.
+- Evidence: evidence/comp/CHECKPOINT-01.md, evidence/comp/checkpoint-01/, evidence/xr/factory-checkpoint/, evidence/xr/killtest-unity/SPRINT02-UNITY-STOP.md; 
+pm --prefix xr-iwsdk test 17 PASS; 
+pm --prefix xr-iwsdk run build PASS; browser LOOP-*.png (BROWSER / DEV_FALLBACK_KEY labeled).
+- Gates: quick PASS; full PASS with UNITY_PATH cleared for this run (unity:editmode skipped — Editor held project / MCP disconnected).
+- Learnings: vite-plugin-dev runtime ownership blocks vitest while dev:runtime is up; Playwright needs system Chrome channel or browser install + ignoreHTTPSErrors for IWSDK TLS; do not let Unity setup consume the shipping day.
