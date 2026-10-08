@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node ../node_modules/vitest/vitest.mjs run src/killtest"
+    "test": "node ../node_modules/vitest/vitest.mjs run src/killtest src/factory"
   },
   "dependencies": {
     "@iwsdk/core": "1.0.1",
