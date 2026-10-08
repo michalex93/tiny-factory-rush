@@ -1,6 +1,7 @@
 # Build info — Checkpoint 01
 
 - Branch: `feat/xr-competition-build`
+- Source commit: `b2f335e` (Prompt 03 packaging tip)
 - Public URL: https://michalex93.github.io/tiny-factory-rush/
 - Hosting: GitHub Pages (`gh-pages` / `/`)
 - App path: `xr-iwsdk/`
