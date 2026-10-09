@@ -4,23 +4,18 @@
 
 **IWSDK EMULATOR — DEVELOPMENT CHECKPOINT**
 
-Not Quest. Not narrated.
+## Continuous excerpt (preferred)
 
-## Frames (causal chain)
+| File | Notes |
+|---|---|
+| `HERO-LOOP-10S.webm` | ~10s continuous slice from automated hand-loop video |
+| `HERO-LOOP-10S.mp4` | H.264 twin |
 
-| # | File | Moment |
-|---|---|---|
-| 1 | `01-running.png` | factory running |
-| 2 | `02-jam.png` | jam |
-| 3 | `03-hand-intervention.png` | hand at BOOST |
-| 4 | `04-recovery.png` | post-snap recovery |
-| 5 | `05-grade.png` | shift result window |
+Source: `evidence/comp/checkpoint-01/short-video/IWSDK-EMULATOR-HAND-LOOP.*`  
+Method: ffmpeg slice — **not** a fake montage.
 
-These are cropped from the Prompt 03 HERO capture set.
+## Still storyboard (fallback)
 
-## Clip status
-
-Continuous 10s MP4: **not assembled in-agent**.  
-Owner can stitch frames or cut from a full emulator recording when available.
+`01-running.png` … `05-grade.png` remain for still-only contexts.
 
 Do not fabricate playtest metrics from this folder.

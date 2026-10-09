@@ -1,0 +1,109 @@
+{
+  "label": "IWSDK EMULATOR — DEVELOPMENT CHECKPOINT",
+  "captureMethod": "CDP Page.captureScreenshot async loop + ffmpeg-static (libvpx/libx264)",
+  "inputPath": "hand-right pinch via IWER",
+  "expectedInputSource": "xr",
+  "grabXr": true,
+  "snapOk": true,
+  "interventionOk": true,
+  "recovered": true,
+  "gradeSeen": true,
+  "keyboardFallbackUsed": false,
+  "events": [
+    {
+      "event": "shiftStart",
+      "present": false,
+      "firstMs": null
+    },
+    {
+      "event": "grabAttempt",
+      "present": true,
+      "firstMs": 21478
+    },
+    {
+      "event": "grabSuccess",
+      "present": true,
+      "firstMs": 21479
+    },
+    {
+      "event": "snapSuccess",
+      "present": true,
+      "firstMs": 33714
+    },
+    {
+      "event": "interventionSuccess",
+      "present": true,
+      "firstMs": 33737
+    },
+    {
+      "event": "flowRecovered",
+      "present": true,
+      "firstMs": 33744
+    },
+    {
+      "event": "shiftEnd",
+      "present": true,
+      "firstMs": 49199
+    }
+  ],
+  "timeline": [
+    {
+      "ms": 0,
+      "step": "enter-xr"
+    },
+    {
+      "ms": 2536,
+      "step": "hand-mode"
+    },
+    {
+      "ms": 7648,
+      "step": "reset-shift"
+    },
+    {
+      "ms": 8086,
+      "step": "build-jam"
+    },
+    {
+      "ms": 12297,
+      "step": "grab"
+    },
+    {
+      "ms": 21995,
+      "step": "snap"
+    },
+    {
+      "ms": 34900,
+      "step": "wait-grade"
+    },
+    {
+      "ms": 49546,
+      "step": "grade"
+    },
+    {
+      "ms": 50581,
+      "step": "stop-capture"
+    },
+    {
+      "ms": 50734,
+      "step": "encode-webm"
+    },
+    {
+      "ms": 73465,
+      "step": "encode-mp4"
+    }
+  ],
+  "video": {
+    "webm": "evidence/comp/checkpoint-01/short-video/IWSDK-EMULATOR-HAND-LOOP.webm",
+    "mp4": "evidence/comp/checkpoint-01/short-video/IWSDK-EMULATOR-HAND-LOOP.mp4",
+    "bytes": 682199,
+    "sha256": "4a90efc87d54f6facf16fbf4bbfc32acbdb8eb9fb497a0ccee73a244626204a9",
+    "frameCount": 243,
+    "captureErrors": 0,
+    "approxFps": 8,
+    "durationSecApprox": 30.4,
+    "mp4Available": true,
+    "hero10sWebm": "evidence/xr/marketing/silent-10s/HERO-LOOP-10S.webm",
+    "hero10sMp4": "evidence/xr/marketing/silent-10s/HERO-LOOP-10S.mp4"
+  },
+  "logsExcerpt": "[factory] productDelivered {total: 5}\n[factory] productDelivered {total: 6}\n[factory] productDelivered {total: 7}\n[factory] productDelivered {total: 8}\n[factory] productDelivered {total: 9}\n[factory] productDelivered {total: 10}\n[factory] productDelivered {total: 11}\n[factory] productDelivered {total: 12}\n[factory] productDelivered {total: 13}\n[factory] productDelivered {total: 14}\n[factory] productDelivered {total: 15}\n[factory] productDelivered {total: 16}\n[factory] productDelivered {total: 17}\n[factory] grabAttempt {inputSource: xr}\n[factory] grabSuccess {inputSource: xr}\n[factory] productDelivered {total: 18}\n[factory] productDelivered {total: 19}\n[factory] productDelivered {total: 20}\n[factory] productDelivered {total: 21}\n[factory] productDelivered {total: 22}\n[factory] productDelivered {total: 23}\n[factory] productDelivered {total: 24}\n[factory] productDelivered {total: 25}\n[factory] release {inputSource: xr}\n[factory] snapSuccess {targetId: boost-slot, inputSource: xr}\n[factory] interventionStart {inputSource: xr}\n[factory] interventionSuccess {kind: boost, inputSource: xr}\n[factory] flowRecovered {inputSource: xr}\n[factory] productDelivered {total: 26}\n[factory] productDelivered {total: 27}\n[factory] productDelivered {total: 28}\n[factory] productDelivered {total: 29}\n[factory] productDelivered {total: 30}\n[factory] productDelivered {total: 31}\n[factory] productDelivered {total: 32}\n[factory] productDelivered {total: 33}\n[factory] productDelivered {total: 34}\n[factory] productDelivered {total: 35}\n[factory] productDelivered {total: 36}\n[factory] productDelivered {total: 37}\n[factory] productDelivered {total: 38}\n[factory] productDelivered {total: 39}\n[factory] productDelivered {total: 40}\n[factory] productDelivered {total: 41}\n[factory] productDelivered {total: 42}\n[factory] productDelivered {total: 43}\n[factory] productDelivered {total: 44}\n[factory] productDelivered {total: 45}\n[factory] productDelivered {total: 46}\n[factory] productDelivered {total: 47}\n[factory] productDelivered {total: 48}\n[factory] productDelivered {total: 49}\n[factory] shiftEnd {grade: A, cash: 218, delivered: 49, jamSec: 41.36}"
+}

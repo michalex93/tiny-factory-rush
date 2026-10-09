@@ -2,28 +2,25 @@
 
 ## Status
 
-**No continuous MP4 recorded in-agent.**  
-Honest substitute: ordered emulator PNG storyboard under `../screenshots/HERO-*.png` and `../../xr/marketing/silent-10s/`.
+**VIDEO_CAPTURE = PASS** (automated)
 
-Label for any recording: **IWSDK EMULATOR — DEVELOPMENT CHECKPOINT**
+Label: **IWSDK EMULATOR — DEVELOPMENT CHECKPOINT**
 
-## Proven interaction (logs)
+## Files
 
-`evidence/xr/factory-checkpoint/EMULATOR-HAND-LOOP.json`:
+| File | Notes |
+|---|---|
+| `IWSDK-EMULATOR-HAND-LOOP.webm` | Primary continuous capture |
+| `IWSDK-EMULATOR-HAND-LOOP.mp4` | H.264 (`MP4_AVAILABLE=yes`) |
+| `VIDEO-HAND-LOOP.json` | Event trace (`inputSource: xr`, no keyboard) |
+| `VIDEO-QA-frame.jpg` | Still extracted for non-black QA |
+| `capture-async.log` | Orchestrator log |
 
-- grabSuccess `inputSource: xr`
-- snapSuccess `inputSource: xr`
-- interventionSuccess
-- flowRecovered
-- shiftEnd / grade
-- no `dev-keyboard`
+## Capture method
 
-## Manual recording steps (Michel — ~2 min)
+1. `iwsdk dev up --allow-browser-automation --headless --open`
+2. `iwsdk browser run scripts/browser-record-and-loop.mjs`
+3. Parallel CDP `Page.captureScreenshot` during IWER hand-right pinch grab/snap
+4. `ffmpeg-static` encode webm+mp4
 
-1. `cd xr-iwsdk && npx iwsdk dev up --ai-mode agent --open`
-2. Enter XR → set input mode to Hands (IWER UI or CLI)
-3. Start OS screen record (Win+G / OBS)
-4. Wait for jam → pinch-grab BOOST → snap to pad → wait grade board
-5. Stop at ~45–75s
-6. Save as `checkpoint-01-emulator-loop.mp4` in this folder
-7. Do **not** use keyboard `B` (`?dev=1` must stay off)
+Keyboard `B` / `?dev=1` **not** used.
