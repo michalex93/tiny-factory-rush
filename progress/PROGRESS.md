@@ -42,3 +42,9 @@ pm --prefix xr-iwsdk run build PASS; browser LOOP-*.png (BROWSER / DEV_FALLBACK_
 - Evidence: evidence/comp/checkpoint-01/short-video/; public-smoke/; EVIDENCE-MANIFEST.md; UPLOAD-READY.md; QUEST-STATUS.md; SPRINT04-UNITY-TIMEBOX.md.
 - Gates: IWSDK test 18/18 PASS + build PASS (cmd.exe; PowerShell can hit runtime_owner_identity_unavailable). Full `npm run gates` with UNITY_PATH set: core lanes PASS; anticheat/evidence/progress SKIP (no base); Unity EditMode batchmode TIMEOUT (>12m AssetDatabase, no xml) - not skipped via empty UNITY_PATH.
 - Learnings: MediaRecorder on WebXR canvas was empty; async CDP Page.captureScreenshot + ffmpeg-static works; browser-run lease max ~110s; spawnSync blocks capture loop; run xr-iwsdk vitest via cmd on Windows when birth-identity fails.
+
+## 2026-10-08 23:45 - CHK-01D - done
+- What changed: World-space jam cue for immersive Quest (DOM HUD invisible in XR); republished gh-pages; Quest ready card + `npm run quest:ready` + local adb under `.agent/platform-tools`.
+- Evidence: evidence/xr/QUEST-READY.md; evidence/xr/QUEST-STATUS.md; https://michalex93.github.io/tiny-factory-rush/
+- Gates: IWSDK 18/18 + build PASS before pages publish.
+- Learnings: H-002 due Oct 8 remains human; no-USB smoke = Meta Browser on public URL.

@@ -20,7 +20,8 @@
     "tasks": "node scripts/tasks.mjs",
     "review:packet": "node scripts/review-packet.mjs",
     "skills:sync": "node scripts/sync-skills.mjs",
-    "xr:fov": "node tools/xr-harness/fov-check.mjs"
+    "xr:fov": "node tools/xr-harness/fov-check.mjs",
+    "quest:ready": "node scripts/quest-ready.mjs"
   },
   "dependencies": {
     "phaser": "^4.2.1"

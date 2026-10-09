@@ -1,28 +1,34 @@
-# Quest readiness — Prompt 04
+# Quest readiness — live probe
 
-Date: 2026-10-08  
+Date: 2026-10-09  
+Probed at: 2026-10-09T05:46:43.982Z  
 **QUEST_CONNECTED: no**
 
-## Checks performed
+## adb
 
-- `where adb` → not on PATH
-- Recursive search under common Android/Unity SDK paths → no usable adb found in timebox
-- PnP device query for Quest/Oculus/Android → no connected headset reported
-- `metavr` / npx metavr device listing → not available as a ready device probe in this session
+- path: `c:\Users\miche\OneDrive\Documentos\01_repos_activos\tiny\.agent\platform-tools\adb.exe`
+- authorized: UNKNOWN
+- device: none
 
-## Authorization
+```
+List of devices attached
 
-UNKNOWN (no device)
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+```
 
-## Smoke
+## Public build (no USB required)
 
-Not attempted (no device)
+URL: https://michalex93.github.io/tiny-factory-rush/
+
+Open in **Meta Browser** on Quest for play smoke.
 
 ## PERFORMANCE
 
-**UNKNOWN**
+**UNKNOWN** (no automated fps capture in this probe)
 
-## NEEDS-HUMAN (single action)
+## Next
 
-NEEDS-HUMAN:  
-Connect the Quest by USB, put it on once, and accept the USB debugging authorization dialog. Ensure Android platform-tools `adb` is on PATH (or Unity Android SDK platform-tools). Then re-run the Quest smoke from the agent.
+NEEDS-HUMAN: For USB path — connect Quest by USB, enable developer/USB debugging, accept the prompt. For no-USB path — open the public URL in Meta Browser (see evidence/xr/QUEST-READY.md).
+
+See also: `evidence/xr/QUEST-READY.md`
