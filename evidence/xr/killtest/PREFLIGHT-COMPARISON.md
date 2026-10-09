@@ -8,20 +8,20 @@ D-007: **OPEN** (no comparable Quest evidence on both stacks)
 
 | Criterion | IWSDK emulator | IWSDK Quest | Unity simulator | Unity Quest |
 |---|---|---|---|---|
-| Grab | PASS | UNKNOWN | UNKNOWN | UNKNOWN |
+| Grab | PASS | PASS (human Meta Browser) | UNKNOWN | UNKNOWN |
 | Rotate | PASS | UNKNOWN | UNKNOWN | UNKNOWN |
-| Snap | PASS | UNKNOWN | UNKNOWN | UNKNOWN |
+| Snap | PASS | PASS (human Meta Browser) | UNKNOWN | UNKNOWN |
 | Tracking recovery | PASS (emulator metrics) | UNKNOWN | UNKNOWN | UNKNOWN |
 | Gaze | PASS (ray/hover) | UNKNOWN | UNKNOWN | UNKNOWN |
-| Setup friction | Low | UNKNOWN | High (Editor/MCP/OpenXR) | UNKNOWN |
-| Build health | PASS | UNKNOWN | Partial (packages present) | UNKNOWN |
-| Evidence quality | High (logs + video + screenshots) | None | Low (no Play observation) | None |
+| Setup friction | Low | Low (public URL) | High (Editor/MCP/OpenXR) | UNKNOWN |
+| Build health | PASS | PASS (loads on device) | Partial (packages present) | UNKNOWN |
+| Evidence quality | High (logs + video + screenshots) | Medium (owner report; no fps/logs) | Low (no Play observation) | None |
 
 ## Completeness notes
 
 | Candidate | Runnable interaction evidence | Class |
 |---|---|---|
-| IWSDK | YES — grab/snap/intervention + continuous emulator video | EMULATOR |
+| IWSDK | YES — emulator video + Quest human grab/snap/recovery | EMULATOR + QUEST (partial) |
 | Unity | Packages/OpenXR assets present; Play/Simulator interaction still not observed | NEEDS-HUMAN / BLOCKED |
 
 ## Explicit non-decision

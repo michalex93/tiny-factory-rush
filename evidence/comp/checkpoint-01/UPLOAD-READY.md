@@ -19,8 +19,14 @@
 
 | Item | Notes |
 |---|---|
-| Quest hardware validation | QUEST_CONNECTED = no / no adb device |
+| Quest fps / automated capture | Human grab/snap/recovery PASS; no measured fps yet |
 | Unity Simulator Play evidence | UNITY_STILL_BLOCKED |
+
+## PARTIAL
+
+| Item | Notes |
+|---|---|
+| Quest hardware smoke | PASS grab/snap/recovery via Meta Browser — `evidence/xr/QUEST-HUMAN-SMOKE-01.md` |
 
 ## OPTIONAL
 
