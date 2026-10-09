@@ -443,11 +443,13 @@ export class FactorySim {
     );
     if (!stuck) return;
     this.spillCount += 1;
+    // Pile around the stressed processor (procB) — readable jam cause.
     stuck.state = {
       kind: 'spill',
-      edgeX: -0.35 + this.spillCount * 0.14,
+      edgeX: -0.2 + this.spillCount * 0.1,
       age: 0,
     };
     this.emit({ type: 'spill', count: this.spillCount });
   }
 }
+

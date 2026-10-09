@@ -40,16 +40,16 @@ import {
   type FactoryInputSource,
 } from './metrics.js';
 import { FactorySim, type ProductState, type StationId } from './sim.js';
+import {
+  buildBoostModule,
+  buildProductMesh,
+  buildStationSilhouette,
+  productKindForIndex,
+} from './silhouettes.js';
 
 const C = {
   table: new Color(0x5c4a38),
   tableTop: new Color(0x7a6348),
-  source: new Color(0x2f8fbf),
-  procA: new Color(0x5a6578),
-  buffer: new Color(0xd4a84b),
-  procB: new Color(0x6b7385),
-  sink: new Color(0x3fa06a),
-  product: new Color(0xf0b429),
   jam: new Color(0xe24b4b),
   warn: new Color(0xf08a3c),
   moduleIdle: new Color(0x4f8cff),
@@ -59,7 +59,7 @@ const C = {
   pad: new Color(0x243038),
   padHot: new Color(0x7ddea0),
   belt: new Color(0x2a3038),
-  metal: new Color(0x8a93a0),
+  procB: new Color(0x6b7385),
 };
 
 type StationVisual = {
@@ -67,7 +67,7 @@ type StationVisual = {
   root: Group;
   body: Mesh;
   material: MeshStandardMaterial;
-  spinner: Mesh | null;
+  spinner: Object3D | null;
   light: Mesh | null;
 };
 
@@ -292,14 +292,29 @@ export class FactorySystem extends createSystem({
       metalness: 0.2,
       roughness: 0.4,
     });
-    this.padMesh = new Mesh(new CylinderGeometry(0.13, 0.14, 0.03, 24), this.padMaterial);
+    // Dock socket the BOOST turbo plugs into.
+    this.padMesh = new Mesh(new CylinderGeometry(0.12, 0.14, 0.035, 24), this.padMaterial);
     this.padMesh.position.set(...BOOST_SLOT.position);
     this.padMesh.name = 'factory-boost-pad';
     this.world.createTransformEntity(this.padMesh);
-
-    // Pad ring for affordance.
+    const socket = new Mesh(
+      new CylinderGeometry(0.045, 0.05, 0.025, 16),
+      new MeshStandardMaterial({
+        color: C.padHot,
+        emissive: C.padHot,
+        emissiveIntensity: 0.2,
+        metalness: 0.35,
+        roughness: 0.4,
+      }),
+    );
+    socket.position.set(
+      BOOST_SLOT.position[0],
+      BOOST_SLOT.position[1] + 0.02,
+      BOOST_SLOT.position[2],
+    );
+    this.world.createTransformEntity(socket);
     const ring = new Mesh(
-      new CylinderGeometry(0.155, 0.155, 0.008, 28),
+      new CylinderGeometry(0.16, 0.16, 0.008, 28),
       new MeshStandardMaterial({
         color: C.padHot,
         emissive: C.padHot,
@@ -322,27 +337,7 @@ export class FactorySystem extends createSystem({
       metalness: 0.45,
       roughness: 0.35,
     });
-    const body = new Mesh(
-      new BoxGeometry(MODULE_SIZE[0], MODULE_SIZE[1], MODULE_SIZE[2]),
-      this.moduleMaterial,
-    );
-    // Chunkier BOOST silhouette: small antenna + face plate.
-    const antenna = new Mesh(
-      new CylinderGeometry(0.015, 0.02, 0.08, 8),
-      new MeshStandardMaterial({ color: C.metal, metalness: 0.6, roughness: 0.3 }),
-    );
-    antenna.position.y = MODULE_SIZE[1] / 2 + 0.04;
-    body.add(antenna);
-    const badge = new Mesh(
-      new BoxGeometry(0.08, 0.04, 0.02),
-      new MeshStandardMaterial({
-        color: C.moduleGrab,
-        emissive: C.moduleGrab,
-        emissiveIntensity: 0.4,
-      }),
-    );
-    badge.position.set(0, 0.02, MODULE_SIZE[2] / 2 + 0.01);
-    body.add(badge);
+    const body = buildBoostModule(this.moduleMaterial);
     body.position.set(
       BOOST_SLOT.position[0] - 0.28,
       BOOST_SLOT.position[1] + MODULE_SIZE[1] / 2,
@@ -356,16 +351,7 @@ export class FactorySystem extends createSystem({
     this.moduleObject = entity.object3D!;
 
     for (let i = 0; i < this.sim.config.maxProducts; i += 1) {
-      const mesh = new Mesh(
-        new BoxGeometry(0.045, 0.045, 0.045),
-        new MeshStandardMaterial({
-          color: C.product,
-          emissive: C.product,
-          emissiveIntensity: 0.22,
-          metalness: 0.15,
-          roughness: 0.4,
-        }),
-      );
+      const mesh = buildProductMesh(productKindForIndex(i));
       mesh.visible = false;
       mesh.name = `factory-product-${i}`;
       this.world.createTransformEntity(mesh);
@@ -446,105 +432,19 @@ export class FactorySystem extends createSystem({
   }
 
   private buildStation(id: StationId): StationVisual {
-    const root = new Group();
-    root.name = `factory-${id}`;
+    const built = buildStationSilhouette(id);
+    built.root.name = `factory-${id}`;
     const p = STATION_POS[id];
-    root.position.set(p[0], p[1], p[2]);
-
-    let body: Mesh;
-    let material: MeshStandardMaterial;
-    let spinner: Mesh | null = null;
-    let light: Mesh | null = null;
-
-    if (id === 'source') {
-      material = new MeshStandardMaterial({
-        color: C.source,
-        emissive: C.source,
-        emissiveIntensity: 0.18,
-        metalness: 0.35,
-        roughness: 0.4,
-      });
-      body = new Mesh(new CylinderGeometry(0.075, 0.09, 0.18, 18), material);
-      spinner = new Mesh(
-        new BoxGeometry(0.12, 0.02, 0.02),
-        new MeshStandardMaterial({ color: C.metal, metalness: 0.7, roughness: 0.3 }),
-      );
-      spinner.position.y = 0.12;
-    } else if (id === 'procA') {
-      material = new MeshStandardMaterial({
-        color: C.procA,
-        emissive: C.procA,
-        emissiveIntensity: 0.14,
-        metalness: 0.4,
-        roughness: 0.4,
-      });
-      body = new Mesh(new BoxGeometry(0.15, 0.13, 0.15), material);
-      spinner = new Mesh(
-        new CylinderGeometry(0.04, 0.04, 0.05, 12),
-        new MeshStandardMaterial({ color: C.metal, metalness: 0.75, roughness: 0.25 }),
-      );
-      spinner.rotation.z = Math.PI / 2;
-      spinner.position.set(0.09, 0.02, 0);
-    } else if (id === 'buffer') {
-      material = new MeshStandardMaterial({
-        color: C.buffer,
-        emissive: C.buffer,
-        emissiveIntensity: 0.16,
-        metalness: 0.25,
-        roughness: 0.5,
-      });
-      body = new Mesh(new BoxGeometry(0.2, 0.09, 0.16), material);
-      const rail = new Mesh(
-        new BoxGeometry(0.18, 0.03, 0.03),
-        new MeshStandardMaterial({ color: C.metal }),
-      );
-      rail.position.y = 0.07;
-      root.add(rail);
-    } else if (id === 'procB') {
-      material = new MeshStandardMaterial({
-        color: C.procB,
-        emissive: C.procB,
-        emissiveIntensity: 0.14,
-        metalness: 0.45,
-        roughness: 0.38,
-      });
-      body = new Mesh(new BoxGeometry(0.16, 0.2, 0.16), material);
-      spinner = new Mesh(
-        new CylinderGeometry(0.055, 0.055, 0.04, 16),
-        new MeshStandardMaterial({
-          color: C.warn,
-          emissive: C.warn,
-          emissiveIntensity: 0.2,
-          metalness: 0.5,
-          roughness: 0.35,
-        }),
-      );
-      spinner.position.y = 0.14;
-    } else {
-      material = new MeshStandardMaterial({
-        color: C.sink,
-        emissive: C.sink,
-        emissiveIntensity: 0.18,
-        metalness: 0.3,
-        roughness: 0.45,
-      });
-      body = new Mesh(new CylinderGeometry(0.095, 0.08, 0.12, 6), material);
-      light = new Mesh(
-        new SphereGeometry(0.025, 10, 10),
-        new MeshStandardMaterial({
-          color: C.moduleOk,
-          emissive: C.moduleOk,
-          emissiveIntensity: 0.5,
-        }),
-      );
-      light.position.y = 0.1;
-    }
-
-    root.add(body);
-    if (spinner) root.add(spinner);
-    if (light) root.add(light);
-    this.world.createTransformEntity(root);
-    return { id, root, body, material, spinner, light };
+    built.root.position.set(p[0], p[1], p[2]);
+    this.world.createTransformEntity(built.root);
+    return {
+      id,
+      root: built.root,
+      body: built.body,
+      material: built.material,
+      spinner: built.spinner,
+      light: built.light,
+    };
   }
 
   private syncPromptBoard(snap: ReturnType<FactorySim['snapshot']>): void {
@@ -664,6 +564,7 @@ export class FactorySystem extends createSystem({
   }
 
   private syncProducts(states: ProductState[], jamSeverity: number): void {
+    const jamMachine = STATION_POS.procB;
     for (let i = 0; i < this.productMeshes.length; i += 1) {
       const mesh = this.productMeshes[i]!;
       const state = states[i];
@@ -678,9 +579,8 @@ export class FactorySystem extends createSystem({
         const stack = states
           .slice(0, i)
           .filter((s) => s.kind === 'at' && s.station === state.station).length;
-        mesh.position.set(p[0], p[1] + 0.1 + stack * 0.048, p[2]);
-        mesh.rotation.y = this.aliveT * 1.2 + i;
-        mat.color.copy(C.product);
+        mesh.position.set(p[0], p[1] + 0.11 + stack * 0.05, p[2]);
+        mesh.rotation.y = this.aliveT * 1.2 + i * 0.7;
         mat.emissiveIntensity = 0.22;
       } else if (state.kind === 'moving') {
         const a = STATION_POS[state.from];
@@ -688,22 +588,26 @@ export class FactorySystem extends createSystem({
         const t = easeInOut(state.t);
         mesh.position.set(
           a[0] + (b[0] - a[0]) * t,
-          a[1] + 0.12 + Math.sin(t * Math.PI) * 0.05,
+          a[1] + 0.13 + Math.sin(t * Math.PI) * 0.05,
           a[2] + (b[2] - a[2]) * t,
         );
-        mesh.rotation.x = t * Math.PI;
-        mat.color.copy(C.product);
-        mat.emissiveIntensity = 0.3;
+        mesh.rotation.y = t * Math.PI * 2;
+        mat.emissiveIntensity = 0.32;
       } else if (state.kind === 'spill') {
-        const fall = Math.min(1, state.age * 1.8);
+        // Physically pile around the jammed processor (procB).
+        const fall = Math.min(1, state.age * 1.6);
+        const ang = state.edgeX * 4.2 + i * 0.35;
+        const radius = 0.12 + Math.min(0.1, state.age * 0.04);
         mesh.position.set(
-          state.edgeX,
-          TABLE.position[1] + 0.08 - fall * 0.04,
-          TABLE.position[2] + 0.32 + Math.min(0.12, state.age * 0.05),
+          jamMachine[0] + Math.cos(ang) * radius,
+          jamMachine[1] - 0.02 + fall * 0.02 + (i % 3) * 0.025,
+          jamMachine[2] + Math.sin(ang) * radius + 0.04,
         );
-        mesh.rotation.set(fall * 1.2, state.edgeX, fall * 0.8);
-        mat.color.copy(jamSeverity > 0.5 ? C.jam : C.warn);
-        mat.emissiveIntensity = 0.35;
+        mesh.rotation.set(fall * 1.1, ang, fall * 0.7);
+        mat.emissiveIntensity = 0.2 + jamSeverity * 0.25;
+        if (jamSeverity > 0.45) {
+          mat.emissive.copy(C.jam);
+        }
       }
     }
   }
@@ -724,22 +628,30 @@ export class FactorySystem extends createSystem({
             ? 4.5
             : 2;
       if (s.spinner) {
-        if (s.id === 'procA') s.spinner.rotation.x += dt * spinRate;
-        else s.spinner.rotation.y += dt * spinRate;
+        // Rollers / hoppers / racks — recovery spins harder; jam almost freezes procB.
+        if (s.id === 'procA' || s.id === 'procB') {
+          s.spinner.rotation.x += dt * spinRate;
+        } else {
+          s.spinner.rotation.y += dt * spinRate;
+        }
       }
       if (s.id === 'procB') {
         s.material.emissive.copy(
           snap.jamActive ? C.jam : snap.pressure > 0.5 ? C.warn : C.procB,
         );
         s.material.emissiveIntensity = snap.jamActive
-          ? 0.35 + 0.35 * Math.sin(this.jamPulse)
-          : 0.14 + snap.pressure * 0.15;
+          ? 0.4 + 0.4 * Math.sin(this.jamPulse)
+          : snap.recoveryBurstLeft > 0
+            ? 0.35
+            : 0.14 + snap.pressure * 0.15;
         s.root.rotation.z = snap.jamActive
-          ? Math.sin(this.jamPulse * 1.6) * 0.05 * snap.jamSeverity
+          ? Math.sin(this.jamPulse * 1.6) * 0.06 * snap.jamSeverity
           : 0;
         s.root.scale.y = snap.jamActive
           ? 1 + 0.05 * Math.sin(this.jamPulse)
-          : 1;
+          : snap.recoveryBurstLeft > 0
+            ? 1.04
+            : 1;
       } else if (s.id === 'buffer') {
         s.material.emissiveIntensity =
           0.12 + snap.bufferFill * 0.12 + (snap.jamActive ? 0.15 : 0);
