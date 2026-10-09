@@ -64,11 +64,11 @@ export class FactoryHud {
     this.cashEl.textContent = `CASH ${Math.floor(snap.cash)}`;
     const time = Math.ceil(snap.remaining);
     const jam = snap.jamActive ? ' · JAM' : '';
-    const boost = snap.boosted ? ' · BOOST ON' : '';
+    const boost = snap.boosted ? ' · FLOW RESTORED' : '';
     if (snap.phase === 'ended' && snap.grade) {
       this.statusEl.textContent = `SHIFT COMPLETE · OUT ${snap.delivered}${boost}`;
       this.gradeEl.textContent = `GRADE ${snap.grade}`;
-      this.hintEl.textContent = 'Result locked — press R for next shift';
+      this.hintEl.textContent = 'RUN AGAIN — press R';
     } else {
       this.statusEl.textContent = `SHIFT ${time}s · OUT ${snap.delivered}${jam}${boost}`;
       this.gradeEl.textContent = '';

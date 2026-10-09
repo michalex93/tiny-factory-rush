@@ -1,6 +1,6 @@
 /**
- * Provisional Tiny Factory Rush XR walking skeleton (IWSDK checkpoint).
- * DEV FALLBACK table. Complete crude loop — not final art / signature / engine.
+ * Tiny Factory Rush XR — fun-slice vertical presentation (IWSDK).
+ * DEV FALLBACK table. Premium desk-toy readability, not final art.
  */
 
 import {
@@ -15,6 +15,7 @@ import {
   CanvasTexture,
   Color,
   CylinderGeometry,
+  Group,
   Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
@@ -23,6 +24,7 @@ import {
   type Object3D,
 } from 'three';
 import { selectSnapTarget } from '../killtest/snap.js';
+import { FactoryAudio } from './audio.js';
 import {
   BOOST_SLOT,
   MODULE_SIZE,
@@ -30,6 +32,7 @@ import {
   STATION_POS,
   TABLE,
 } from './config.js';
+import { FunMetrics } from './funMetrics.js';
 import { FactoryHud } from './hud.js';
 import {
   FactoryMetrics,
@@ -39,25 +42,33 @@ import {
 import { FactorySim, type ProductState, type StationId } from './sim.js';
 
 const C = {
-  table: new Color(0x6e5843),
-  source: new Color(0x3d7ea6),
-  proc: new Color(0x4a5568),
-  buffer: new Color(0xc4a35a),
-  sink: new Color(0x3f8f6b),
-  product: new Color(0xe8a838),
-  jam: new Color(0xd9534f),
-  moduleIdle: new Color(0x5b8def),
-  moduleHover: new Color(0x7ec8e3),
-  moduleGrab: new Color(0xf0c75e),
-  moduleOk: new Color(0x5cb85c),
-  pad: new Color(0x2f3e46),
-  padHot: new Color(0x88c999),
+  table: new Color(0x5c4a38),
+  tableTop: new Color(0x7a6348),
+  source: new Color(0x2f8fbf),
+  procA: new Color(0x5a6578),
+  buffer: new Color(0xd4a84b),
+  procB: new Color(0x6b7385),
+  sink: new Color(0x3fa06a),
+  product: new Color(0xf0b429),
+  jam: new Color(0xe24b4b),
+  warn: new Color(0xf08a3c),
+  moduleIdle: new Color(0x4f8cff),
+  moduleHover: new Color(0x8ed7f0),
+  moduleGrab: new Color(0xffd166),
+  moduleOk: new Color(0x5ed17a),
+  pad: new Color(0x243038),
+  padHot: new Color(0x7ddea0),
+  belt: new Color(0x2a3038),
+  metal: new Color(0x8a93a0),
 };
 
 type StationVisual = {
   id: StationId;
-  root: Mesh;
+  root: Group;
+  body: Mesh;
   material: MeshStandardMaterial;
+  spinner: Mesh | null;
+  light: Mesh | null;
 };
 
 export class FactorySystem extends createSystem({
@@ -65,7 +76,9 @@ export class FactorySystem extends createSystem({
   moduleHovered: { required: [Hovered] },
 }) {
   readonly metrics = new FactoryMetrics();
-  private sim = new FactorySim();
+  readonly funMetrics = new FunMetrics();
+  private sim = new FactorySim(readCaptureTuning());
+  private audio = new FactoryAudio();
   private hud: FactoryHud | null = null;
   private stations: StationVisual[] = [];
   private productMeshes: Mesh[] = [];
@@ -73,11 +86,17 @@ export class FactorySystem extends createSystem({
   private moduleMaterial: MeshStandardMaterial | null = null;
   private padMesh: Mesh | null = null;
   private padMaterial: MeshStandardMaterial | null = null;
+  private beacon: Mesh | null = null;
+  private recoveryRipples: Mesh[] = [];
   private occupiedSlot: string | null = null;
   private wasGrabbed = false;
   private rejectUntil = 0;
   private built = false;
   private jamPulse = 0;
+  private aliveT = 0;
+  private recoveryJuice = 0;
+  private snapSettleT = 0;
+  private snapFrom: [number, number, number] | null = null;
   private keyHandler: ((e: KeyboardEvent) => void) | null = null;
   private unsubSim: (() => void) | null = null;
   private lastInterventionSource: FactoryInputSource | null = null;
@@ -85,60 +104,35 @@ export class FactorySystem extends createSystem({
   private resultBoard: Mesh | null = null;
   private resultTexture: CanvasTexture | null = null;
   private lastShownGrade: string | null = null;
-  /** World-space cue — DOM HUD is invisible inside immersive XR / Quest. */
   private promptBoard: Mesh | null = null;
   private promptTexture: CanvasTexture | null = null;
   private lastPromptKey: string | null = null;
+  private lastDelivered = 0;
 
   init(): void {
-    const host =
-      document.getElementById('scene-container') ?? document.body;
+    const host = document.getElementById('scene-container') ?? document.body;
     this.hud = new FactoryHud(host);
     const devFallback = isDevFallbackEnabled();
 
-    this.unsubSim = this.sim.on((e) => {
-      if (e.type === 'shiftStart') this.metrics.log('shiftStart');
-      else if (e.type === 'firstProduct') this.metrics.log('firstProduct');
-      else if (e.type === 'jamStart') this.metrics.log('jamStart');
-      else if (e.type === 'interventionStart')
-        this.metrics.log('interventionStart', {
-          inputSource: this.lastInterventionSource,
-        });
-      else if (e.type === 'interventionSuccess')
-        this.metrics.log('interventionSuccess', {
-          kind: e.kind,
-          inputSource: this.lastInterventionSource,
-        });
-      else if (e.type === 'flowRecovered')
-        this.metrics.log('flowRecovered', {
-          inputSource: this.lastInterventionSource,
-        });
-      else if (e.type === 'productDelivered')
-        this.metrics.log('productDelivered', { total: e.total });
-      else if (e.type === 'spill')
-        this.metrics.log('spill', { count: e.count });
-      else if (e.type === 'shiftEnd')
-        this.metrics.log('shiftEnd', {
-          grade: e.grade,
-          cash: e.cash,
-          delivered: e.delivered,
-          jamSec: Number(e.jamSec.toFixed(2)),
-        });
-      else if (e.type === 'shiftReset') this.metrics.log('shiftReset');
-    });
+    this.unsubSim = this.bindSimEvents();
 
     this.queries.moduleGrabbed.subscribe('qualify', () => this.onGrabStart());
     this.queries.moduleGrabbed.subscribe('disqualify', () => this.onGrabEnd());
 
     this.keyHandler = (ev: KeyboardEvent) => {
-      // Restart is always available (result screen).
       if (ev.key === 'r' || ev.key === 'R') {
-        this.sim.reset();
+        this.funMetrics.onRestart();
+        // Recreate sim so ?capture=1 (replaceState, no reload) can retune the arc.
+        this.unsubSim?.();
+        this.sim = new FactorySim(readCaptureTuning());
+        this.unsubSim = this.bindSimEvents();
+        this.sim.start();
         this.occupiedSlot = null;
         this.lastInterventionSource = null;
+        this.lastDelivered = 0;
+        this.recoveryJuice = 0;
         this.resetModuleHome();
       }
-      // DEV ONLY (?dev=1): keyboard boost — not hero / not Quest evidence.
       if (devFallback && (ev.key === 'b' || ev.key === 'B')) {
         this.devApplyBoostAtPad('dev-keyboard');
       }
@@ -146,15 +140,14 @@ export class FactorySystem extends createSystem({
     window.addEventListener('keydown', this.keyHandler);
     if (devFallback) {
       (
-        window as unknown as {
-          __factoryApplyBoost?: () => void;
-        }
+        window as unknown as { __factoryApplyBoost?: () => void }
       ).__factoryApplyBoost = () => this.devApplyBoostAtPad('automation');
     }
     this.cleanupFuncs.push(() => {
       if (this.keyHandler) window.removeEventListener('keydown', this.keyHandler);
       this.unsubSim?.();
       this.hud?.dispose();
+      this.audio.dispose();
       if (devFallback) {
         delete (window as unknown as { __factoryApplyBoost?: () => void })
           .__factoryApplyBoost;
@@ -164,26 +157,91 @@ export class FactorySystem extends createSystem({
     this.buildScene();
     this.sim.start();
     // eslint-disable-next-line no-console
-    console.info('[factory] walking skeleton ready', {
+    console.info('[factory] fun-slice ready', {
       mode: 'EMULATOR_OR_QUEST',
       table: 'DEV_FALLBACK_PLANE',
-      note: 'PROVISIONAL CHECKPOINT — D-007 OPEN',
+      shiftSec: this.sim.config.shiftDurationSec,
+      note: 'FUN SLICE — D-007 OPEN',
       devFallback,
+    });
+  }
+
+  private bindSimEvents(): () => void {
+    return this.sim.on((e) => {
+      if (e.type === 'shiftStart') {
+        this.metrics.log('shiftStart');
+        this.funMetrics.onShiftStart();
+        this.audio.unlock();
+        this.audio.setRhythm('healthy');
+      } else if (e.type === 'firstProduct') {
+        this.metrics.log('firstProduct');
+        this.funMetrics.onFirstProduct();
+      } else if (e.type === 'jamStart') {
+        this.metrics.log('jamStart');
+        this.funMetrics.onJamStart();
+        this.audio.play('jamWarn');
+        this.audio.setRhythm('jam');
+      } else if (e.type === 'interventionStart')
+        this.metrics.log('interventionStart', {
+          inputSource: this.lastInterventionSource,
+        });
+      else if (e.type === 'interventionSuccess')
+        this.metrics.log('interventionSuccess', {
+          kind: e.kind,
+          inputSource: this.lastInterventionSource,
+        });
+      else if (e.type === 'flowRecovered') {
+        this.metrics.log('flowRecovered', {
+          inputSource: this.lastInterventionSource,
+        });
+        this.funMetrics.onRecovery();
+        this.recoveryJuice = 2.6;
+        this.audio.play('recovery');
+        this.audio.setRhythm('healthy');
+      } else if (e.type === 'productDelivered') {
+        this.metrics.log('productDelivered', { total: e.total });
+        if (e.total > this.lastDelivered) this.audio.play('delivery');
+        this.lastDelivered = e.total;
+      } else if (e.type === 'spill') this.metrics.log('spill', { count: e.count });
+      else if (e.type === 'shiftEnd') {
+        this.metrics.log('shiftEnd', {
+          grade: e.grade,
+          cash: e.cash,
+          delivered: e.delivered,
+          jamSec: Number(e.jamSec.toFixed(2)),
+        });
+        this.funMetrics.onShiftEnd({
+          jamSec: e.jamSec,
+          delivered: e.delivered,
+          cash: e.cash,
+          grade: e.grade,
+        });
+        this.audio.setRhythm('off');
+        this.audio.play('result');
+      } else if (e.type === 'shiftReset') this.metrics.log('shiftReset');
     });
   }
 
   update(delta: number): void {
     if (!this.built) return;
-    this.sim.step(Math.min(0.05, delta));
+    const dt = Math.min(0.05, delta);
+    this.aliveT += dt;
+    this.sim.step(dt);
     const snap = this.sim.snapshot();
-    this.syncProducts(snap.products);
-    this.pulseStations(snap.jamActive, delta);
-    this.updateModuleVisual(snap.jamActive && !snap.boosted);
-    const hint = snap.boosted
-      ? 'Flow recovered — keep shipping'
-      : snap.jamActive
-        ? 'JAM! Grab the glowing cube → snap it on the bright pad'
-        : 'Watch the line — when it jams, grab the blue cube';
+    this.syncProducts(snap.products, snap.jamSeverity);
+    this.animateStations(snap, dt);
+    this.updateModuleVisual(snap.jamActive && !snap.boosted, dt);
+    this.updateBeacon(snap);
+    this.updateRecoveryRipple(dt);
+    const hint = snap.phase === 'ended'
+      ? 'SHIFT COMPLETE — press R to run again'
+      : snap.boosted
+        ? 'FLOW RESTORED — keep shipping'
+        : snap.jamActive
+          ? 'JAM! GRAB BOOST → SNAP HERE'
+          : snap.pressure > 0.35
+            ? 'Pressure rising — watch the slow machine'
+            : 'Line healthy — watch products move';
     this.hud?.update(snap, hint);
     this.syncPromptBoard(snap);
     this.syncResultBoard(snap);
@@ -192,84 +250,99 @@ export class FactorySystem extends createSystem({
   private buildScene(): void {
     const table = new Mesh(
       new BoxGeometry(...TABLE.size),
-      new MeshStandardMaterial({ color: C.table, roughness: 0.9 }),
+      new MeshStandardMaterial({
+        color: C.table,
+        roughness: 0.85,
+        metalness: 0.05,
+      }),
     );
     table.position.set(...TABLE.position);
     table.name = 'factory-table';
     this.world.createTransformEntity(table);
 
-    const stationDefs: Array<{
-      id: StationId;
-      geo: BoxGeometry | CylinderGeometry;
-      color: Color;
-      yScale?: number;
-    }> = [
-      {
-        id: 'source',
-        geo: new CylinderGeometry(0.07, 0.08, 0.16, 16),
-        color: C.source,
-      },
-      {
-        id: 'procA',
-        geo: new BoxGeometry(0.14, 0.12, 0.14),
-        color: C.proc,
-      },
-      {
-        id: 'buffer',
-        geo: new BoxGeometry(0.18, 0.08, 0.14),
-        color: C.buffer,
-      },
-      {
-        id: 'procB',
-        geo: new BoxGeometry(0.14, 0.18, 0.14),
-        color: C.proc,
-      },
-      {
-        id: 'sink',
-        geo: new CylinderGeometry(0.09, 0.09, 0.1, 6),
-        color: C.sink,
-      },
-    ];
+    const top = new Mesh(
+      new BoxGeometry(TABLE.size[0] * 0.96, 0.008, TABLE.size[2] * 0.92),
+      new MeshStandardMaterial({ color: C.tableTop, roughness: 0.7 }),
+    );
+    top.position.set(TABLE.position[0], TABLE.position[1] + 0.022, TABLE.position[2]);
+    this.world.createTransformEntity(top);
 
-    for (const def of stationDefs) {
-      const material = new MeshStandardMaterial({
-        color: def.color,
-        emissive: def.color,
-        emissiveIntensity: 0.12,
-        metalness: 0.25,
-        roughness: 0.45,
-      });
-      const mesh = new Mesh(def.geo, material);
-      const p = STATION_POS[def.id];
-      mesh.position.set(p[0], p[1], p[2]);
-      mesh.name = `factory-${def.id}`;
-      this.world.createTransformEntity(mesh);
-      this.stations.push({ id: def.id, root: mesh, material });
-    }
+    // Belt path under the line.
+    const belt = new Mesh(
+      new BoxGeometry(1.12, 0.012, 0.11),
+      new MeshStandardMaterial({
+        color: C.belt,
+        metalness: 0.4,
+        roughness: 0.55,
+        emissive: C.belt,
+        emissiveIntensity: 0.08,
+      }),
+    );
+    belt.position.set(0, TABLE.position[1] + 0.035, STATION_POS.source[2]);
+    belt.name = 'factory-belt';
+    this.world.createTransformEntity(belt);
 
-    // Labels via tiny colored caps already distinct — no text meshes.
+    const order: StationId[] = ['source', 'procA', 'buffer', 'procB', 'sink'];
+    for (const id of order) this.stations.push(this.buildStation(id));
 
     this.padMaterial = new MeshStandardMaterial({
       color: C.pad,
       emissive: C.pad,
-      emissiveIntensity: 0.2,
+      emissiveIntensity: 0.25,
+      metalness: 0.2,
+      roughness: 0.4,
     });
-    this.padMesh = new Mesh(
-      new BoxGeometry(0.24, 0.02, 0.24),
-      this.padMaterial,
-    );
+    this.padMesh = new Mesh(new CylinderGeometry(0.13, 0.14, 0.03, 24), this.padMaterial);
     this.padMesh.position.set(...BOOST_SLOT.position);
     this.padMesh.name = 'factory-boost-pad';
     this.world.createTransformEntity(this.padMesh);
 
+    // Pad ring for affordance.
+    const ring = new Mesh(
+      new CylinderGeometry(0.155, 0.155, 0.008, 28),
+      new MeshStandardMaterial({
+        color: C.padHot,
+        emissive: C.padHot,
+        emissiveIntensity: 0.15,
+        transparent: true,
+        opacity: 0.55,
+      }),
+    );
+    ring.position.set(
+      BOOST_SLOT.position[0],
+      BOOST_SLOT.position[1] - 0.01,
+      BOOST_SLOT.position[2],
+    );
+    this.world.createTransformEntity(ring);
+
     this.moduleMaterial = new MeshStandardMaterial({
       color: C.moduleIdle,
       emissive: C.moduleIdle,
-      emissiveIntensity: 0.25,
-      metalness: 0.35,
-      roughness: 0.4,
+      emissiveIntensity: 0.3,
+      metalness: 0.45,
+      roughness: 0.35,
     });
-    const body = new Mesh(new BoxGeometry(...MODULE_SIZE), this.moduleMaterial);
+    const body = new Mesh(
+      new BoxGeometry(MODULE_SIZE[0], MODULE_SIZE[1], MODULE_SIZE[2]),
+      this.moduleMaterial,
+    );
+    // Chunkier BOOST silhouette: small antenna + face plate.
+    const antenna = new Mesh(
+      new CylinderGeometry(0.015, 0.02, 0.08, 8),
+      new MeshStandardMaterial({ color: C.metal, metalness: 0.6, roughness: 0.3 }),
+    );
+    antenna.position.y = MODULE_SIZE[1] / 2 + 0.04;
+    body.add(antenna);
+    const badge = new Mesh(
+      new BoxGeometry(0.08, 0.04, 0.02),
+      new MeshStandardMaterial({
+        color: C.moduleGrab,
+        emissive: C.moduleGrab,
+        emissiveIntensity: 0.4,
+      }),
+    );
+    badge.position.set(0, 0.02, MODULE_SIZE[2] / 2 + 0.01);
+    body.add(badge);
     body.position.set(
       BOOST_SLOT.position[0] - 0.28,
       BOOST_SLOT.position[1] + MODULE_SIZE[1] / 2,
@@ -284,11 +357,13 @@ export class FactorySystem extends createSystem({
 
     for (let i = 0; i < this.sim.config.maxProducts; i += 1) {
       const mesh = new Mesh(
-        new SphereGeometry(0.028, 12, 12),
+        new BoxGeometry(0.045, 0.045, 0.045),
         new MeshStandardMaterial({
           color: C.product,
           emissive: C.product,
-          emissiveIntensity: 0.15,
+          emissiveIntensity: 0.22,
+          metalness: 0.15,
+          roughness: 0.4,
         }),
       );
       mesh.visible = false;
@@ -297,20 +372,51 @@ export class FactorySystem extends createSystem({
       this.productMeshes.push(mesh);
     }
 
-    // World-space boards (DOM HUD is invisible inside immersive XR / Quest).
+    this.beacon = new Mesh(
+      new CylinderGeometry(0.02, 0.035, 0.16, 10),
+      new MeshStandardMaterial({
+        color: C.jam,
+        emissive: C.jam,
+        emissiveIntensity: 0.6,
+      }),
+    );
+    this.beacon.position.set(
+      STATION_POS.procB[0],
+      STATION_POS.procB[1] + 0.22,
+      STATION_POS.procB[2],
+    );
+    this.beacon.visible = false;
+    this.beacon.name = 'factory-jam-beacon';
+    this.world.createTransformEntity(this.beacon);
+
+    for (let i = 0; i < 5; i += 1) {
+      const rip = new Mesh(
+        new SphereGeometry(0.04, 10, 10),
+        new MeshBasicMaterial({
+          color: C.moduleOk,
+          transparent: true,
+          opacity: 0.55,
+          depthWrite: false,
+        }),
+      );
+      rip.visible = false;
+      this.world.createTransformEntity(rip);
+      this.recoveryRipples.push(rip);
+    }
+
     const resultCanvas = document.createElement('canvas');
-    resultCanvas.width = 512;
-    resultCanvas.height = 256;
+    resultCanvas.width = 640;
+    resultCanvas.height = 360;
     this.resultTexture = new CanvasTexture(resultCanvas);
     this.resultBoard = new Mesh(
-      new PlaneGeometry(0.55, 0.28),
+      new PlaneGeometry(0.7, 0.4),
       new MeshBasicMaterial({
         map: this.resultTexture,
         transparent: true,
         depthWrite: false,
       }),
     );
-    this.resultBoard.position.set(0, 1.05, -0.7);
+    this.resultBoard.position.set(0, 1.08, -0.68);
     this.resultBoard.visible = false;
     this.resultBoard.name = 'factory-result-board';
     this.world.createTransformEntity(this.resultBoard);
@@ -327,7 +433,6 @@ export class FactorySystem extends createSystem({
         depthWrite: false,
       }),
     );
-    // Above the BOOST module / pad so the next action is in FoV.
     this.promptBoard.position.set(
       BOOST_SLOT.position[0],
       BOOST_SLOT.position[1] + 0.42,
@@ -340,20 +445,128 @@ export class FactorySystem extends createSystem({
     this.built = true;
   }
 
+  private buildStation(id: StationId): StationVisual {
+    const root = new Group();
+    root.name = `factory-${id}`;
+    const p = STATION_POS[id];
+    root.position.set(p[0], p[1], p[2]);
+
+    let body: Mesh;
+    let material: MeshStandardMaterial;
+    let spinner: Mesh | null = null;
+    let light: Mesh | null = null;
+
+    if (id === 'source') {
+      material = new MeshStandardMaterial({
+        color: C.source,
+        emissive: C.source,
+        emissiveIntensity: 0.18,
+        metalness: 0.35,
+        roughness: 0.4,
+      });
+      body = new Mesh(new CylinderGeometry(0.075, 0.09, 0.18, 18), material);
+      spinner = new Mesh(
+        new BoxGeometry(0.12, 0.02, 0.02),
+        new MeshStandardMaterial({ color: C.metal, metalness: 0.7, roughness: 0.3 }),
+      );
+      spinner.position.y = 0.12;
+    } else if (id === 'procA') {
+      material = new MeshStandardMaterial({
+        color: C.procA,
+        emissive: C.procA,
+        emissiveIntensity: 0.14,
+        metalness: 0.4,
+        roughness: 0.4,
+      });
+      body = new Mesh(new BoxGeometry(0.15, 0.13, 0.15), material);
+      spinner = new Mesh(
+        new CylinderGeometry(0.04, 0.04, 0.05, 12),
+        new MeshStandardMaterial({ color: C.metal, metalness: 0.75, roughness: 0.25 }),
+      );
+      spinner.rotation.z = Math.PI / 2;
+      spinner.position.set(0.09, 0.02, 0);
+    } else if (id === 'buffer') {
+      material = new MeshStandardMaterial({
+        color: C.buffer,
+        emissive: C.buffer,
+        emissiveIntensity: 0.16,
+        metalness: 0.25,
+        roughness: 0.5,
+      });
+      body = new Mesh(new BoxGeometry(0.2, 0.09, 0.16), material);
+      const rail = new Mesh(
+        new BoxGeometry(0.18, 0.03, 0.03),
+        new MeshStandardMaterial({ color: C.metal }),
+      );
+      rail.position.y = 0.07;
+      root.add(rail);
+    } else if (id === 'procB') {
+      material = new MeshStandardMaterial({
+        color: C.procB,
+        emissive: C.procB,
+        emissiveIntensity: 0.14,
+        metalness: 0.45,
+        roughness: 0.38,
+      });
+      body = new Mesh(new BoxGeometry(0.16, 0.2, 0.16), material);
+      spinner = new Mesh(
+        new CylinderGeometry(0.055, 0.055, 0.04, 16),
+        new MeshStandardMaterial({
+          color: C.warn,
+          emissive: C.warn,
+          emissiveIntensity: 0.2,
+          metalness: 0.5,
+          roughness: 0.35,
+        }),
+      );
+      spinner.position.y = 0.14;
+    } else {
+      material = new MeshStandardMaterial({
+        color: C.sink,
+        emissive: C.sink,
+        emissiveIntensity: 0.18,
+        metalness: 0.3,
+        roughness: 0.45,
+      });
+      body = new Mesh(new CylinderGeometry(0.095, 0.08, 0.12, 6), material);
+      light = new Mesh(
+        new SphereGeometry(0.025, 10, 10),
+        new MeshStandardMaterial({
+          color: C.moduleOk,
+          emissive: C.moduleOk,
+          emissiveIntensity: 0.5,
+        }),
+      );
+      light.position.y = 0.1;
+    }
+
+    root.add(body);
+    if (spinner) root.add(spinner);
+    if (light) root.add(light);
+    this.world.createTransformEntity(root);
+    return { id, root, body, material, spinner, light };
+  }
+
   private syncPromptBoard(snap: ReturnType<FactorySim['snapshot']>): void {
     if (!this.promptBoard || !this.promptTexture) return;
-    const showJam =
-      snap.phase === 'running' && snap.jamActive && !snap.boosted;
-    const showIdle =
-      snap.phase === 'running' && !snap.jamActive && !snap.boosted;
-    const showOk = snap.phase === 'running' && snap.boosted;
-    if (!showJam && !showIdle && !showOk) {
+    if (snap.phase === 'ended') {
       this.promptBoard.visible = false;
       this.lastPromptKey = null;
       return;
     }
+    const showJam = snap.jamActive && !snap.boosted;
+    const showOk = snap.boosted && this.recoveryJuice > 0;
+    const showPressure =
+      !snap.boosted && !snap.jamActive && snap.pressure > 0.4;
+    const showIdle = !showJam && !showOk && !showPressure;
     this.promptBoard.visible = true;
-    const key = showJam ? 'jam' : showOk ? 'ok' : 'idle';
+    const key = showJam
+      ? 'jam'
+      : showOk
+        ? 'ok'
+        : showPressure
+          ? 'pressure'
+          : 'idle';
     if (key === this.lastPromptKey) return;
     this.lastPromptKey = key;
     const canvas = this.promptTexture.image as HTMLCanvasElement;
@@ -361,42 +574,54 @@ export class FactorySystem extends createSystem({
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (showJam) {
-      ctx.fillStyle = 'rgba(90, 18, 18, 0.92)';
+      ctx.fillStyle = 'rgba(90, 18, 18, 0.94)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = '#ff6b5e';
-      ctx.lineWidth = 10;
+      ctx.lineWidth = 12;
       ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
       ctx.fillStyle = '#ff6b5e';
-      ctx.font = 'bold 72px Segoe UI, sans-serif';
-      ctx.fillText('JAM', 40, 90);
+      ctx.font = 'bold 78px Segoe UI, sans-serif';
+      ctx.fillText('JAM!', 40, 95);
       ctx.fillStyle = '#fff6e8';
-      ctx.font = 'bold 40px Segoe UI, sans-serif';
-      ctx.fillText('1. Grab the glowing cube', 40, 155);
-      ctx.fillText('2. Snap it on the bright pad', 40, 210);
+      ctx.font = 'bold 42px Segoe UI, sans-serif';
+      ctx.fillText('1. GRAB BOOST', 40, 160);
+      ctx.fillText('2. SNAP HERE', 40, 215);
     } else if (showOk) {
-      ctx.fillStyle = 'rgba(16, 48, 28, 0.9)';
+      ctx.fillStyle = 'rgba(12, 52, 30, 0.92)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = '#5cb85c';
-      ctx.lineWidth = 8;
+      ctx.strokeStyle = '#5ed17a';
+      ctx.lineWidth = 10;
       ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
       ctx.fillStyle = '#8fd99a';
-      ctx.font = 'bold 48px Segoe UI, sans-serif';
-      ctx.fillText('FLOW RECOVERED', 40, 120);
+      ctx.font = 'bold 56px Segoe UI, sans-serif';
+      ctx.fillText('FLOW RESTORED', 36, 140);
       ctx.fillStyle = '#e8f5e9';
-      ctx.font = '32px Segoe UI, sans-serif';
-      ctx.fillText('Line is shipping again', 40, 175);
-    } else {
-      ctx.fillStyle = 'rgba(20, 28, 36, 0.88)';
+      ctx.font = '30px Segoe UI, sans-serif';
+      ctx.fillText('You fixed the line', 36, 195);
+    } else if (showPressure) {
+      ctx.fillStyle = 'rgba(60, 36, 12, 0.9)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#f08a3c';
+      ctx.lineWidth = 8;
+      ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+      ctx.fillStyle = '#ffc078';
+      ctx.font = 'bold 40px Segoe UI, sans-serif';
+      ctx.fillText('PRESSURE BUILDING', 36, 120);
+      ctx.fillStyle = '#ffe8d0';
+      ctx.font = '30px Segoe UI, sans-serif';
+      ctx.fillText('Watch the tall machine', 36, 175);
+    } else if (showIdle) {
+      ctx.fillStyle = 'rgba(18, 28, 36, 0.85)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = '#7ec8e3';
       ctx.lineWidth = 6;
       ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
       ctx.fillStyle = '#f4f1ea';
-      ctx.font = 'bold 36px Segoe UI, sans-serif';
-      ctx.fillText('Watch the line', 40, 100);
+      ctx.font = 'bold 40px Segoe UI, sans-serif';
+      ctx.fillText('LINE RUNNING', 40, 120);
       ctx.fillStyle = '#c8d0d8';
-      ctx.font = '30px Segoe UI, sans-serif';
-      ctx.fillText('When it jams → grab the blue cube', 40, 160);
+      ctx.font = '28px Segoe UI, sans-serif';
+      ctx.fillText('Products flowing — stay ready', 40, 175);
     }
     this.promptTexture.needsUpdate = true;
   }
@@ -409,35 +634,36 @@ export class FactorySystem extends createSystem({
       return;
     }
     this.resultBoard.visible = true;
-    const key = `${snap.grade}:${snap.cash}:${snap.delivered}`;
+    const key = `${snap.grade}:${snap.cash}:${snap.delivered}:${snap.jamSec.toFixed(1)}`;
     if (key === this.lastShownGrade) return;
     this.lastShownGrade = key;
     const canvas = this.resultTexture.image as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'rgba(20,24,28,0.88)';
+    ctx.fillStyle = 'rgba(16, 20, 26, 0.92)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#f0c75e';
-    ctx.lineWidth = 8;
-    ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(12, 12, canvas.width - 24, canvas.height - 24);
     ctx.fillStyle = '#f4f1ea';
-    ctx.font = 'bold 36px Segoe UI, sans-serif';
-    ctx.fillText('SHIFT COMPLETE', 36, 70);
+    ctx.font = 'bold 34px Segoe UI, sans-serif';
+    ctx.fillText('SHIFT COMPLETE', 40, 60);
     ctx.fillStyle = '#f0c75e';
-    ctx.font = 'bold 96px Segoe UI, sans-serif';
-    ctx.fillText(`GRADE ${snap.grade}`, 36, 170);
-    ctx.fillStyle = '#c8d0d8';
+    ctx.font = 'bold 92px Segoe UI, sans-serif';
+    ctx.fillText(`GRADE ${snap.grade}`, 40, 155);
+    ctx.fillStyle = '#d7dee6';
     ctx.font = '28px Segoe UI, sans-serif';
-    ctx.fillText(
-      `CASH ${Math.floor(snap.cash)}   OUT ${snap.delivered}`,
-      36,
-      220,
-    );
+    ctx.fillText(`PROFIT  ${Math.floor(snap.cash)}`, 40, 210);
+    ctx.fillText(`DELIVERIES  ${snap.delivered}`, 40, 248);
+    ctx.fillText(`JAM TIME  ${snap.jamSec.toFixed(1)}s`, 40, 286);
+    ctx.fillStyle = '#8fd99a';
+    ctx.font = 'bold 30px Segoe UI, sans-serif';
+    ctx.fillText('RUN AGAIN — reset for next shift', 40, 330);
     this.resultTexture.needsUpdate = true;
   }
 
-  private syncProducts(states: ProductState[]): void {
+  private syncProducts(states: ProductState[], jamSeverity: number): void {
     for (let i = 0; i < this.productMeshes.length; i += 1) {
       const mesh = this.productMeshes[i]!;
       const state = states[i];
@@ -452,46 +678,117 @@ export class FactorySystem extends createSystem({
         const stack = states
           .slice(0, i)
           .filter((s) => s.kind === 'at' && s.station === state.station).length;
-        mesh.position.set(p[0], p[1] + 0.08 + stack * 0.04, p[2]);
+        mesh.position.set(p[0], p[1] + 0.1 + stack * 0.048, p[2]);
+        mesh.rotation.y = this.aliveT * 1.2 + i;
         mat.color.copy(C.product);
+        mat.emissiveIntensity = 0.22;
       } else if (state.kind === 'moving') {
         const a = STATION_POS[state.from];
         const b = STATION_POS[state.to];
         const t = easeInOut(state.t);
         mesh.position.set(
           a[0] + (b[0] - a[0]) * t,
-          a[1] + 0.1 + Math.sin(t * Math.PI) * 0.04,
+          a[1] + 0.12 + Math.sin(t * Math.PI) * 0.05,
           a[2] + (b[2] - a[2]) * t,
         );
+        mesh.rotation.x = t * Math.PI;
         mat.color.copy(C.product);
+        mat.emissiveIntensity = 0.3;
       } else if (state.kind === 'spill') {
-        // OVERFLOW PLACEHOLDER — pile toward near table edge, capped.
+        const fall = Math.min(1, state.age * 1.8);
         mesh.position.set(
-          state.edgeX * 0.15,
-          TABLE.position[1] + 0.06 + Math.min(0.12, state.age * 0.02),
-          TABLE.position[2] + 0.28 + state.edgeX * 0.05,
+          state.edgeX,
+          TABLE.position[1] + 0.08 - fall * 0.04,
+          TABLE.position[2] + 0.32 + Math.min(0.12, state.age * 0.05),
         );
-        mat.color.copy(C.jam);
+        mesh.rotation.set(fall * 1.2, state.edgeX, fall * 0.8);
+        mat.color.copy(jamSeverity > 0.5 ? C.jam : C.warn);
+        mat.emissiveIntensity = 0.35;
       }
     }
   }
 
-  private pulseStations(jam: boolean, delta: number): void {
-    this.jamPulse += delta * (jam ? 6 : 2);
+  private animateStations(
+    snap: ReturnType<FactorySim['snapshot']>,
+    dt: number,
+  ): void {
+    this.jamPulse += dt * (snap.jamActive ? 7 : 2.2 + snap.pressure);
     for (const s of this.stations) {
+      const working =
+        !snap.jamActive || s.id === 'source' || s.id === 'sink';
+      const spinRate = snap.recoveryBurstLeft > 0
+        ? 10
+        : snap.jamActive && s.id === 'procB'
+          ? 1.2
+          : working
+            ? 4.5
+            : 2;
+      if (s.spinner) {
+        if (s.id === 'procA') s.spinner.rotation.x += dt * spinRate;
+        else s.spinner.rotation.y += dt * spinRate;
+      }
       if (s.id === 'procB') {
-        s.material.emissive.copy(jam ? C.jam : C.proc);
-        s.material.emissiveIntensity = jam
-          ? 0.25 + 0.25 * Math.sin(this.jamPulse)
-          : 0.12;
-        s.root.scale.y = jam ? 1 + 0.04 * Math.sin(this.jamPulse) : 1;
+        s.material.emissive.copy(
+          snap.jamActive ? C.jam : snap.pressure > 0.5 ? C.warn : C.procB,
+        );
+        s.material.emissiveIntensity = snap.jamActive
+          ? 0.35 + 0.35 * Math.sin(this.jamPulse)
+          : 0.14 + snap.pressure * 0.15;
+        s.root.rotation.z = snap.jamActive
+          ? Math.sin(this.jamPulse * 1.6) * 0.05 * snap.jamSeverity
+          : 0;
+        s.root.scale.y = snap.jamActive
+          ? 1 + 0.05 * Math.sin(this.jamPulse)
+          : 1;
       } else if (s.id === 'buffer') {
-        s.material.emissiveIntensity = jam ? 0.3 : 0.12;
+        s.material.emissiveIntensity =
+          0.12 + snap.bufferFill * 0.12 + (snap.jamActive ? 0.15 : 0);
+      } else if (s.id === 'sink' && s.light) {
+        const lm = s.light.material as MeshStandardMaterial;
+        lm.emissiveIntensity =
+          0.35 + (snap.recoveryBurstLeft > 0 ? 0.4 : 0) + Math.sin(this.aliveT * 6) * 0.1;
+      } else {
+        s.material.emissiveIntensity =
+          0.12 + (snap.recoveryBurstLeft > 0 ? 0.2 : 0);
       }
     }
   }
 
-  private updateModuleVisual(jamNeedsAction: boolean): void {
+  private updateBeacon(snap: ReturnType<FactorySim['snapshot']>): void {
+    if (!this.beacon) return;
+    const on = snap.jamActive && !snap.boosted;
+    this.beacon.visible = on;
+    if (!on) return;
+    const mat = this.beacon.material as MeshStandardMaterial;
+    mat.emissiveIntensity = 0.5 + 0.5 * Math.sin(this.jamPulse * 2);
+    this.beacon.position.y =
+      STATION_POS.procB[1] + 0.22 + 0.03 * Math.sin(this.jamPulse * 2);
+  }
+
+  private updateRecoveryRipple(dt: number): void {
+    if (this.recoveryJuice > 0) this.recoveryJuice = Math.max(0, this.recoveryJuice - dt);
+    const active = this.recoveryJuice > 0;
+    const order: StationId[] = ['source', 'procA', 'buffer', 'procB', 'sink'];
+    for (let i = 0; i < this.recoveryRipples.length; i += 1) {
+      const rip = this.recoveryRipples[i]!;
+      if (!active) {
+        rip.visible = false;
+        continue;
+      }
+      const t = 1 - this.recoveryJuice / 2.6;
+      const wave = Math.max(0, Math.min(1, t * 5 - i));
+      rip.visible = wave > 0 && wave < 1;
+      const id = order[i]!;
+      const p = STATION_POS[id];
+      rip.position.set(p[0], p[1] + 0.18 + wave * 0.08, p[2]);
+      const s = 0.6 + wave * 1.4;
+      rip.scale.setScalar(s);
+      const mat = rip.material as MeshBasicMaterial;
+      mat.opacity = (1 - wave) * 0.55;
+    }
+  }
+
+  private updateModuleVisual(jamNeedsAction: boolean, dt: number): void {
     if (
       !this.moduleMaterial ||
       !this.padMaterial ||
@@ -503,6 +800,24 @@ export class FactorySystem extends createSystem({
       typeof performance !== 'undefined' ? performance.now() : Date.now();
     const grabbed = this.queries.moduleGrabbed.entities.size > 0;
     const hovered = this.queries.moduleHovered.entities.size > 0;
+
+    if (this.snapSettleT > 0 && this.snapFrom && !grabbed) {
+      this.snapSettleT = Math.max(0, this.snapSettleT - dt);
+      const u = 1 - this.snapSettleT / 0.22;
+      const e = easeOutBack(Math.min(1, u));
+      const target: [number, number, number] = [
+        BOOST_SLOT.position[0],
+        BOOST_SLOT.position[1] + MODULE_SIZE[1] / 2,
+        BOOST_SLOT.position[2],
+      ];
+      this.moduleObject.position.set(
+        this.snapFrom[0] + (target[0] - this.snapFrom[0]) * e,
+        this.snapFrom[1] + (target[1] - this.snapFrom[1]) * e,
+        this.snapFrom[2] + (target[2] - this.snapFrom[2]) * e,
+      );
+      this.moduleObject.rotation.y = (1 - e) * 0.4;
+    }
+
     let color = C.moduleIdle;
     if (now < this.rejectUntil) color = C.jam;
     else if (grabbed) color = C.moduleGrab;
@@ -513,21 +828,23 @@ export class FactorySystem extends createSystem({
     this.moduleMaterial.emissive.copy(color);
     this.moduleMaterial.emissiveIntensity =
       jamNeedsAction && !grabbed
-        ? 0.55 + 0.35 * Math.sin(this.jamPulse)
+        ? 0.6 + 0.35 * Math.sin(this.jamPulse)
         : grabbed
-          ? 0.45
-          : 0.25;
+          ? 0.5
+          : hovered
+            ? 0.4
+            : 0.28;
+
     const homeY = BOOST_SLOT.position[1] + MODULE_SIZE[1] / 2;
-    // Bob the actionable cube so it reads as "this is the verb".
-    if (jamNeedsAction && !grabbed && !this.occupiedSlot) {
+    if (jamNeedsAction && !grabbed && !this.occupiedSlot && this.snapSettleT <= 0) {
       this.moduleObject.position.y =
-        homeY + 0.03 * (0.5 + 0.5 * Math.sin(this.jamPulse * 1.4));
-      this.moduleObject.scale.setScalar(
-        1.08 + 0.04 * Math.sin(this.jamPulse * 1.4),
-      );
-    } else if (!grabbed) {
-      this.moduleObject.scale.setScalar(1);
+        homeY + 0.035 * (0.5 + 0.5 * Math.sin(this.jamPulse * 1.5));
+      this.moduleObject.scale.setScalar(1.1 + 0.05 * Math.sin(this.jamPulse * 1.5));
+    } else if (!grabbed && this.snapSettleT <= 0) {
+      this.moduleObject.scale.setScalar(hovered ? 1.06 : 1);
       if (!this.occupiedSlot) this.moduleObject.position.y = homeY;
+    } else if (grabbed) {
+      this.moduleObject.scale.setScalar(1.12);
     }
 
     const pos = this.moduleObject.position;
@@ -544,26 +861,28 @@ export class FactorySystem extends createSystem({
     );
     const hot = grabbed && decision.kind === 'snap';
     const padAttract = jamNeedsAction || hot;
-    this.padMaterial.color.copy(hot ? C.padHot : padAttract ? C.padHot : C.pad);
-    this.padMaterial.emissive.copy(
-      hot ? C.padHot : padAttract ? C.padHot : C.pad,
-    );
+    this.padMaterial.color.copy(hot || padAttract ? C.padHot : C.pad);
+    this.padMaterial.emissive.copy(hot || padAttract ? C.padHot : C.pad);
     this.padMaterial.emissiveIntensity = hot
-      ? 0.7
+      ? 0.85
       : padAttract
-        ? 0.35 + 0.25 * Math.sin(this.jamPulse)
-        : 0.2;
-    const padScale = padAttract ? 1.15 + 0.05 * Math.sin(this.jamPulse) : 1;
+        ? 0.4 + 0.3 * Math.sin(this.jamPulse)
+        : 0.22;
+    const padScale = hot ? 1.25 : padAttract ? 1.18 + 0.06 * Math.sin(this.jamPulse) : 1;
     this.padMesh.scale.set(padScale, 1, padScale);
   }
 
   private onGrabStart(): void {
-    // ECS Grabbed tag = XR GrabSystem path (IWER hand/controller), not keyboard.
     this.activeGrabSource = 'xr';
     this.metrics.log('grabAttempt', { inputSource: 'xr' });
     this.metrics.log('grabSuccess', { inputSource: 'xr' });
+    this.funMetrics.onGrab();
+    this.audio.unlock();
+    this.audio.play('grab');
     this.wasGrabbed = true;
     this.occupiedSlot = null;
+    this.snapSettleT = 0;
+    this.snapFrom = null;
   }
 
   private onGrabEnd(): void {
@@ -586,17 +905,16 @@ export class FactorySystem extends createSystem({
     );
 
     if (decision.kind === 'snap') {
-      this.moduleObject.position.set(
-        decision.position[0],
-        decision.position[1] + MODULE_SIZE[1] / 2,
-        decision.position[2],
-      );
+      this.snapFrom = [pos.x, pos.y, pos.z];
+      this.snapSettleT = 0.22;
       this.occupiedSlot = decision.targetId;
       this.lastInterventionSource = inputSource;
       this.metrics.log('snapSuccess', {
         targetId: decision.targetId,
         inputSource,
       });
+      this.funMetrics.onSnap();
+      this.audio.play('snap');
       const result = this.sim.tryApplyBoost();
       if (!result.ok) {
         this.rejectUntil = now + 450;
@@ -604,9 +922,12 @@ export class FactorySystem extends createSystem({
           reason: result.reason,
           inputSource,
         });
+        this.audio.play('reject');
         this.resetModuleHome();
         this.occupiedSlot = null;
         this.lastInterventionSource = null;
+        this.snapSettleT = 0;
+        this.snapFrom = null;
       }
     } else {
       this.rejectUntil = now + 450;
@@ -614,6 +935,7 @@ export class FactorySystem extends createSystem({
         reason: decision.reason,
         inputSource,
       });
+      this.audio.play('reject');
       this.resetModuleHome();
     }
     this.wasGrabbed = false;
@@ -627,18 +949,17 @@ export class FactorySystem extends createSystem({
       BOOST_SLOT.position[1] + MODULE_SIZE[1] / 2,
       BOOST_SLOT.position[2],
     );
+    this.moduleObject.rotation.set(0, 0, 0);
+    this.moduleObject.scale.setScalar(1);
   }
 
-  /**
-   * DEV ONLY (?dev=1): keyboard / automation boost.
-   * Not hero evidence. Not Quest evidence. Normal XR flow must not need this.
-   */
   private devApplyBoostAtPad(inputSource: 'dev-keyboard' | 'automation'): void {
     if (!this.moduleObject) return;
     if (!isDevFallbackEnabled()) return;
     this.lastInterventionSource = inputSource;
     this.metrics.log('grabAttempt', { inputSource, path: 'DEV_ONLY' });
     this.metrics.log('grabSuccess', { inputSource, path: 'DEV_ONLY' });
+    this.funMetrics.onGrab();
     this.moduleObject.position.set(
       BOOST_SLOT.position[0],
       BOOST_SLOT.position[1] + MODULE_SIZE[1] / 2,
@@ -650,6 +971,8 @@ export class FactorySystem extends createSystem({
       inputSource,
       path: 'DEV_ONLY',
     });
+    this.funMetrics.onSnap();
+    this.audio.play('snap');
     const result = this.sim.tryApplyBoost();
     if (!result.ok) {
       this.metrics.log('snapRejected', {
@@ -665,4 +988,33 @@ export class FactorySystem extends createSystem({
 
 function easeInOut(t: number): number {
   return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
+function easeOutBack(t: number): number {
+  const c = 1.70158;
+  const x = t - 1;
+  return 1 + c * x * x * x + x * x;
+}
+
+/** Evidence-only shorter arc (`?capture=1`). Quest/public default stays ~150s. */
+function readCaptureTuning(): Partial<import('./sim.js').SimConfig> {
+  if (typeof window === 'undefined') return {};
+  try {
+    if (new URLSearchParams(window.location.search).get('capture') !== '1') {
+      return {};
+    }
+  } catch {
+    return {};
+  }
+  return {
+    shiftDurationSec: 55,
+    pressureRampStartSec: 3,
+    pressureRampDurationSec: 8,
+    sourcePeriodSec: 0.65,
+    sourcePeriodStressedSec: 0.36,
+    procBPeriodSec: 1.35,
+    procBPeriodStressedSec: 2.7,
+    jamBufferThreshold: 2,
+    bufferCapacity: 2,
+  };
 }
