@@ -5,10 +5,10 @@ describe('computeGrade', () => {
   it('rewards high delivery and cash', () => {
     expect(
       computeGrade({
-        delivered: 20,
+        delivered: 40,
         jamSec: 5,
-        cash: 90,
-        shiftDurationSec: 90,
+        cash: 130,
+        shiftDurationSec: 150,
       }),
     ).toBe('S');
   });
@@ -17,9 +17,9 @@ describe('computeGrade', () => {
     expect(
       computeGrade({
         delivered: 4,
-        jamSec: 50,
+        jamSec: 70,
         cash: 10,
-        shiftDurationSec: 90,
+        shiftDurationSec: 150,
       }),
     ).toBe('C');
   });
@@ -35,6 +35,7 @@ describe('FactorySim', () => {
       bufferCapacity: 4,
       moveDurationSec: 0.2,
       maxProducts: 20,
+      pressureRampStartSec: 999,
     });
     sim.start();
     for (let i = 0; i < 200; i += 1) sim.step(0.1);
@@ -53,6 +54,10 @@ describe('FactorySim', () => {
       jamBufferThreshold: 2,
       moveDurationSec: 0.15,
       maxProducts: 20,
+      pressureRampStartSec: 0,
+      pressureRampDurationSec: 1,
+      sourcePeriodStressedSec: 0.3,
+      procBPeriodStressedSec: 3.5,
     });
     const events: string[] = [];
     sim.on((e) => events.push(e.type));
@@ -73,6 +78,10 @@ describe('FactorySim', () => {
       boostCost: 18,
       startingCash: 40,
       moveDurationSec: 0.15,
+      pressureRampStartSec: 0,
+      pressureRampDurationSec: 1,
+      sourcePeriodStressedSec: 0.35,
+      procBPeriodStressedSec: 3.2,
     });
     const events: string[] = [];
     sim.on((e) => events.push(e.type));
@@ -83,6 +92,8 @@ describe('FactorySim', () => {
     const applied = sim.tryApplyBoost();
     expect(applied.ok).toBe(true);
     expect(events).toContain('interventionSuccess');
+    expect(events).toContain('flowRecovered');
+    expect(sim.snapshot().recoveryBurstLeft).toBeGreaterThan(0);
     for (let i = 0; i < 120; i += 1) sim.step(0.1);
     expect(sim.snapshot().delivered).toBeGreaterThan(before);
     expect(sim.snapshot().boosted).toBe(true);
@@ -97,9 +108,20 @@ describe('FactorySim', () => {
     expect(snap.grade).toMatch(/^[SABC]$/);
   });
 
-  it('checkpoint default shift is short demo length', () => {
+  it('fun-slice default shift is about 2–3 minutes', () => {
     const sim = new FactorySim();
-    expect(sim.config.shiftDurationSec).toBeGreaterThanOrEqual(45);
-    expect(sim.config.shiftDurationSec).toBeLessThanOrEqual(75);
+    expect(sim.config.shiftDurationSec).toBeGreaterThanOrEqual(120);
+    expect(sim.config.shiftDurationSec).toBeLessThanOrEqual(180);
+  });
+
+  it('pressure ramps after healthy window', () => {
+    const sim = new FactorySim({
+      pressureRampStartSec: 10,
+      pressureRampDurationSec: 10,
+    });
+    for (let i = 0; i < 50; i += 1) sim.step(0.1);
+    expect(sim.pressure()).toBeLessThan(0.05);
+    for (let i = 0; i < 150; i += 1) sim.step(0.1);
+    expect(sim.pressure()).toBeGreaterThan(0.5);
   });
 });

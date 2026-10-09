@@ -1,6 +1,6 @@
 /**
- * Tiny crude factory simulation for the IWSDK walking-skeleton checkpoint.
- * Deterministic fixed-step; no random. Player-facing labels stay out of this module.
+ * Fun-slice factory simulation (~2–3 min shift).
+ * Deterministic fixed-step; drama via pressure ramp + recovery burst.
  */
 
 export type StationId = 'source' | 'procA' | 'buffer' | 'procB' | 'sink';
@@ -25,23 +25,36 @@ export type SimConfig = {
   startingCash: number;
   jamBufferThreshold: number;
   spillCap: number;
+  /** Elapsed before source/procB pressure ramps toward jam. */
+  pressureRampStartSec: number;
+  pressureRampDurationSec: number;
+  sourcePeriodStressedSec: number;
+  procBPeriodStressedSec: number;
+  recoveryBurstSec: number;
+  recoveryMoveScale: number;
 };
 
 export const DEFAULT_SIM_CONFIG: SimConfig = {
-  /** Checkpoint timing (45–75s). Not final competition balance. */
-  shiftDurationSec: 60,
-  sourcePeriodSec: 0.55,
-  procAPeriodSec: 0.45,
-  procBPeriodSec: 2.6,
-  bufferCapacity: 2,
-  moveDurationSec: 0.3,
-  maxProducts: 24,
-  payoutPerDelivery: 4,
-  boostCost: 18,
-  boostProcBMultiplier: 2.8,
-  startingCash: 40,
+  /** Fun-slice: ~2.5 minutes. */
+  shiftDurationSec: 150,
+  sourcePeriodSec: 0.85,
+  procAPeriodSec: 0.42,
+  procBPeriodSec: 1.55,
+  bufferCapacity: 3,
+  moveDurationSec: 0.28,
+  maxProducts: 28,
+  payoutPerDelivery: 5,
+  boostCost: 20,
+  boostProcBMultiplier: 3.2,
+  startingCash: 45,
   jamBufferThreshold: 2,
-  spillCap: 4,
+  spillCap: 5,
+  pressureRampStartSec: 22,
+  pressureRampDurationSec: 28,
+  sourcePeriodStressedSec: 0.42,
+  procBPeriodStressedSec: 3.1,
+  recoveryBurstSec: 2.8,
+  recoveryMoveScale: 0.42,
 };
 
 export type SimEvent =
@@ -53,7 +66,13 @@ export type SimEvent =
   | { type: 'flowRecovered' }
   | { type: 'productDelivered'; total: number }
   | { type: 'spill'; count: number }
-  | { type: 'shiftEnd'; grade: Grade; cash: number; delivered: number; jamSec: number }
+  | {
+      type: 'shiftEnd';
+      grade: Grade;
+      cash: number;
+      delivered: number;
+      jamSec: number;
+    }
   | { type: 'shiftReset' };
 
 export type Grade = 'S' | 'A' | 'B' | 'C';
@@ -65,11 +84,16 @@ export type SimSnapshot = {
   delivered: number;
   jamActive: boolean;
   jamSec: number;
+  /** 0..1 visual/audio stress while jamActive. */
+  jamSeverity: number;
   bufferFill: number;
   boosted: boolean;
   phase: 'running' | 'ended';
   grade: Grade | null;
   products: ProductState[];
+  /** Seconds left in post-boost acceleration. */
+  recoveryBurstLeft: number;
+  pressure: number;
 };
 
 type InternalProduct = {
@@ -85,15 +109,23 @@ function nextStation(id: StationId): StationId | null {
   return LINE[i + 1]!;
 }
 
+function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
+
 export function computeGrade(input: {
   delivered: number;
   jamSec: number;
   cash: number;
   shiftDurationSec: number;
 }): Grade {
-  const deliveryScore = Math.min(1, input.delivered / 18);
-  const jamPenalty = Math.min(1, input.jamSec / Math.max(1, input.shiftDurationSec * 0.45));
-  const cashScore = Math.min(1, Math.max(0, input.cash) / 80);
+  const deliveryTarget = Math.max(12, input.shiftDurationSec * 0.22);
+  const deliveryScore = Math.min(1, input.delivered / deliveryTarget);
+  const jamPenalty = Math.min(
+    1,
+    input.jamSec / Math.max(1, input.shiftDurationSec * 0.35),
+  );
+  const cashScore = Math.min(1, Math.max(0, input.cash) / 120);
   const score = deliveryScore * 0.55 + cashScore * 0.25 + (1 - jamPenalty) * 0.2;
   if (score >= 0.82) return 'S';
   if (score >= 0.62) return 'A';
@@ -118,6 +150,7 @@ export class FactorySim {
   private procBBusy = 0;
   private firstProduct = false;
   private spillCount = 0;
+  private recoveryBurstLeft = 0;
   private listeners: Array<(e: SimEvent) => void> = [];
 
   constructor(config: Partial<SimConfig> = {}) {
@@ -156,6 +189,7 @@ export class FactorySim {
     this.procBBusy = 0;
     this.firstProduct = false;
     this.spillCount = 0;
+    this.recoveryBurstLeft = 0;
     this.emit({ type: 'shiftReset' });
     this.emit({ type: 'shiftStart' });
   }
@@ -167,6 +201,7 @@ export class FactorySim {
     this.emit({ type: 'interventionStart' });
     this.cash -= this.config.boostCost;
     this.boosted = true;
+    this.recoveryBurstLeft = this.config.recoveryBurstSec;
     this.emit({ type: 'interventionSuccess', kind: 'boost' });
     if (this.jamActive) {
       this.jamActive = false;
@@ -175,7 +210,46 @@ export class FactorySim {
     return { ok: true };
   }
 
+  /** 0 = calm, 1 = fully stressed (before boost). */
+  pressure(): number {
+    if (this.boosted) return 0;
+    const start = this.config.pressureRampStartSec;
+    const dur = Math.max(0.01, this.config.pressureRampDurationSec);
+    return Math.min(1, Math.max(0, (this.elapsed - start) / dur));
+  }
+
+  private sourcePeriod(): number {
+    const p = this.pressure();
+    return lerp(
+      this.config.sourcePeriodSec,
+      this.config.sourcePeriodStressedSec,
+      p,
+    );
+  }
+
+  private procBPeriod(): number {
+    let base = this.boosted
+      ? this.config.procBPeriodSec / this.config.boostProcBMultiplier
+      : lerp(
+          this.config.procBPeriodSec,
+          this.config.procBPeriodStressedSec,
+          this.pressure(),
+        );
+    if (this.recoveryBurstLeft > 0) base *= 0.55;
+    return base;
+  }
+
+  private moveDuration(): number {
+    let d = this.config.moveDurationSec;
+    if (this.recoveryBurstLeft > 0) d *= this.config.recoveryMoveScale;
+    else if (this.jamActive) d *= 1.35;
+    return d;
+  }
+
   snapshot(): SimSnapshot {
+    const jamSeverity = this.jamActive
+      ? Math.min(1, 0.25 + this.jamSec / 18)
+      : 0;
     return {
       elapsed: this.elapsed,
       remaining: Math.max(0, this.config.shiftDurationSec - this.elapsed),
@@ -183,23 +257,21 @@ export class FactorySim {
       delivered: this.delivered,
       jamActive: this.jamActive,
       jamSec: this.jamSec,
+      jamSeverity,
       bufferFill: this.countAt('buffer'),
       boosted: this.boosted,
       phase: this.phase,
       grade: this.grade,
       products: this.products.map((p) => p.state),
+      recoveryBurstLeft: this.recoveryBurstLeft,
+      pressure: this.pressure(),
     };
   }
 
   private countAt(station: StationId): number {
-    return this.products.filter((p) => p.state.kind === 'at' && p.state.station === station)
-      .length;
-  }
-
-  private procBPeriod(): number {
-    return this.boosted
-      ? this.config.procBPeriodSec / this.config.boostProcBMultiplier
-      : this.config.procBPeriodSec;
+    return this.products.filter(
+      (p) => p.state.kind === 'at' && p.state.station === station,
+    ).length;
   }
 
   step(dt: number): void {
@@ -207,6 +279,9 @@ export class FactorySim {
     if (dt <= 0) return;
 
     this.elapsed += dt;
+    if (this.recoveryBurstLeft > 0) {
+      this.recoveryBurstLeft = Math.max(0, this.recoveryBurstLeft - dt);
+    }
     if (this.elapsed >= this.config.shiftDurationSec) {
       this.endShift();
       return;
@@ -237,9 +312,10 @@ export class FactorySim {
   }
 
   private advanceMovers(dt: number): void {
+    const moveDur = this.moveDuration();
     for (const p of this.products) {
       if (p.state.kind === 'moving') {
-        const t = p.state.t + dt / this.config.moveDurationSec;
+        const t = p.state.t + dt / moveDur;
         if (t >= 1) {
           p.state = { kind: 'at', station: p.state.to };
         } else {
@@ -253,11 +329,12 @@ export class FactorySim {
 
   private tickSource(dt: number): void {
     this.sourceAcc += dt;
+    const period = this.sourcePeriod();
     while (
-      this.sourceAcc >= this.config.sourcePeriodSec &&
+      this.sourceAcc >= period &&
       this.products.length < this.config.maxProducts
     ) {
-      this.sourceAcc -= this.config.sourcePeriodSec;
+      this.sourceAcc -= period;
       if (this.countAt('source') > 0) break;
       const id = this.nextId++;
       this.products.push({ id, state: { kind: 'at', station: 'source' } });
@@ -304,14 +381,7 @@ export class FactorySim {
       this.maybeSpill();
       return;
     }
-    if (to === 'sink') {
-      // leave procB toward sink
-    } else if (to !== 'buffer' && this.countAt(to) > 0) {
-      return;
-    }
-
-    if (to === 'sink') {
-      product.state = { kind: 'moving', from, to, t: 0 };
+    if (to !== 'sink' && to !== 'buffer' && this.countAt(to) > 0) {
       return;
     }
 
@@ -319,7 +389,6 @@ export class FactorySim {
   }
 
   private updateJam(dt: number): void {
-    // Complete arrivals into sink / buffer capacity effects.
     for (const p of this.products) {
       if (p.state.kind === 'at' && p.state.station === 'sink') {
         this.delivered += 1;
@@ -330,10 +399,13 @@ export class FactorySim {
     }
     this.products = this.products.filter((p) => p.state.kind !== 'idle');
 
-    // Push ready stations forward when free.
     this.tryDepart('source');
     if (this.procABusy === 0) this.tryDepart('procA');
-    if (this.countAt('buffer') > 0 && this.countAt('procB') === 0 && this.procBBusy === 0) {
+    if (
+      this.countAt('buffer') > 0 &&
+      this.countAt('procB') === 0 &&
+      this.procBBusy === 0
+    ) {
       const waiting = this.products.find(
         (p) => p.state.kind === 'at' && p.state.station === 'buffer',
       );
@@ -343,7 +415,6 @@ export class FactorySim {
     }
     if (this.procBBusy === 0) this.tryDepart('procB');
 
-    // Jam sticks once entered until boost clears it (readable crisis, no flicker).
     const congested =
       this.countAt('buffer') >= this.config.jamBufferThreshold && !this.boosted;
     if (!this.boosted) {
@@ -351,7 +422,12 @@ export class FactorySim {
         this.jamActive = true;
         this.emit({ type: 'jamStart' });
       }
-      if (this.jamActive) this.jamSec += dt;
+      if (this.jamActive) {
+        this.jamSec += dt;
+        if (this.jamSec > 4 && this.spillCount < this.config.spillCap) {
+          this.maybeSpill();
+        }
+      }
     } else if (this.jamActive) {
       this.jamActive = false;
       this.emit({ type: 'flowRecovered' });
@@ -360,14 +436,18 @@ export class FactorySim {
 
   private maybeSpill(): void {
     if (this.spillCount >= this.config.spillCap) return;
-    if (!this.jamActive && this.countAt('buffer') < this.config.bufferCapacity) return;
-    // Convert one queued-at-procA product into a spill placeholder toward table edge.
+    if (!this.jamActive && this.countAt('buffer') < this.config.bufferCapacity)
+      return;
     const stuck = this.products.find(
-      (p) => p.state.kind === 'at' && p.state.station === 'procA',
+      (p) => p.state.kind === 'at' && (p.state.station === 'procA' || p.state.station === 'buffer'),
     );
     if (!stuck) return;
     this.spillCount += 1;
-    stuck.state = { kind: 'spill', edgeX: 0.55 + this.spillCount * 0.04, age: 0 };
+    stuck.state = {
+      kind: 'spill',
+      edgeX: -0.35 + this.spillCount * 0.14,
+      age: 0,
+    };
     this.emit({ type: 'spill', count: this.spillCount });
   }
 }
