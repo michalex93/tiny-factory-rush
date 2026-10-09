@@ -48,3 +48,9 @@ pm --prefix xr-iwsdk run build PASS; browser LOOP-*.png (BROWSER / DEV_FALLBACK_
 - Evidence: evidence/xr/QUEST-READY.md; evidence/xr/QUEST-STATUS.md; https://michalex93.github.io/tiny-factory-rush/
 - Gates: IWSDK 18/18 + build PASS before pages publish.
 - Learnings: H-002 due Oct 8 remains human; no-USB smoke = Meta Browser on public URL.
+
+## 2026-10-09 01:05 - FUN-06 - done
+- What changed: Fun-first vertical slice ? ~150s pressure-ramp shift, alive silhouettes, jam beacon/spill, snap settle, recovery ripple+audio language, in-world result/prompts; published Pages; emulator hand video.
+- Evidence: evidence/xr/fun-slice/; FUN-SLICE-HAND-LOOP (grab/snap/recovery PASS, xr); QUEST-TEST-02.md; Quest smoke 01 preserved.
+- Gates: IWSDK 19/19 PASS + build PASS; Unity not re-run.
+- Learnings: Do not reload page mid browser-run (breaks XR); encode outside 100s lease; jamStart log can miss in short console window even when flowRecovered fires.
