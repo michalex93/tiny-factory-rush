@@ -1,0 +1,66 @@
+{
+  "label": "IWSDK EMULATOR — FUN SLICE",
+  "note": "Default shift (~150s); capture stops after recovery (grade optional in lease).",
+  "frameCount": 317,
+  "captureErrors": 0,
+  "timeline": [
+    {
+      "ms": 1,
+      "step": "enter-xr"
+    },
+    {
+      "ms": 4899,
+      "step": "hand-mode"
+    },
+    {
+      "ms": 10292,
+      "step": "reset-shift"
+    },
+    {
+      "ms": 10936,
+      "step": "healthy-pressure"
+    },
+    {
+      "ms": 50304,
+      "step": "jam-timeout"
+    },
+    {
+      "ms": 50816,
+      "step": "grab"
+    },
+    {
+      "ms": 61426,
+      "step": "snap"
+    },
+    {
+      "ms": 72985,
+      "step": "recovery-hold"
+    },
+    {
+      "ms": 75490,
+      "step": "stop-capture"
+    }
+  ],
+  "flags": {
+    "jamSeen": false,
+    "grabXr": true,
+    "snapOk": true,
+    "interventionOk": true,
+    "recovered": true,
+    "gradeSeen": false,
+    "keyboardFallbackUsed": false
+  },
+  "logsExcerpt": "[factory] productDelivered {total: 30}\n[factory] productDelivered {total: 31}\n[factory] productDelivered {total: 32}\n[factory] productDelivered {total: 33}\n[factory] productDelivered {total: 34}\n[factory] productDelivered {total: 35}\n[factory] productDelivered {total: 36}\n[factory] productDelivered {total: 37}\n[factory] productDelivered {total: 38}\n[factory] productDelivered {total: 39}\n[factory] productDelivered {total: 40}\n[factory] productDelivered {total: 41}\n[factory] productDelivered {total: 42}\n[factory] productDelivered {total: 43}\n[factory] productDelivered {total: 44}\n[factory] productDelivered {total: 45}\n[factory] productDelivered {total: 46}\n[factory] productDelivered {total: 47}\n[factory] productDelivered {total: 48}\n[factory] productDelivered {total: 49}\n[factory] productDelivered {total: 50}\n[factory] productDelivered {total: 51}\n[factory] productDelivered {total: 52}\n[factory] productDelivered {total: 53}\n[factory] productDelivered {total: 54}\n[factory] productDelivered {total: 55}\n[factory] productDelivered {total: 56}\n[factory] productDelivered {total: 57}\n[factory] productDelivered {total: 58}\n[factory] productDelivered {total: 59}\n[factory] productDelivered {total: 60}\n[factory] productDelivered {total: 61}\n[factory] productDelivered {total: 62}\n[factory] grabAttempt {inputSource: xr}\n[factory] grabSuccess {inputSource: xr}\n[factory] productDelivered {total: 63}\n[factory] productDelivered {total: 64}\n[factory] productDelivered {total: 65}\n[factory] productDelivered {total: 66}\n[factory] productDelivered {total: 67}\n[factory] productDelivered {total: 68}\n[factory] productDelivered {total: 69}\n[factory] productDelivered {total: 70}\n[factory] release {inputSource: xr}\n[factory] snapSuccess {targetId: boost-slot, inputSource: xr}\n[factory] interventionStart {inputSource: xr}\n[factory] interventionSuccess {kind: boost, inputSource: xr}\n[factory] flowRecovered {inputSource: xr}\n[factory] productDelivered {total: 71}\n[factory] productDelivered {total: 72}\n[factory] productDelivered {total: 73}\n[factory] productDelivered {total: 74}\n[factory] productDelivered {total: 75}\n[factory] productDelivered {total: 76}",
+  "VIDEO_CAPTURE": "PASS",
+  "video": {
+    "webm": "evidence/xr/fun-slice/video/FUN-SLICE-HAND-LOOP.webm",
+    "mp4": "evidence/xr/fun-slice/video/FUN-SLICE-HAND-LOOP.mp4",
+    "hero15s": "evidence/xr/fun-slice/video/FUN-SLICE-HERO-15S.webm",
+    "bytes": 1046510,
+    "sha256": "6616a58f8ef8478adef2dc45748b63055e040cdb8c28cd8149a42cf9b1e53d14",
+    "frameCount": 317,
+    "approxFps": 7,
+    "durationSecApprox": 45.3,
+    "mp4Available": true
+  }
+}
