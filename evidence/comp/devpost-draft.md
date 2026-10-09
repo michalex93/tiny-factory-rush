@@ -28,9 +28,11 @@ Tiny Factory Rush already existed as a web industrial-strategy / management game
 
 MR / hands-first tabletop slice: the factory runs on a real (or fallback) table; products flow through a crude line; a jam becomes visually obvious; the player grabs a BOOST module and snaps it into a correction slot; cash and grade close the short shift. Built provisionally on IWSDK/WebXR while Unity comparison continues (D-007 open).
 
-Current development checkpoint validated in Meta's IWSDK emulator; target-device validation is scheduled next.
+Validated in IWSDK's XR emulator using simulated hand tracking input. Target-device (Quest) validation is scheduled next — do not read this as “works on Quest” yet.
 
 Public development checkpoint: https://michalex93.github.io/tiny-factory-rush/
+
+Hands-first physical intervention changes the production system in real time (emulator event trace + continuous video).
 
 ## INSPIRATION
 

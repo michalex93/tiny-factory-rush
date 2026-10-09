@@ -36,3 +36,9 @@ pm --prefix xr-iwsdk run build PASS; browser LOOP-*.png (BROWSER / DEV_FALLBACK_
 - Evidence: evidence/xr/factory-checkpoint/EMULATOR-HAND-LOOP.json; evidence/comp/checkpoint-01/screenshots/HERO-*.png; https://michalex93.github.io/tiny-factory-rush/; artifacts/tiny-factory-rush-xr-checkpoint-01.zip.
 - Gates: re-run after commit.
 - Learnings: IWER CLI screenshots are slow (~7s); reset shift with R before intervention so snap lands while phase=running.
+
+## 2026-10-08 20:10 - CHK-01C - done
+- What changed: Prompt 04 evidence sprint - public smoke PASS; automated continuous IWER hand video (webm+mp4) + 10s hero clip; evidence manifest; Quest not connected; Unity still blocked; D-007 OPEN.
+- Evidence: evidence/comp/checkpoint-01/short-video/; public-smoke/; EVIDENCE-MANIFEST.md; UPLOAD-READY.md; QUEST-STATUS.md; SPRINT04-UNITY-TIMEBOX.md.
+- Gates: IWSDK test 18/18 PASS + build PASS (cmd.exe; PowerShell can hit runtime_owner_identity_unavailable). Full `npm run gates` with UNITY_PATH set: core lanes PASS; anticheat/evidence/progress SKIP (no base); Unity EditMode batchmode TIMEOUT (>12m AssetDatabase, no xml) - not skipped via empty UNITY_PATH.
+- Learnings: MediaRecorder on WebXR canvas was empty; async CDP Page.captureScreenshot + ffmpeg-static works; browser-run lease max ~110s; spawnSync blocks capture loop; run xr-iwsdk vitest via cmd on Windows when birth-identity fails.

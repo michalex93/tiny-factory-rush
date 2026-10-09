@@ -5,8 +5,8 @@
 - miniature tabletop factory
 - visible production flow
 - visible jam
-- hands-first physical intervention (IWER hand pinch → grab → snap)
-- immediate recovery
+- hands-first physical intervention (IWER simulated hand tracking)
+- immediate recovery that changes the production system in real time
 - money/result
 - shift grade
 
@@ -16,34 +16,32 @@ IWSDK/WebXR
 
 ## Evidence level
 
-EMULATOR
+EMULATOR — validated in IWSDK's XR emulator using simulated hand tracking input (`inputSource: xr`).
 
 ## Public URL
 
 https://michalex93.github.io/tiny-factory-rush/
 
+## Continuous video
+
+`short-video/IWSDK-EMULATOR-HAND-LOOP.webm` (+ `.mp4`) — automated CDP capture during hand pinch grab/snap.
+
 ## Not yet proven
 
 - Quest performance
 - Quest hand reliability
-- final engine
+- final engine (D-007 OPEN)
 - final signature interaction
 - final art
 - final balance
 
 ## Build commit
 
-See `build-info.md` (updated when packaging). Source branch: `feat/xr-competition-build`.
+See `build-info.md` / `git log -1` on `feat/xr-competition-build`.
 
 ## Controls
 
-- Enter XR → use hands (or IWER hand mode)
-- Grab BOOST cube → snap onto glowing pad
-- After grade: press `R` for next shift
-- DEV ONLY (`?dev=1`): keyboard `B` boost — not hero evidence
-
-## Honest labels
-
-- Screenshots/video: **IWSDK EMULATOR — DEVELOPMENT CHECKPOINT**
-- Intervention validation: `inputSource: xr` (not `dev-keyboard`)
-- D-007 engine decision: **OPEN**
+- Enter XR → hands (IWER hand mode)
+- Grab BOOST → snap to pad
+- After grade: `R` next shift
+- DEV ONLY (`?dev=1`): keyboard `B` — not used for hero evidence
