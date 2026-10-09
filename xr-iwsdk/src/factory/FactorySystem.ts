@@ -85,6 +85,10 @@ export class FactorySystem extends createSystem({
   private resultBoard: Mesh | null = null;
   private resultTexture: CanvasTexture | null = null;
   private lastShownGrade: string | null = null;
+  /** World-space cue — DOM HUD is invisible inside immersive XR / Quest. */
+  private promptBoard: Mesh | null = null;
+  private promptTexture: CanvasTexture | null = null;
+  private lastPromptKey: string | null = null;
 
   init(): void {
     const host =
@@ -174,13 +178,14 @@ export class FactorySystem extends createSystem({
     const snap = this.sim.snapshot();
     this.syncProducts(snap.products);
     this.pulseStations(snap.jamActive, delta);
-    this.updateModuleVisual(delta);
+    this.updateModuleVisual(snap.jamActive && !snap.boosted);
     const hint = snap.boosted
-      ? 'Line accelerating — keep shipping'
+      ? 'Flow recovered — keep shipping'
       : snap.jamActive
-        ? 'JAM at slow machine — grab BOOST cube → snap onto glowing pad'
-        : 'Orders flowing — watch the slow machine';
+        ? 'JAM! Grab the glowing cube → snap it on the bright pad'
+        : 'Watch the line — when it jams, grab the blue cube';
     this.hud?.update(snap, hint);
+    this.syncPromptBoard(snap);
     this.syncResultBoard(snap);
   }
 
@@ -292,11 +297,11 @@ export class FactorySystem extends createSystem({
       this.productMeshes.push(mesh);
     }
 
-    // World-space result board (DOM HUD is invisible inside immersive XR).
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 256;
-    this.resultTexture = new CanvasTexture(canvas);
+    // World-space boards (DOM HUD is invisible inside immersive XR / Quest).
+    const resultCanvas = document.createElement('canvas');
+    resultCanvas.width = 512;
+    resultCanvas.height = 256;
+    this.resultTexture = new CanvasTexture(resultCanvas);
     this.resultBoard = new Mesh(
       new PlaneGeometry(0.55, 0.28),
       new MeshBasicMaterial({
@@ -310,7 +315,90 @@ export class FactorySystem extends createSystem({
     this.resultBoard.name = 'factory-result-board';
     this.world.createTransformEntity(this.resultBoard);
 
+    const promptCanvas = document.createElement('canvas');
+    promptCanvas.width = 640;
+    promptCanvas.height = 256;
+    this.promptTexture = new CanvasTexture(promptCanvas);
+    this.promptBoard = new Mesh(
+      new PlaneGeometry(0.72, 0.3),
+      new MeshBasicMaterial({
+        map: this.promptTexture,
+        transparent: true,
+        depthWrite: false,
+      }),
+    );
+    // Above the BOOST module / pad so the next action is in FoV.
+    this.promptBoard.position.set(
+      BOOST_SLOT.position[0],
+      BOOST_SLOT.position[1] + 0.42,
+      BOOST_SLOT.position[2] + 0.08,
+    );
+    this.promptBoard.visible = false;
+    this.promptBoard.name = 'factory-prompt-board';
+    this.world.createTransformEntity(this.promptBoard);
+
     this.built = true;
+  }
+
+  private syncPromptBoard(snap: ReturnType<FactorySim['snapshot']>): void {
+    if (!this.promptBoard || !this.promptTexture) return;
+    const showJam =
+      snap.phase === 'running' && snap.jamActive && !snap.boosted;
+    const showIdle =
+      snap.phase === 'running' && !snap.jamActive && !snap.boosted;
+    const showOk = snap.phase === 'running' && snap.boosted;
+    if (!showJam && !showIdle && !showOk) {
+      this.promptBoard.visible = false;
+      this.lastPromptKey = null;
+      return;
+    }
+    this.promptBoard.visible = true;
+    const key = showJam ? 'jam' : showOk ? 'ok' : 'idle';
+    if (key === this.lastPromptKey) return;
+    this.lastPromptKey = key;
+    const canvas = this.promptTexture.image as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (showJam) {
+      ctx.fillStyle = 'rgba(90, 18, 18, 0.92)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#ff6b5e';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+      ctx.fillStyle = '#ff6b5e';
+      ctx.font = 'bold 72px Segoe UI, sans-serif';
+      ctx.fillText('JAM', 40, 90);
+      ctx.fillStyle = '#fff6e8';
+      ctx.font = 'bold 40px Segoe UI, sans-serif';
+      ctx.fillText('1. Grab the glowing cube', 40, 155);
+      ctx.fillText('2. Snap it on the bright pad', 40, 210);
+    } else if (showOk) {
+      ctx.fillStyle = 'rgba(16, 48, 28, 0.9)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#5cb85c';
+      ctx.lineWidth = 8;
+      ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+      ctx.fillStyle = '#8fd99a';
+      ctx.font = 'bold 48px Segoe UI, sans-serif';
+      ctx.fillText('FLOW RECOVERED', 40, 120);
+      ctx.fillStyle = '#e8f5e9';
+      ctx.font = '32px Segoe UI, sans-serif';
+      ctx.fillText('Line is shipping again', 40, 175);
+    } else {
+      ctx.fillStyle = 'rgba(20, 28, 36, 0.88)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#7ec8e3';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+      ctx.fillStyle = '#f4f1ea';
+      ctx.font = 'bold 36px Segoe UI, sans-serif';
+      ctx.fillText('Watch the line', 40, 100);
+      ctx.fillStyle = '#c8d0d8';
+      ctx.font = '30px Segoe UI, sans-serif';
+      ctx.fillText('When it jams → grab the blue cube', 40, 160);
+    }
+    this.promptTexture.needsUpdate = true;
   }
 
   private syncResultBoard(snap: ReturnType<FactorySim['snapshot']>): void {
@@ -403,8 +491,14 @@ export class FactorySystem extends createSystem({
     }
   }
 
-  private updateModuleVisual(_delta: number): void {
-    if (!this.moduleMaterial || !this.padMaterial || !this.moduleObject) return;
+  private updateModuleVisual(jamNeedsAction: boolean): void {
+    if (
+      !this.moduleMaterial ||
+      !this.padMaterial ||
+      !this.moduleObject ||
+      !this.padMesh
+    )
+      return;
     const now =
       typeof performance !== 'undefined' ? performance.now() : Date.now();
     const grabbed = this.queries.moduleGrabbed.entities.size > 0;
@@ -414,8 +508,27 @@ export class FactorySystem extends createSystem({
     else if (grabbed) color = C.moduleGrab;
     else if (hovered) color = C.moduleHover;
     else if (this.occupiedSlot) color = C.moduleOk;
+    else if (jamNeedsAction) color = C.moduleGrab;
     this.moduleMaterial.color.copy(color);
     this.moduleMaterial.emissive.copy(color);
+    this.moduleMaterial.emissiveIntensity =
+      jamNeedsAction && !grabbed
+        ? 0.55 + 0.35 * Math.sin(this.jamPulse)
+        : grabbed
+          ? 0.45
+          : 0.25;
+    const homeY = BOOST_SLOT.position[1] + MODULE_SIZE[1] / 2;
+    // Bob the actionable cube so it reads as "this is the verb".
+    if (jamNeedsAction && !grabbed && !this.occupiedSlot) {
+      this.moduleObject.position.y =
+        homeY + 0.03 * (0.5 + 0.5 * Math.sin(this.jamPulse * 1.4));
+      this.moduleObject.scale.setScalar(
+        1.08 + 0.04 * Math.sin(this.jamPulse * 1.4),
+      );
+    } else if (!grabbed) {
+      this.moduleObject.scale.setScalar(1);
+      if (!this.occupiedSlot) this.moduleObject.position.y = homeY;
+    }
 
     const pos = this.moduleObject.position;
     const decision = selectSnapTarget(
@@ -430,9 +543,18 @@ export class FactorySystem extends createSystem({
       SNAP_RADIUS,
     );
     const hot = grabbed && decision.kind === 'snap';
-    this.padMaterial.color.copy(hot ? C.padHot : C.pad);
-    this.padMaterial.emissive.copy(hot ? C.padHot : C.pad);
-    this.padMaterial.emissiveIntensity = hot ? 0.55 : 0.2;
+    const padAttract = jamNeedsAction || hot;
+    this.padMaterial.color.copy(hot ? C.padHot : padAttract ? C.padHot : C.pad);
+    this.padMaterial.emissive.copy(
+      hot ? C.padHot : padAttract ? C.padHot : C.pad,
+    );
+    this.padMaterial.emissiveIntensity = hot
+      ? 0.7
+      : padAttract
+        ? 0.35 + 0.25 * Math.sin(this.jamPulse)
+        : 0.2;
+    const padScale = padAttract ? 1.15 + 0.05 * Math.sin(this.jamPulse) : 1;
+    this.padMesh.scale.set(padScale, 1, padScale);
   }
 
   private onGrabStart(): void {
