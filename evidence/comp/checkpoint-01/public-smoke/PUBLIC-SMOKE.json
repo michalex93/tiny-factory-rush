@@ -1,0 +1,38 @@
+{
+  "url": "https://michalex93.github.io/tiny-factory-rush/",
+  "timestamp": "2026-10-09T01:39:28.130Z",
+  "commit": "6a5072aa6f8c5f36b69a821c63a31f51bdfd9374",
+  "browser": "Chromium (Playwright channel=chrome)",
+  "viewport": "1280x720",
+  "httpStatus": 200,
+  "success": true,
+  "hud": "TINY FACTORY RUSH XR\nCASH 40\nSHIFT 56s · OUT 0 · JAM\nJAM at slow machine — grab BOOST cube → snap onto glowing pad",
+  "consoleErrors": [],
+  "failedRequests": [],
+  "asset404": [],
+  "networkSample": [
+    {
+      "url": "https://michalex93.github.io/tiny-factory-rush/",
+      "status": 200
+    },
+    {
+      "url": "https://michalex93.github.io/tiny-factory-rush/assets/index-DV9nuDNL.js",
+      "status": 200
+    },
+    {
+      "url": "https://michalex93.github.io/tiny-factory-rush/assets/world-initializer-Cs93mDlO.js",
+      "status": 200
+    },
+    {
+      "url": "https://michalex93.github.io/tiny-factory-rush/ui/welcome.uikitml",
+      "status": 200
+    },
+    {
+      "url": "https://michalex93.github.io/tiny-factory-rush/scenes/main.iwsdk.scene.json",
+      "status": 200
+    }
+  ],
+  "screenshot": "PUBLIC-SMOKE-01.png",
+  "screenshotSha256": "33fd8875ca28bb192ab5e15fb26efb37c9253cca593657a8e9035d724925c4fb",
+  "notes": "PUBLIC BUILD SMOKE — browser page load. Not immersive XR / not Quest / not hand-loop proof."
+}
